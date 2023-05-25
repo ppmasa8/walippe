@@ -1,5 +1,10 @@
 import 'package:drift/drift.dart';
 
+import 'dart:io';
+import 'package:path_provider/path_provider.dart';
+import 'package:drift/native.dart';
+import 'package:path/path.dart' as p;
+
 part 'walippe_db.g.dart';
 
 @DataClassName('Group')
@@ -36,8 +41,36 @@ class Members extends Table {
 
 @DriftDatabase(tables: [Groups, Transactions, Members])
 class WalippeDatabase extends _$WalippeDatabase {
-  WalippeDatabase(QueryExecutor e) : super(e);
+  WalippeDatabase() : super(_openConnection());
 
   @override
   int get schemaVersion => 1;
+
+  // Groups
+  Stream<List<Group>> watchAllGroups() {
+    return (select(groups)).watch();
+  }
+
+  Future<List<Group>> getAllGroups() => select(groups).get();
+
+  Future<int> addGroup(String name, String description) {
+    return into(groups).insert(GroupsCompanion(
+      name: Value(name),
+      description: Value(description),
+      createdAt: Value(DateTime.now()),
+      updatedAt: Value(DateTime.now()),
+    ));
+  }
+
+  // Transactions
+
+  // Members
+}
+
+LazyDatabase _openConnection() {
+  return LazyDatabase(() async {
+    final dbFolder = await getApplicationDocumentsDirectory();
+    final file = File(p.join(dbFolder.path, 'db.sqlite'));
+    return NativeDatabase.createInBackground(file);
+  });
 }

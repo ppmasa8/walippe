@@ -1,9 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:walippe/src/drift/walippe_db.dart';
 
-class BaseView extends StatelessWidget {
-  const BaseView({Key? key}) : super(key: key);
+class BaseView extends StatefulWidget {
+  const BaseView({Key? key, required this.database}) : super(key: key);
 
+  final WalippeDatabase database;
+
+  @override
+  State<BaseView> createState() => _BaseViewState();
+}
+
+class _BaseViewState extends State<BaseView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -19,9 +27,58 @@ class BaseView extends StatelessWidget {
           centerTitle: true,
           backgroundColor: Colors.deepPurpleAccent,
         ),
-        body: const Center(
-          child: TextFieldWidget(),
-        ));
+        body: Center(
+            child: Column(
+          children: [
+            Spacer(),
+            TextFieldWidget(),
+            Expanded(
+              child: StreamBuilder(
+                stream: widget.database.watchAllGroups(),
+                builder: (BuildContext context,
+                    AsyncSnapshot<List<Group>> snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return const Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  }
+                  return ListView.builder(
+                    itemCount: snapshot.data!.length,
+                    itemBuilder: (context, index) => TextButton(
+                      child: Text(snapshot.data![index].name),
+                      onPressed: () async {},
+                    ),
+                  );
+                },
+              ),
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.all(8),
+                    child: ElevatedButton(
+                      child: const Text('追加'),
+                      onPressed: () async {
+                        await widget.database.addGroup('test', 'test');
+                      },
+                    ),
+                  ),
+                ),
+                Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.all(8),
+                    child: ElevatedButton(
+                      child: const Text('削除'),
+                      onPressed: () async {},
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ],
+        )));
   }
 }
 
