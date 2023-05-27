@@ -62,6 +62,14 @@ class WalippeDatabase extends _$WalippeDatabase {
     ));
   }
 
+  Future<int> updateGroup(Group group, String name, String description) {
+    return (update(groups)..where((tbl) => tbl.id.equals(group.id))).write(
+        GroupsCompanion(
+            name: Value(name),
+            description: Value(description),
+            updatedAt: Value(DateTime.now())));
+  }
+
   // Transactions
 
   // Members

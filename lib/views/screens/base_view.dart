@@ -46,7 +46,13 @@ class _BaseViewState extends State<BaseView> {
                     itemCount: snapshot.data!.length,
                     itemBuilder: (context, index) => TextButton(
                       child: Text(snapshot.data![index].name),
-                      onPressed: () async {},
+                      onPressed: () async {
+                        await widget.database.updateGroup(
+                          snapshot.data![index],
+                          '',
+                          '更新',
+                        );
+                      },
                     ),
                   );
                 },
