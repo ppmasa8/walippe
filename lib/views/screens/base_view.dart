@@ -12,6 +12,8 @@ class BaseView extends StatefulWidget {
 }
 
 class _BaseViewState extends State<BaseView> {
+  late String colName;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -31,7 +33,9 @@ class _BaseViewState extends State<BaseView> {
             child: Column(
           children: [
             Spacer(),
-            TextFieldWidget(),
+            TextField(onChanged: (value) {
+              colName = value;
+            }),
             Expanded(
               child: StreamBuilder(
                 stream: widget.database.watchAllGroups(),
@@ -67,7 +71,7 @@ class _BaseViewState extends State<BaseView> {
                     child: ElevatedButton(
                       child: const Text('追加'),
                       onPressed: () async {
-                        await widget.database.addGroup('test', 'test');
+                        await widget.database.addGroup(colName, 'test');
                       },
                     ),
                   ),
@@ -77,7 +81,12 @@ class _BaseViewState extends State<BaseView> {
                     padding: const EdgeInsets.all(8),
                     child: ElevatedButton(
                       child: const Text('削除'),
-                      onPressed: () async {},
+                      onPressed: () async {
+                        final list = await widget.database.getAllGroups();
+                        if (list.isNotEmpty) {
+                          await widget.database.deleteGroup(list[list.length - 1]);
+                        }
+                      },
                     ),
                   ),
                 ),

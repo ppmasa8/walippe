@@ -70,6 +70,10 @@ class WalippeDatabase extends _$WalippeDatabase {
             updatedAt: Value(DateTime.now())));
   }
 
+  Future<int> deleteGroup(Group group) {
+    return (delete(groups)..where((tbl) => tbl.id.equals(group.id))).go();
+  }
+
   // Transactions
 
   // Members
