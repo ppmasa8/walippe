@@ -84,7 +84,8 @@ class _BaseViewState extends State<BaseView> {
                       onPressed: () async {
                         final list = await widget.database.getAllGroups();
                         if (list.isNotEmpty) {
-                          await widget.database.deleteGroup(list[list.length - 1]);
+                          await widget.database
+                              .deleteGroup(list[list.length - 1]);
                         }
                       },
                     ),
