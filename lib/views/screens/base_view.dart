@@ -33,9 +33,12 @@ class _BaseViewState extends State<BaseView> {
             child: Column(
           children: [
             Spacer(),
-            TextField(onChanged: (value) {
-              colName = value;
-            }),
+            TextField(
+                decoration:
+                    const InputDecoration(labelText: 'グループ名', hintText: '京都旅行'),
+                onChanged: (value) {
+                  colName = value;
+                }),
             Expanded(
               child: StreamBuilder(
                 stream: widget.database.watchAllGroups(),
