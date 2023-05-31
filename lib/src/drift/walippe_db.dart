@@ -77,6 +77,46 @@ class WalippeDatabase extends _$WalippeDatabase {
   // Transactions
 
   // Members
+  Stream<List<Member>> watchAllMembers() {
+    return (select(members)).watch();
+  }
+
+  Future<List<Member>> getAllMembers() => select(members).get();
+
+  Future<int> addMember(String name, String description) {
+    return into(members).insert(MembersCompanion(
+      groupId: const Value(0),
+      name: Value(name),
+      description: Value(description),
+      balance: const Value(0),
+      createdAt: Value(DateTime.now()),
+      updatedAt: Value(DateTime.now()),
+    ));
+  }
+
+  Future<int> updateMember(Member member, String name, String description) {
+    return (update(members)..where((tbl) => tbl.id.equals(member.id))).write(
+        MembersCompanion(
+            name: Value(name),
+            description: Value(description),
+            updatedAt: Value(DateTime.now())));
+  }
+
+  Future<int> updateMemberGroupId(Member member, int groupId) {
+    return (update(members)..where((tbl) => tbl.id.equals(member.id))).write(
+        MembersCompanion(
+            groupId: Value(groupId), updatedAt: Value(DateTime.now())));
+  }
+
+  Future<int> updateMemberBalance(Member member, int balance) {
+    return (update(members)..where((tbl) => tbl.id.equals(member.id))).write(
+        MembersCompanion(
+            balance: Value(balance), updatedAt: Value(DateTime.now())));
+  }
+
+  Future<int> deleteMember(Member member) {
+    return (delete(members)..where((tbl) => tbl.id.equals(member.id))).go();
+  }
 }
 
 LazyDatabase _openConnection() {

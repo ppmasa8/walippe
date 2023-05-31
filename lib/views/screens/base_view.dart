@@ -12,7 +12,8 @@ class BaseView extends StatefulWidget {
 }
 
 class _BaseViewState extends State<BaseView> {
-  late String colName;
+  late String groupName;
+  late String memberName;
 
   @override
   Widget build(BuildContext context) {
@@ -32,18 +33,23 @@ class _BaseViewState extends State<BaseView> {
         body: Center(
             child: Column(
           children: [
-            Spacer(),
             TextField(
                 decoration:
-                    const InputDecoration(labelText: 'グループ名', hintText: '京都旅行'),
+                    const InputDecoration(labelText: 'グループ名', hintText: '沖縄旅行'),
                 onChanged: (value) {
-                  colName = value;
+                  groupName = value;
+                }),
+            TextField(
+                decoration:
+                    const InputDecoration(labelText: 'メンバー名', hintText: 'なおみ'),
+                onChanged: (value) {
+                  memberName = value;
                 }),
             Expanded(
               child: StreamBuilder(
-                stream: widget.database.watchAllGroups(),
+                stream: widget.database.watchAllMembers(),
                 builder: (BuildContext context,
-                    AsyncSnapshot<List<Group>> snapshot) {
+                    AsyncSnapshot<List<Member>> snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
                     return const Center(
                       child: CircularProgressIndicator(),
@@ -54,7 +60,7 @@ class _BaseViewState extends State<BaseView> {
                     itemBuilder: (context, index) => TextButton(
                       child: Text(snapshot.data![index].name),
                       onPressed: () async {
-                        await widget.database.updateGroup(
+                        await widget.database.updateMember(
                           snapshot.data![index],
                           '',
                           '更新',
@@ -74,7 +80,7 @@ class _BaseViewState extends State<BaseView> {
                     child: ElevatedButton(
                       child: const Text('追加'),
                       onPressed: () async {
-                        await widget.database.addGroup(colName, 'test');
+                        await widget.database.addMember(memberName, 'test');
                       },
                     ),
                   ),
@@ -85,10 +91,10 @@ class _BaseViewState extends State<BaseView> {
                     child: ElevatedButton(
                       child: const Text('削除'),
                       onPressed: () async {
-                        final list = await widget.database.getAllGroups();
+                        final list = await widget.database.getAllMembers();
                         if (list.isNotEmpty) {
                           await widget.database
-                              .deleteGroup(list[list.length - 1]);
+                              .deleteMember(list[list.length - 1]);
                         }
                       },
                     ),
