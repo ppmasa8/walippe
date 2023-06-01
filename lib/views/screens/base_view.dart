@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:walippe/src/drift/walippe_db.dart';
+import 'package:walippe/views/screens/group_view.dart';
 
 class BaseView extends StatefulWidget {
   const BaseView({Key? key, required this.database}) : super(key: key);
@@ -14,6 +15,7 @@ class BaseView extends StatefulWidget {
 class _BaseViewState extends State<BaseView> {
   late String groupName;
   late String memberName;
+  late List members;
 
   @override
   Widget build(BuildContext context) {
@@ -44,6 +46,7 @@ class _BaseViewState extends State<BaseView> {
                     const InputDecoration(labelText: 'メンバー名', hintText: 'なおみ'),
                 onChanged: (value) {
                   memberName = value;
+                  members.add(memberName);
                 }),
             Expanded(
               child: StreamBuilder(
@@ -71,6 +74,16 @@ class _BaseViewState extends State<BaseView> {
                 },
               ),
             ),
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                shape: const StadiumBorder(),
+              ),
+              onPressed: () async {
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => GroupView()));
+              },
+              child: const Text('グループを作成'),
+            ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
@@ -80,7 +93,8 @@ class _BaseViewState extends State<BaseView> {
                     child: ElevatedButton(
                       child: const Text('追加'),
                       onPressed: () async {
-                        await widget.database.addMember(memberName, 'test');
+                        final groupList = await widget.database.getAllGroups();
+                        await widget.database.addMember(groupList.length - 1, memberName, 'test');
                       },
                     ),
                   ),
@@ -107,20 +121,20 @@ class _BaseViewState extends State<BaseView> {
   }
 }
 
-class TextFieldWidget extends StatelessWidget {
-  const TextFieldWidget({Key? key}) : super(key: key);
+// class TextFieldWidget extends StatelessWidget {
+//   const TextFieldWidget({Key? key}) : super(key: key);
 
-  @override
-  Widget build(BuildContext context) {
-    return const SizedBox(
-      width: 300,
-      child: TextField(
-        obscureText: true,
-        decoration: InputDecoration(
-          border: OutlineInputBorder(),
-          labelText: 'グループ名',
-        ),
-      ),
-    );
-  }
-}
+//   @override
+//   Widget build(BuildContext context) {
+//     return const SizedBox(
+//       width: 300,
+//       child: TextField(
+//         obscureText: true,
+//         decoration: InputDecoration(
+//           border: OutlineInputBorder(),
+//           labelText: 'グループ名',
+//         ),
+//       ),
+//     );
+//   }
+// }

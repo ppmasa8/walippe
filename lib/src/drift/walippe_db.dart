@@ -83,9 +83,9 @@ class WalippeDatabase extends _$WalippeDatabase {
 
   Future<List<Member>> getAllMembers() => select(members).get();
 
-  Future<int> addMember(String name, String description) {
+  Future<int> addMember(int groupId, String name, String description) {
     return into(members).insert(MembersCompanion(
-      groupId: const Value(0),
+      groupId: Value(groupId),
       name: Value(name),
       description: Value(description),
       balance: const Value(0),
