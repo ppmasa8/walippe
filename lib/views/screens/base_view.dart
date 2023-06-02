@@ -13,6 +13,8 @@ class BaseView extends StatefulWidget {
 }
 
 class _BaseViewState extends State<BaseView> {
+  final formKey = GlobalKey<FormState>();
+
   late String groupName;
   late String memberName;
   late List members;
@@ -35,12 +37,24 @@ class _BaseViewState extends State<BaseView> {
         body: Center(
             child: Column(
           children: [
-            TextField(
-                decoration:
-                    const InputDecoration(labelText: 'グループ名', hintText: '沖縄旅行'),
-                onChanged: (value) {
-                  groupName = value;
-                }),
+            Form(
+                key: formKey,
+                child: Column(
+                  children: [
+                    TextFormField(
+                        decoration: const InputDecoration(
+                            labelText: 'グループ名', hintText: '沖縄旅行'),
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'グループ名を入力してください';
+                          }
+                          return null;
+                        },
+                        onChanged: (value) {
+                          groupName = value;
+                        }),
+                  ],
+                )),
             TextField(
                 decoration:
                     const InputDecoration(labelText: 'メンバー名', hintText: 'なおみ'),
@@ -79,8 +93,10 @@ class _BaseViewState extends State<BaseView> {
                 shape: const StadiumBorder(),
               ),
               onPressed: () async {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => GroupView()));
+                if (formKey.currentState!.validate()) {
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => GroupView()));
+                }
               },
               child: const Text('グループを作成'),
             ),
@@ -94,7 +110,8 @@ class _BaseViewState extends State<BaseView> {
                       child: const Text('追加'),
                       onPressed: () async {
                         final groupList = await widget.database.getAllGroups();
-                        await widget.database.addMember(groupList.length - 1, memberName, 'test');
+                        await widget.database.addMember(
+                            groupList.length - 1, memberName, 'test');
                       },
                     ),
                   ),
