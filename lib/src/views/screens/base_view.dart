@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:walippe/src/drift/walippe_db.dart';
-import 'package:walippe/src/views/services/base_view_service.dart';
 import 'package:walippe/src/views/screens/group_view.dart';
 
 class BaseView extends StatefulWidget {
@@ -14,7 +13,6 @@ class BaseView extends StatefulWidget {
 }
 
 class _BaseViewState extends State<BaseView> {
-  final BaseViewService _service = BaseViewService();
 
   final formKey = GlobalKey<FormState>();
 
@@ -22,6 +20,11 @@ class _BaseViewState extends State<BaseView> {
   late String memberName;
   late int groupId;
   // List? members = [];
+
+  Future<int> getLastGroupId(widget) async {
+    final groupList = await widget.database.getAllGroups();
+    return groupList.length - 1;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -99,7 +102,7 @@ class _BaseViewState extends State<BaseView> {
                 if (formKey.currentState!.validate()) {
                   // members!.add(memberName);
                   await widget.database.addGroup(groupName, 'test');
-                  groupId = await _service.getLastGroupId(widget);
+                  groupId = await getLastGroupId(widget);
                   Navigator.push(
                       context,
                       MaterialPageRoute(
@@ -118,7 +121,7 @@ class _BaseViewState extends State<BaseView> {
                       child: const Text('追加'),
                       onPressed: () async {
                         // members!.add(memberName);
-                        groupId = await _service.getLastGroupId(widget);
+                        groupId = await getLastGroupId(widget);
                         await widget.database
                             .addMember(groupId, memberName, 'test');
                       },
