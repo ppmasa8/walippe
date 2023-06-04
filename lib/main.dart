@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:walippe/src/drift/walippe_db.dart';
-import 'package:walippe/views/screens/base_view.dart';
+import 'package:walippe/src/views/screens/base_view.dart';
 
 void main() {
   final database = WalippeDatabase();
