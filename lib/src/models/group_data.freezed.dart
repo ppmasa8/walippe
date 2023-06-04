@@ -18,7 +18,7 @@ final _privateConstructorUsedError = UnsupportedError(
 mixin _$GroupData {
   int get id => throw _privateConstructorUsedError;
   String get name => throw _privateConstructorUsedError;
-  String get description => throw _privateConstructorUsedError;
+  String? get description => throw _privateConstructorUsedError;
   DateTime get createdAt => throw _privateConstructorUsedError;
   DateTime get updatedAt => throw _privateConstructorUsedError;
 
@@ -35,7 +35,7 @@ abstract class $GroupDataCopyWith<$Res> {
   $Res call(
       {int id,
       String name,
-      String description,
+      String? description,
       DateTime createdAt,
       DateTime updatedAt});
 }
@@ -55,7 +55,7 @@ class _$GroupDataCopyWithImpl<$Res, $Val extends GroupData>
   $Res call({
     Object? id = null,
     Object? name = null,
-    Object? description = null,
+    Object? description = freezed,
     Object? createdAt = null,
     Object? updatedAt = null,
   }) {
@@ -68,10 +68,10 @@ class _$GroupDataCopyWithImpl<$Res, $Val extends GroupData>
           ? _value.name
           : name // ignore: cast_nullable_to_non_nullable
               as String,
-      description: null == description
+      description: freezed == description
           ? _value.description
           : description // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
       createdAt: null == createdAt
           ? _value.createdAt
           : createdAt // ignore: cast_nullable_to_non_nullable
@@ -94,7 +94,7 @@ abstract class _$$_GroupDataCopyWith<$Res> implements $GroupDataCopyWith<$Res> {
   $Res call(
       {int id,
       String name,
-      String description,
+      String? description,
       DateTime createdAt,
       DateTime updatedAt});
 }
@@ -112,7 +112,7 @@ class __$$_GroupDataCopyWithImpl<$Res>
   $Res call({
     Object? id = null,
     Object? name = null,
-    Object? description = null,
+    Object? description = freezed,
     Object? createdAt = null,
     Object? updatedAt = null,
   }) {
@@ -125,10 +125,10 @@ class __$$_GroupDataCopyWithImpl<$Res>
           ? _value.name
           : name // ignore: cast_nullable_to_non_nullable
               as String,
-      description: null == description
+      description: freezed == description
           ? _value.description
           : description // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
       createdAt: null == createdAt
           ? _value.createdAt
           : createdAt // ignore: cast_nullable_to_non_nullable
@@ -156,7 +156,7 @@ class _$_GroupData implements _GroupData {
   @override
   final String name;
   @override
-  final String description;
+  final String? description;
   @override
   final DateTime createdAt;
   @override
@@ -197,7 +197,7 @@ abstract class _GroupData implements GroupData {
   const factory _GroupData(
       {required final int id,
       required final String name,
-      required final String description,
+      required final String? description,
       required final DateTime createdAt,
       required final DateTime updatedAt}) = _$_GroupData;
 
@@ -206,7 +206,7 @@ abstract class _GroupData implements GroupData {
   @override
   String get name;
   @override
-  String get description;
+  String? get description;
   @override
   DateTime get createdAt;
   @override

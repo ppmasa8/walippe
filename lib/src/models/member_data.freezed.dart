@@ -19,7 +19,7 @@ mixin _$MemberData {
   int get id => throw _privateConstructorUsedError;
   int get groupId => throw _privateConstructorUsedError;
   String get name => throw _privateConstructorUsedError;
-  String get description => throw _privateConstructorUsedError;
+  String? get description => throw _privateConstructorUsedError;
   int get balance => throw _privateConstructorUsedError;
   DateTime get createdAt => throw _privateConstructorUsedError;
   DateTime get updatedAt => throw _privateConstructorUsedError;
@@ -39,7 +39,7 @@ abstract class $MemberDataCopyWith<$Res> {
       {int id,
       int groupId,
       String name,
-      String description,
+      String? description,
       int balance,
       DateTime createdAt,
       DateTime updatedAt});
@@ -61,7 +61,7 @@ class _$MemberDataCopyWithImpl<$Res, $Val extends MemberData>
     Object? id = null,
     Object? groupId = null,
     Object? name = null,
-    Object? description = null,
+    Object? description = freezed,
     Object? balance = null,
     Object? createdAt = null,
     Object? updatedAt = null,
@@ -79,10 +79,10 @@ class _$MemberDataCopyWithImpl<$Res, $Val extends MemberData>
           ? _value.name
           : name // ignore: cast_nullable_to_non_nullable
               as String,
-      description: null == description
+      description: freezed == description
           ? _value.description
           : description // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
       balance: null == balance
           ? _value.balance
           : balance // ignore: cast_nullable_to_non_nullable
@@ -111,7 +111,7 @@ abstract class _$$_MemberDataCopyWith<$Res>
       {int id,
       int groupId,
       String name,
-      String description,
+      String? description,
       int balance,
       DateTime createdAt,
       DateTime updatedAt});
@@ -131,7 +131,7 @@ class __$$_MemberDataCopyWithImpl<$Res>
     Object? id = null,
     Object? groupId = null,
     Object? name = null,
-    Object? description = null,
+    Object? description = freezed,
     Object? balance = null,
     Object? createdAt = null,
     Object? updatedAt = null,
@@ -149,10 +149,10 @@ class __$$_MemberDataCopyWithImpl<$Res>
           ? _value.name
           : name // ignore: cast_nullable_to_non_nullable
               as String,
-      description: null == description
+      description: freezed == description
           ? _value.description
           : description // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
       balance: null == balance
           ? _value.balance
           : balance // ignore: cast_nullable_to_non_nullable
@@ -188,7 +188,7 @@ class _$_MemberData implements _MemberData {
   @override
   final String name;
   @override
-  final String description;
+  final String? description;
   @override
   final int balance;
   @override
@@ -234,7 +234,7 @@ abstract class _MemberData implements MemberData {
       {required final int id,
       required final int groupId,
       required final String name,
-      required final String description,
+      required final String? description,
       required final int balance,
       required final DateTime createdAt,
       required final DateTime updatedAt}) = _$_MemberData;
@@ -246,7 +246,7 @@ abstract class _MemberData implements MemberData {
   @override
   String get name;
   @override
-  String get description;
+  String? get description;
   @override
   int get balance;
   @override

@@ -18,10 +18,11 @@ final _privateConstructorUsedError = UnsupportedError(
 mixin _$TransactionData {
   int get id => throw _privateConstructorUsedError;
   int get groupId => throw _privateConstructorUsedError;
+  String get subject => throw _privateConstructorUsedError;
+  String? get description => throw _privateConstructorUsedError;
   int get payerId => throw _privateConstructorUsedError;
   int get payeeId => throw _privateConstructorUsedError;
   int get amount => throw _privateConstructorUsedError;
-  String get description => throw _privateConstructorUsedError;
   DateTime get createdAt => throw _privateConstructorUsedError;
   DateTime get updatedAt => throw _privateConstructorUsedError;
 
@@ -39,10 +40,11 @@ abstract class $TransactionDataCopyWith<$Res> {
   $Res call(
       {int id,
       int groupId,
+      String subject,
+      String? description,
       int payerId,
       int payeeId,
       int amount,
-      String description,
       DateTime createdAt,
       DateTime updatedAt});
 }
@@ -62,10 +64,11 @@ class _$TransactionDataCopyWithImpl<$Res, $Val extends TransactionData>
   $Res call({
     Object? id = null,
     Object? groupId = null,
+    Object? subject = null,
+    Object? description = freezed,
     Object? payerId = null,
     Object? payeeId = null,
     Object? amount = null,
-    Object? description = null,
     Object? createdAt = null,
     Object? updatedAt = null,
   }) {
@@ -78,6 +81,14 @@ class _$TransactionDataCopyWithImpl<$Res, $Val extends TransactionData>
           ? _value.groupId
           : groupId // ignore: cast_nullable_to_non_nullable
               as int,
+      subject: null == subject
+          ? _value.subject
+          : subject // ignore: cast_nullable_to_non_nullable
+              as String,
+      description: freezed == description
+          ? _value.description
+          : description // ignore: cast_nullable_to_non_nullable
+              as String?,
       payerId: null == payerId
           ? _value.payerId
           : payerId // ignore: cast_nullable_to_non_nullable
@@ -90,10 +101,6 @@ class _$TransactionDataCopyWithImpl<$Res, $Val extends TransactionData>
           ? _value.amount
           : amount // ignore: cast_nullable_to_non_nullable
               as int,
-      description: null == description
-          ? _value.description
-          : description // ignore: cast_nullable_to_non_nullable
-              as String,
       createdAt: null == createdAt
           ? _value.createdAt
           : createdAt // ignore: cast_nullable_to_non_nullable
@@ -117,10 +124,11 @@ abstract class _$$_TransactionDataCopyWith<$Res>
   $Res call(
       {int id,
       int groupId,
+      String subject,
+      String? description,
       int payerId,
       int payeeId,
       int amount,
-      String description,
       DateTime createdAt,
       DateTime updatedAt});
 }
@@ -138,10 +146,11 @@ class __$$_TransactionDataCopyWithImpl<$Res>
   $Res call({
     Object? id = null,
     Object? groupId = null,
+    Object? subject = null,
+    Object? description = freezed,
     Object? payerId = null,
     Object? payeeId = null,
     Object? amount = null,
-    Object? description = null,
     Object? createdAt = null,
     Object? updatedAt = null,
   }) {
@@ -154,6 +163,14 @@ class __$$_TransactionDataCopyWithImpl<$Res>
           ? _value.groupId
           : groupId // ignore: cast_nullable_to_non_nullable
               as int,
+      subject: null == subject
+          ? _value.subject
+          : subject // ignore: cast_nullable_to_non_nullable
+              as String,
+      description: freezed == description
+          ? _value.description
+          : description // ignore: cast_nullable_to_non_nullable
+              as String?,
       payerId: null == payerId
           ? _value.payerId
           : payerId // ignore: cast_nullable_to_non_nullable
@@ -166,10 +183,6 @@ class __$$_TransactionDataCopyWithImpl<$Res>
           ? _value.amount
           : amount // ignore: cast_nullable_to_non_nullable
               as int,
-      description: null == description
-          ? _value.description
-          : description // ignore: cast_nullable_to_non_nullable
-              as String,
       createdAt: null == createdAt
           ? _value.createdAt
           : createdAt // ignore: cast_nullable_to_non_nullable
@@ -188,10 +201,11 @@ class _$_TransactionData implements _TransactionData {
   const _$_TransactionData(
       {required this.id,
       required this.groupId,
+      required this.subject,
+      required this.description,
       required this.payerId,
       required this.payeeId,
       required this.amount,
-      required this.description,
       required this.createdAt,
       required this.updatedAt});
 
@@ -200,13 +214,15 @@ class _$_TransactionData implements _TransactionData {
   @override
   final int groupId;
   @override
+  final String subject;
+  @override
+  final String? description;
+  @override
   final int payerId;
   @override
   final int payeeId;
   @override
   final int amount;
-  @override
-  final String description;
   @override
   final DateTime createdAt;
   @override
@@ -214,7 +230,7 @@ class _$_TransactionData implements _TransactionData {
 
   @override
   String toString() {
-    return 'TransactionData(id: $id, groupId: $groupId, payerId: $payerId, payeeId: $payeeId, amount: $amount, description: $description, createdAt: $createdAt, updatedAt: $updatedAt)';
+    return 'TransactionData(id: $id, groupId: $groupId, subject: $subject, description: $description, payerId: $payerId, payeeId: $payeeId, amount: $amount, createdAt: $createdAt, updatedAt: $updatedAt)';
   }
 
   @override
@@ -224,11 +240,12 @@ class _$_TransactionData implements _TransactionData {
             other is _$_TransactionData &&
             (identical(other.id, id) || other.id == id) &&
             (identical(other.groupId, groupId) || other.groupId == groupId) &&
+            (identical(other.subject, subject) || other.subject == subject) &&
+            (identical(other.description, description) ||
+                other.description == description) &&
             (identical(other.payerId, payerId) || other.payerId == payerId) &&
             (identical(other.payeeId, payeeId) || other.payeeId == payeeId) &&
             (identical(other.amount, amount) || other.amount == amount) &&
-            (identical(other.description, description) ||
-                other.description == description) &&
             (identical(other.createdAt, createdAt) ||
                 other.createdAt == createdAt) &&
             (identical(other.updatedAt, updatedAt) ||
@@ -236,8 +253,8 @@ class _$_TransactionData implements _TransactionData {
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, id, groupId, payerId, payeeId,
-      amount, description, createdAt, updatedAt);
+  int get hashCode => Object.hash(runtimeType, id, groupId, subject,
+      description, payerId, payeeId, amount, createdAt, updatedAt);
 
   @JsonKey(ignore: true)
   @override
@@ -250,10 +267,11 @@ abstract class _TransactionData implements TransactionData {
   const factory _TransactionData(
       {required final int id,
       required final int groupId,
+      required final String subject,
+      required final String? description,
       required final int payerId,
       required final int payeeId,
       required final int amount,
-      required final String description,
       required final DateTime createdAt,
       required final DateTime updatedAt}) = _$_TransactionData;
 
@@ -262,13 +280,15 @@ abstract class _TransactionData implements TransactionData {
   @override
   int get groupId;
   @override
+  String get subject;
+  @override
+  String? get description;
+  @override
   int get payerId;
   @override
   int get payeeId;
   @override
   int get amount;
-  @override
-  String get description;
   @override
   DateTime get createdAt;
   @override
