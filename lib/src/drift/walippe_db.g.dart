@@ -693,11 +693,20 @@ class $TransactionsTable extends Transactions
   late final GeneratedColumn<String> description = GeneratedColumn<String>(
       'description', aliasedName, true,
       type: DriftSqlType.string, requiredDuringInsert: false);
-  static const VerificationMeta _memberIdOfPayInAdvanceMeta =
-      const VerificationMeta('memberIdOfPayInAdvance');
+  static const VerificationMeta _payerIdMeta =
+      const VerificationMeta('payerId');
   @override
-  late final GeneratedColumn<int> memberIdOfPayInAdvance = GeneratedColumn<int>(
-      'member_id_of_pay_in_advance', aliasedName, false,
+  late final GeneratedColumn<int> payerId = GeneratedColumn<int>(
+      'payer_id', aliasedName, false,
+      type: DriftSqlType.int,
+      requiredDuringInsert: true,
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('REFERENCES members (id)'));
+  static const VerificationMeta _payeeIdMeta =
+      const VerificationMeta('payeeId');
+  @override
+  late final GeneratedColumn<int> payeeId = GeneratedColumn<int>(
+      'payee_id', aliasedName, false,
       type: DriftSqlType.int,
       requiredDuringInsert: true,
       defaultConstraints:
@@ -725,7 +734,8 @@ class $TransactionsTable extends Transactions
         groupId,
         subject,
         description,
-        memberIdOfPayInAdvance,
+        payerId,
+        payeeId,
         amount,
         createdAt,
         updatedAt
@@ -760,14 +770,17 @@ class $TransactionsTable extends Transactions
           description.isAcceptableOrUnknown(
               data['description']!, _descriptionMeta));
     }
-    if (data.containsKey('member_id_of_pay_in_advance')) {
-      context.handle(
-          _memberIdOfPayInAdvanceMeta,
-          memberIdOfPayInAdvance.isAcceptableOrUnknown(
-              data['member_id_of_pay_in_advance']!,
-              _memberIdOfPayInAdvanceMeta));
+    if (data.containsKey('payer_id')) {
+      context.handle(_payerIdMeta,
+          payerId.isAcceptableOrUnknown(data['payer_id']!, _payerIdMeta));
     } else if (isInserting) {
-      context.missing(_memberIdOfPayInAdvanceMeta);
+      context.missing(_payerIdMeta);
+    }
+    if (data.containsKey('payee_id')) {
+      context.handle(_payeeIdMeta,
+          payeeId.isAcceptableOrUnknown(data['payee_id']!, _payeeIdMeta));
+    } else if (isInserting) {
+      context.missing(_payeeIdMeta);
     }
     if (data.containsKey('amount')) {
       context.handle(_amountMeta,
@@ -804,9 +817,10 @@ class $TransactionsTable extends Transactions
           .read(DriftSqlType.string, data['${effectivePrefix}subject'])!,
       description: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}description']),
-      memberIdOfPayInAdvance: attachedDatabase.typeMapping.read(
-          DriftSqlType.int,
-          data['${effectivePrefix}member_id_of_pay_in_advance'])!,
+      payerId: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}payer_id'])!,
+      payeeId: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}payee_id'])!,
       amount: attachedDatabase.typeMapping
           .read(DriftSqlType.int, data['${effectivePrefix}amount'])!,
       createdAt: attachedDatabase.typeMapping
@@ -827,7 +841,8 @@ class Transaction extends DataClass implements Insertable<Transaction> {
   final int groupId;
   final String subject;
   final String? description;
-  final int memberIdOfPayInAdvance;
+  final int payerId;
+  final int payeeId;
   final int amount;
   final DateTime createdAt;
   final DateTime updatedAt;
@@ -836,7 +851,8 @@ class Transaction extends DataClass implements Insertable<Transaction> {
       required this.groupId,
       required this.subject,
       this.description,
-      required this.memberIdOfPayInAdvance,
+      required this.payerId,
+      required this.payeeId,
       required this.amount,
       required this.createdAt,
       required this.updatedAt});
@@ -849,7 +865,8 @@ class Transaction extends DataClass implements Insertable<Transaction> {
     if (!nullToAbsent || description != null) {
       map['description'] = Variable<String>(description);
     }
-    map['member_id_of_pay_in_advance'] = Variable<int>(memberIdOfPayInAdvance);
+    map['payer_id'] = Variable<int>(payerId);
+    map['payee_id'] = Variable<int>(payeeId);
     map['amount'] = Variable<int>(amount);
     map['created_at'] = Variable<DateTime>(createdAt);
     map['updated_at'] = Variable<DateTime>(updatedAt);
@@ -864,7 +881,8 @@ class Transaction extends DataClass implements Insertable<Transaction> {
       description: description == null && nullToAbsent
           ? const Value.absent()
           : Value(description),
-      memberIdOfPayInAdvance: Value(memberIdOfPayInAdvance),
+      payerId: Value(payerId),
+      payeeId: Value(payeeId),
       amount: Value(amount),
       createdAt: Value(createdAt),
       updatedAt: Value(updatedAt),
@@ -879,8 +897,8 @@ class Transaction extends DataClass implements Insertable<Transaction> {
       groupId: serializer.fromJson<int>(json['groupId']),
       subject: serializer.fromJson<String>(json['subject']),
       description: serializer.fromJson<String?>(json['description']),
-      memberIdOfPayInAdvance:
-          serializer.fromJson<int>(json['memberIdOfPayInAdvance']),
+      payerId: serializer.fromJson<int>(json['payerId']),
+      payeeId: serializer.fromJson<int>(json['payeeId']),
       amount: serializer.fromJson<int>(json['amount']),
       createdAt: serializer.fromJson<DateTime>(json['createdAt']),
       updatedAt: serializer.fromJson<DateTime>(json['updatedAt']),
@@ -894,7 +912,8 @@ class Transaction extends DataClass implements Insertable<Transaction> {
       'groupId': serializer.toJson<int>(groupId),
       'subject': serializer.toJson<String>(subject),
       'description': serializer.toJson<String?>(description),
-      'memberIdOfPayInAdvance': serializer.toJson<int>(memberIdOfPayInAdvance),
+      'payerId': serializer.toJson<int>(payerId),
+      'payeeId': serializer.toJson<int>(payeeId),
       'amount': serializer.toJson<int>(amount),
       'createdAt': serializer.toJson<DateTime>(createdAt),
       'updatedAt': serializer.toJson<DateTime>(updatedAt),
@@ -906,7 +925,8 @@ class Transaction extends DataClass implements Insertable<Transaction> {
           int? groupId,
           String? subject,
           Value<String?> description = const Value.absent(),
-          int? memberIdOfPayInAdvance,
+          int? payerId,
+          int? payeeId,
           int? amount,
           DateTime? createdAt,
           DateTime? updatedAt}) =>
@@ -915,8 +935,8 @@ class Transaction extends DataClass implements Insertable<Transaction> {
         groupId: groupId ?? this.groupId,
         subject: subject ?? this.subject,
         description: description.present ? description.value : this.description,
-        memberIdOfPayInAdvance:
-            memberIdOfPayInAdvance ?? this.memberIdOfPayInAdvance,
+        payerId: payerId ?? this.payerId,
+        payeeId: payeeId ?? this.payeeId,
         amount: amount ?? this.amount,
         createdAt: createdAt ?? this.createdAt,
         updatedAt: updatedAt ?? this.updatedAt,
@@ -928,7 +948,8 @@ class Transaction extends DataClass implements Insertable<Transaction> {
           ..write('groupId: $groupId, ')
           ..write('subject: $subject, ')
           ..write('description: $description, ')
-          ..write('memberIdOfPayInAdvance: $memberIdOfPayInAdvance, ')
+          ..write('payerId: $payerId, ')
+          ..write('payeeId: $payeeId, ')
           ..write('amount: $amount, ')
           ..write('createdAt: $createdAt, ')
           ..write('updatedAt: $updatedAt')
@@ -937,8 +958,8 @@ class Transaction extends DataClass implements Insertable<Transaction> {
   }
 
   @override
-  int get hashCode => Object.hash(id, groupId, subject, description,
-      memberIdOfPayInAdvance, amount, createdAt, updatedAt);
+  int get hashCode => Object.hash(id, groupId, subject, description, payerId,
+      payeeId, amount, createdAt, updatedAt);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -947,7 +968,8 @@ class Transaction extends DataClass implements Insertable<Transaction> {
           other.groupId == this.groupId &&
           other.subject == this.subject &&
           other.description == this.description &&
-          other.memberIdOfPayInAdvance == this.memberIdOfPayInAdvance &&
+          other.payerId == this.payerId &&
+          other.payeeId == this.payeeId &&
           other.amount == this.amount &&
           other.createdAt == this.createdAt &&
           other.updatedAt == this.updatedAt);
@@ -958,7 +980,8 @@ class TransactionsCompanion extends UpdateCompanion<Transaction> {
   final Value<int> groupId;
   final Value<String> subject;
   final Value<String?> description;
-  final Value<int> memberIdOfPayInAdvance;
+  final Value<int> payerId;
+  final Value<int> payeeId;
   final Value<int> amount;
   final Value<DateTime> createdAt;
   final Value<DateTime> updatedAt;
@@ -967,7 +990,8 @@ class TransactionsCompanion extends UpdateCompanion<Transaction> {
     this.groupId = const Value.absent(),
     this.subject = const Value.absent(),
     this.description = const Value.absent(),
-    this.memberIdOfPayInAdvance = const Value.absent(),
+    this.payerId = const Value.absent(),
+    this.payeeId = const Value.absent(),
     this.amount = const Value.absent(),
     this.createdAt = const Value.absent(),
     this.updatedAt = const Value.absent(),
@@ -977,13 +1001,15 @@ class TransactionsCompanion extends UpdateCompanion<Transaction> {
     required int groupId,
     required String subject,
     this.description = const Value.absent(),
-    required int memberIdOfPayInAdvance,
+    required int payerId,
+    required int payeeId,
     required int amount,
     required DateTime createdAt,
     required DateTime updatedAt,
   })  : groupId = Value(groupId),
         subject = Value(subject),
-        memberIdOfPayInAdvance = Value(memberIdOfPayInAdvance),
+        payerId = Value(payerId),
+        payeeId = Value(payeeId),
         amount = Value(amount),
         createdAt = Value(createdAt),
         updatedAt = Value(updatedAt);
@@ -992,7 +1018,8 @@ class TransactionsCompanion extends UpdateCompanion<Transaction> {
     Expression<int>? groupId,
     Expression<String>? subject,
     Expression<String>? description,
-    Expression<int>? memberIdOfPayInAdvance,
+    Expression<int>? payerId,
+    Expression<int>? payeeId,
     Expression<int>? amount,
     Expression<DateTime>? createdAt,
     Expression<DateTime>? updatedAt,
@@ -1002,8 +1029,8 @@ class TransactionsCompanion extends UpdateCompanion<Transaction> {
       if (groupId != null) 'group_id': groupId,
       if (subject != null) 'subject': subject,
       if (description != null) 'description': description,
-      if (memberIdOfPayInAdvance != null)
-        'member_id_of_pay_in_advance': memberIdOfPayInAdvance,
+      if (payerId != null) 'payer_id': payerId,
+      if (payeeId != null) 'payee_id': payeeId,
       if (amount != null) 'amount': amount,
       if (createdAt != null) 'created_at': createdAt,
       if (updatedAt != null) 'updated_at': updatedAt,
@@ -1015,7 +1042,8 @@ class TransactionsCompanion extends UpdateCompanion<Transaction> {
       Value<int>? groupId,
       Value<String>? subject,
       Value<String?>? description,
-      Value<int>? memberIdOfPayInAdvance,
+      Value<int>? payerId,
+      Value<int>? payeeId,
       Value<int>? amount,
       Value<DateTime>? createdAt,
       Value<DateTime>? updatedAt}) {
@@ -1024,8 +1052,8 @@ class TransactionsCompanion extends UpdateCompanion<Transaction> {
       groupId: groupId ?? this.groupId,
       subject: subject ?? this.subject,
       description: description ?? this.description,
-      memberIdOfPayInAdvance:
-          memberIdOfPayInAdvance ?? this.memberIdOfPayInAdvance,
+      payerId: payerId ?? this.payerId,
+      payeeId: payeeId ?? this.payeeId,
       amount: amount ?? this.amount,
       createdAt: createdAt ?? this.createdAt,
       updatedAt: updatedAt ?? this.updatedAt,
@@ -1047,9 +1075,11 @@ class TransactionsCompanion extends UpdateCompanion<Transaction> {
     if (description.present) {
       map['description'] = Variable<String>(description.value);
     }
-    if (memberIdOfPayInAdvance.present) {
-      map['member_id_of_pay_in_advance'] =
-          Variable<int>(memberIdOfPayInAdvance.value);
+    if (payerId.present) {
+      map['payer_id'] = Variable<int>(payerId.value);
+    }
+    if (payeeId.present) {
+      map['payee_id'] = Variable<int>(payeeId.value);
     }
     if (amount.present) {
       map['amount'] = Variable<int>(amount.value);
@@ -1070,7 +1100,8 @@ class TransactionsCompanion extends UpdateCompanion<Transaction> {
           ..write('groupId: $groupId, ')
           ..write('subject: $subject, ')
           ..write('description: $description, ')
-          ..write('memberIdOfPayInAdvance: $memberIdOfPayInAdvance, ')
+          ..write('payerId: $payerId, ')
+          ..write('payeeId: $payeeId, ')
           ..write('amount: $amount, ')
           ..write('createdAt: $createdAt, ')
           ..write('updatedAt: $updatedAt')
