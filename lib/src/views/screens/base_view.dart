@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:walippe/src/drift/walippe_db.dart';
-import 'package:walippe/src/views/controller/base_controller.dart';
+import 'package:walippe/src/views/services/base_view_service.dart';
 import 'package:walippe/src/views/screens/group_view.dart';
 
 class BaseView extends StatefulWidget {
@@ -14,7 +14,7 @@ class BaseView extends StatefulWidget {
 }
 
 class _BaseViewState extends State<BaseView> {
-  final BaseController _controller = BaseController();
+  final BaseViewService _service = BaseViewService();
 
   final formKey = GlobalKey<FormState>();
 
@@ -80,7 +80,6 @@ class _BaseViewState extends State<BaseView> {
                     itemBuilder: (context, index) => TextButton(
                       child: Text(snapshot.data![index].name),
                       onPressed: () async {
-                        // TODO: Dispose
                         await widget.database.updateMember(
                           snapshot.data![index],
                           '',
@@ -99,9 +98,8 @@ class _BaseViewState extends State<BaseView> {
               onPressed: () async {
                 if (formKey.currentState!.validate()) {
                   // members!.add(memberName);
-                  // TODO: Dispose
                   await widget.database.addGroup(groupName, 'test');
-                  groupId = await _controller.getLastGroupId(widget);
+                  groupId = await _service.getLastGroupId(widget);
                   Navigator.push(
                       context,
                       MaterialPageRoute(
@@ -120,8 +118,7 @@ class _BaseViewState extends State<BaseView> {
                       child: const Text('追加'),
                       onPressed: () async {
                         // members!.add(memberName);
-                        groupId = await _controller.getLastGroupId(widget);
-                        // TODO: Dispose
+                        groupId = await _service.getLastGroupId(widget);
                         await widget.database
                             .addMember(groupId, memberName, 'test');
                       },
@@ -134,10 +131,8 @@ class _BaseViewState extends State<BaseView> {
                     child: ElevatedButton(
                       child: const Text('削除'),
                       onPressed: () async {
-                        // TODO: Dispose
                         final list = await widget.database.getAllMembers();
                         if (list.isNotEmpty) {
-                          // TODO: Dispose
                           await widget.database
                               .deleteMember(list[list.length - 1]);
                         }
