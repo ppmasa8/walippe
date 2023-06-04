@@ -17,7 +17,8 @@ class _BaseViewState extends State<BaseView> {
 
   late String groupName;
   late String memberName;
-  late List members;
+  late int groupId;
+  // List? members = [];
 
   @override
   Widget build(BuildContext context) {
@@ -60,7 +61,6 @@ class _BaseViewState extends State<BaseView> {
                     const InputDecoration(labelText: 'メンバー名', hintText: 'なおみ'),
                 onChanged: (value) {
                   memberName = value;
-                  members.add(memberName);
                 }),
             Expanded(
               child: StreamBuilder(
@@ -80,7 +80,7 @@ class _BaseViewState extends State<BaseView> {
                         await widget.database.updateMember(
                           snapshot.data![index],
                           '',
-                          '更新',
+                          '',
                         );
                       },
                     ),
@@ -94,8 +94,13 @@ class _BaseViewState extends State<BaseView> {
               ),
               onPressed: () async {
                 if (formKey.currentState!.validate()) {
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => GroupView()));
+                  // members!.add(memberName);
+                  await widget.database.addGroup(groupName, 'test');
+                  groupId = await getLastGroupId(widget);
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => GroupView(groupName, groupId)));
                 }
               },
               child: const Text('グループを作成'),
@@ -109,9 +114,10 @@ class _BaseViewState extends State<BaseView> {
                     child: ElevatedButton(
                       child: const Text('追加'),
                       onPressed: () async {
-                        final groupList = await widget.database.getAllGroups();
-                        await widget.database.addMember(
-                            groupList.length - 1, memberName, 'test');
+                        // members!.add(memberName);
+                        groupId = await getLastGroupId(widget);
+                        await widget.database
+                            .addMember(groupId, memberName, 'test');
                       },
                     ),
                   ),
@@ -136,6 +142,11 @@ class _BaseViewState extends State<BaseView> {
           ],
         )));
   }
+}
+
+Future<int> getLastGroupId(widget) async {
+  final groupList = await widget.database.getAllGroups();
+  return groupList.length - 1;
 }
 
 // class TextFieldWidget extends StatelessWidget {

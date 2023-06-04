@@ -2,7 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class GroupView extends StatelessWidget {
-  const GroupView({Key? key}) : super(key: key);
+  final String groupName;
+  final int groupId;
+  // final List members;
+
+  const GroupView(this.groupName, this.groupId, {Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -21,6 +26,14 @@ class GroupView extends StatelessWidget {
       body: Center(
           child: Column(
         children: [
+          Text(
+            groupName,
+          style: const TextStyle(
+            fontSize: 32,
+            fontWeight: FontWeight.bold,
+            color: Colors.deepPurpleAccent
+          ),),
+          Text(groupId.toString()),
           ElevatedButton(
             style: ElevatedButton.styleFrom(
               shape: const StadiumBorder(),

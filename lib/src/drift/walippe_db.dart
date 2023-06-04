@@ -81,6 +81,11 @@ class WalippeDatabase extends _$WalippeDatabase {
     return (select(members)).watch();
   }
 
+  Stream<List<Member>> watchAllMembersInGroup(int groupId) {
+    return (select(members)..where((tbl) => tbl.groupId.equals(groupId)))
+        .watch();
+  }
+
   Future<List<Member>> getAllMembers() => select(members).get();
 
   Future<int> addMember(int groupId, String name, String description) {
@@ -102,8 +107,8 @@ class WalippeDatabase extends _$WalippeDatabase {
             updatedAt: Value(DateTime.now())));
   }
 
-  Future<int> updateMemberGroupId(Member member, int groupId) {
-    return (update(members)..where((tbl) => tbl.id.equals(member.id))).write(
+  Future<int> updateMemberGroupId(int memberId, int groupId) {
+    return (update(members)..where((tbl) => tbl.id.equals(memberId))).write(
         MembersCompanion(
             groupId: Value(groupId), updatedAt: Value(DateTime.now())));
   }
