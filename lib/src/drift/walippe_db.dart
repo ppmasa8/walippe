@@ -76,6 +76,11 @@ class WalippeDatabase extends _$WalippeDatabase {
   }
 
   // Transactions
+  Stream<List<Transaction>> watchAllTransactions() {
+    return (select(transactions)).watch();
+  }
+
+  Future<List<Transaction>> getAllTransactions() => select(transactions).get();
 
   // Members
   Stream<List<Member>> watchAllMembers() {
