@@ -1,5 +1,5 @@
-import 'package:walippe/src/drift/walippe_db.dart';
-import 'package:walippe/src/models/group_data.dart';
+import '../drift/walippe_db.dart';
+import '../models/group_data.dart';
 
 class GroupRepository {
   const GroupRepository({required this.database});
@@ -14,5 +14,13 @@ class GroupRepository {
       createdAt: group.createdAt,
       updatedAt: group.updatedAt,
     )).toList();
+  }
+
+  Future<void> addGroupByString(String name, String description) async {
+    await database.addGroup(name, description);
+  }
+
+  Future<void> deleteGroupById(int id) async {
+    await database.deleteGroup(id);
   }
 }

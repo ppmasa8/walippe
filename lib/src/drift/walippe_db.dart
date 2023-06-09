@@ -63,16 +63,8 @@ class WalippeDatabase extends _$WalippeDatabase {
     ));
   }
 
-  Future<int> updateGroup(Group group, String name, String description) {
-    return (update(groups)..where((tbl) => tbl.id.equals(group.id))).write(
-        GroupsCompanion(
-            name: Value(name),
-            description: Value(description),
-            updatedAt: Value(DateTime.now())));
-  }
-
-  Future<int> deleteGroup(Group group) {
-    return (delete(groups)..where((tbl) => tbl.id.equals(group.id))).go();
+  Future<int> deleteGroup(int id) {
+    return (delete(groups)..where((tbl) => tbl.id.equals(id))).go();
   }
 
   // Transactions
@@ -87,7 +79,7 @@ class WalippeDatabase extends _$WalippeDatabase {
     return (select(members)).watch();
   }
 
-  Stream<List<Member>> watchAllMembersInGroup(int groupId) {
+  Stream<List<Member>> watchMembersInGroup(int groupId) {
     return (select(members)..where((tbl) => tbl.groupId.equals(groupId)))
         .watch();
   }
@@ -105,28 +97,14 @@ class WalippeDatabase extends _$WalippeDatabase {
     ));
   }
 
-  Future<int> updateMember(Member member, String name, String description) {
-    return (update(members)..where((tbl) => tbl.id.equals(member.id))).write(
-        MembersCompanion(
-            name: Value(name),
-            description: Value(description),
-            updatedAt: Value(DateTime.now())));
-  }
-
-  Future<int> updateMemberGroupId(int memberId, int groupId) {
-    return (update(members)..where((tbl) => tbl.id.equals(memberId))).write(
-        MembersCompanion(
-            groupId: Value(groupId), updatedAt: Value(DateTime.now())));
-  }
-
   Future<int> updateMemberBalance(Member member, int balance) {
     return (update(members)..where((tbl) => tbl.id.equals(member.id))).write(
         MembersCompanion(
             balance: Value(balance), updatedAt: Value(DateTime.now())));
   }
 
-  Future<int> deleteMember(Member member) {
-    return (delete(members)..where((tbl) => tbl.id.equals(member.id))).go();
+  Future<int> deleteMember(int id) {
+    return (delete(members)..where((tbl) => tbl.id.equals(id))).go();
   }
 }
 

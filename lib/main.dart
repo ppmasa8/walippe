@@ -1,27 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:walippe/src/drift/walippe_db.dart';
-import 'package:walippe/src/views/screens/base_view.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+import 'src/providers/provider.dart';
+import 'src/walippe.dart';
+import 'src/drift/walippe_db.dart';
 
 void main() {
   final database = WalippeDatabase();
-  runApp(MyApp(database: database,));
-}
-
-class MyApp extends StatelessWidget {
-  const MyApp({Key? key, required this.database,}) : super(key: key);
-
-  final WalippeDatabase database;
-
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Walippe',
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        useMaterial3: true,
-      ),
-      home: BaseView(database: database,),
-    );
-  }
+  runApp(ProviderScope(overrides: [
+    walippeDatabaseProvider.overrideWithValue(database),
+  ], child: Walippe()));
 }
