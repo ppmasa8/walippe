@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../drift/walippe_db.dart';
@@ -44,3 +45,6 @@ MemberRepository memberRepository(MemberRepositoryRef ref) {
 Future<List<MemberData>> memberList(MemberListRef ref) {
   return ref.read(memberRepositoryProvider).fetchMember();
 }
+
+// For Form Provider.
+final formKeyProvider = Provider((ref) => GlobalKey<FormState>());
