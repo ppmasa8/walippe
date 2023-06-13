@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-import 'drift/walippe_db.dart';
 import 'views/screens/base_view.dart';
 
 class Walippe extends StatelessWidget {

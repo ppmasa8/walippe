@@ -2,10 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-import '../../drift/walippe_db.dart';
-import '../../models/group_data.dart';
 import '../../providers/provider.dart';
-import '../../views/screens/group_view.dart';
+import 'add_member.dart';
 
 class BaseView extends ConsumerWidget {
   BaseView({Key? key}) : super(key: key);
@@ -53,14 +51,19 @@ class BaseView extends ConsumerWidget {
                 shape: const StadiumBorder(),
               ),
               onPressed: () async {
-                await ref
-                    .watch(groupRepositoryProvider)
-                    .addGroupByString(groupName, 'test');
                 if (globalKey.currentState!.validate()) {
-                  // Navigator.push(
-                  //     context,
-                  //     MaterialPageRoute(
-                  //         builder: (context) => GroupView(groupName)));
+                  await ref
+                      .watch(groupRepositoryProvider)
+                      .addGroupByString(groupName, 'test');
+                  final providerContainer = ProviderScope.containerOf(context);
+                  await Navigator.of(context).push<void>(
+                    MaterialPageRoute(
+                      builder: (context) => ProviderScope(
+                        parent: providerContainer,
+                        child: AddMember(),
+                      ),
+                    ),
+                  );
                 }
               },
               child: const Text('グループを作成'),
