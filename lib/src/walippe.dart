@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import 'const/const.dart';
 import 'views/screens/base_view.dart';
 
 class Walippe extends StatelessWidget {
@@ -8,7 +9,7 @@ class Walippe extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Walippe',
+      title: titleName,
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),

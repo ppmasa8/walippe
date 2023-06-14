@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../drift/walippe_db.dart';
@@ -8,6 +7,7 @@ import '../models/transaction_data.dart';
 import '../repositories/group_repository.dart';
 import '../repositories/member_repository.dart';
 import '../repositories/transaction_repository.dart';
+import '../views/form_validator.dart';
 
 part 'provider.g.dart';
 
@@ -46,5 +46,10 @@ Future<List<MemberData>> memberList(MemberListRef ref) {
   return ref.read(memberRepositoryProvider).fetchMember();
 }
 
+final memberListStreamProvider = StreamProvider.autoDispose<List<MemberData>>((ref) {
+  final memberListFuture = ref.watch(memberListProvider.future);
+  return memberListFuture.asStream();
+});
+
 // For Form Provider.
-final formKeyProvider = Provider((ref) => GlobalKey<FormState>());
+final formValidatorProvider = Provider((ref) => FormValidator());

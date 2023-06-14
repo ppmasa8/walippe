@@ -2,20 +2,23 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+import '../../const/const.dart';
 import '../../providers/provider.dart';
 import 'add_member.dart';
 
 class BaseView extends ConsumerWidget {
   BaseView({Key? key}) : super(key: key);
+  final GlobalKey<FormState> formKey = GlobalKey<FormState>();
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final globalKey = ref.watch(formKeyProvider);
+    final formValidator = ref.watch(formValidatorProvider);
     late String groupName;
 
     return Scaffold(
         appBar: AppBar(
           title: Text(
-            'Walippe',
+            titleName,
             style: GoogleFonts.dancingScript(
               fontSize: 32,
               fontWeight: FontWeight.bold,
@@ -29,18 +32,14 @@ class BaseView extends ConsumerWidget {
             child: Column(
           children: [
             Form(
-                key: globalKey,
+                key: formKey,
                 child: Column(
                   children: [
                     TextFormField(
                         decoration: const InputDecoration(
-                            labelText: 'グループ名', hintText: '沖縄旅行'),
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'グループ名を入力してください';
-                          }
-                          return null;
-                        },
+                            labelText: groupFormLabelText,
+                            hintText: groupFormHintText),
+                        validator: formValidator.validateGroupName,
                         onChanged: (value) {
                           groupName = value;
                         }),
@@ -51,22 +50,20 @@ class BaseView extends ConsumerWidget {
                 shape: const StadiumBorder(),
               ),
               onPressed: () async {
-                if (globalKey.currentState!.validate()) {
+                if (formKey.currentState!.validate()) {
                   await ref
                       .watch(groupRepositoryProvider)
                       .addGroupByString(groupName, 'test');
-                  final providerContainer = ProviderScope.containerOf(context);
                   await Navigator.of(context).push<void>(
                     MaterialPageRoute(
                       builder: (context) => ProviderScope(
-                        parent: providerContainer,
                         child: AddMember(),
                       ),
                     ),
                   );
                 }
               },
-              child: const Text('グループを作成'),
+              child: const Text(groupCreateButtonText),
             ),
           ],
         )));
