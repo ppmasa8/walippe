@@ -1,5 +1,5 @@
-import 'package:walippe/src/drift/walippe_db.dart';
-import 'package:walippe/src/models/transaction_data.dart';
+import '../drift/walippe_db.dart';
+import '../models/transaction_data.dart';
 
 class TransactionRepository {
   const TransactionRepository({required this.database});

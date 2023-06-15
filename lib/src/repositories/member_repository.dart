@@ -1,5 +1,5 @@
-import 'package:walippe/src/drift/walippe_db.dart';
-import 'package:walippe/src/models/member_data.dart';
+import '../drift/walippe_db.dart';
+import '../models/member_data.dart';
 
 class MemberRepository {
   const MemberRepository({required this.database});
@@ -18,5 +18,14 @@ class MemberRepository {
               updatedAt: member.updatedAt,
             ))
         .toList();
+  }
+
+  Future<void> addMemberToGroup(
+      int groupId, String name, String description) async {
+    await database.addMember(groupId, name, description);
+  }
+
+  Future<void> deleteMemberById(int id) async {
+    await database.deleteMember(id);
   }
 }

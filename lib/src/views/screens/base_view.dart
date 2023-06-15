@@ -1,37 +1,24 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:walippe/src/drift/walippe_db.dart';
-import 'package:walippe/src/views/screens/group_view.dart';
 
-class BaseView extends StatefulWidget {
-  const BaseView({Key? key, required this.database}) : super(key: key);
+import '../../const/const.dart';
+import '../../providers/provider.dart';
+import 'add_member.dart';
 
-  final WalippeDatabase database;
-
-  @override
-  State<BaseView> createState() => _BaseViewState();
-}
-
-class _BaseViewState extends State<BaseView> {
-
-  final formKey = GlobalKey<FormState>();
-
-  late String groupName;
-  late String memberName;
-  late int groupId;
-  // List? members = [];
-
-  Future<int> getLastGroupId(widget) async {
-    final groupList = await widget.database.getAllGroups();
-    return groupList.length - 1;
-  }
+class BaseView extends ConsumerWidget {
+  BaseView({Key? key}) : super(key: key);
+  final GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final formValidator = ref.watch(formValidatorProvider);
+    late String groupName;
+
     return Scaffold(
         appBar: AppBar(
           title: Text(
-            'Walippe',
+            titleName,
             style: GoogleFonts.dancingScript(
               fontSize: 32,
               fontWeight: FontWeight.bold,
@@ -50,100 +37,33 @@ class _BaseViewState extends State<BaseView> {
                   children: [
                     TextFormField(
                         decoration: const InputDecoration(
-                            labelText: 'グループ名', hintText: '沖縄旅行'),
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'グループ名を入力してください';
-                          }
-                          return null;
-                        },
+                            labelText: groupFormLabelText,
+                            hintText: groupFormHintText),
+                        validator: formValidator.validateGroupName,
                         onChanged: (value) {
                           groupName = value;
                         }),
                   ],
                 )),
-            TextField(
-                decoration:
-                    const InputDecoration(labelText: 'メンバー名', hintText: 'なおみ'),
-                onChanged: (value) {
-                  memberName = value;
-                }),
-            Expanded(
-              child: StreamBuilder(
-                stream: widget.database.watchAllMembers(),
-                builder: (BuildContext context,
-                    AsyncSnapshot<List<Member>> snapshot) {
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return const Center(
-                      child: CircularProgressIndicator(),
-                    );
-                  }
-                  return ListView.builder(
-                    itemCount: snapshot.data!.length,
-                    itemBuilder: (context, index) => TextButton(
-                      child: Text(snapshot.data![index].name),
-                      onPressed: () async {
-                        await widget.database.updateMember(
-                          snapshot.data![index],
-                          '',
-                          '',
-                        );
-                      },
-                    ),
-                  );
-                },
-              ),
-            ),
             ElevatedButton(
               style: ElevatedButton.styleFrom(
                 shape: const StadiumBorder(),
               ),
               onPressed: () async {
                 if (formKey.currentState!.validate()) {
-                  // members!.add(memberName);
-                  await widget.database.addGroup(groupName, 'test');
-                  groupId = await getLastGroupId(widget);
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => GroupView(groupName, groupId)));
+                  await ref
+                      .watch(groupRepositoryProvider)
+                      .addGroupByString(groupName, 'test');
+                  await Navigator.of(context).push<void>(
+                    MaterialPageRoute(
+                      builder: (context) => ProviderScope(
+                        child: AddMember(),
+                      ),
+                    ),
+                  );
                 }
               },
-              child: const Text('グループを作成'),
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                Expanded(
-                  child: Padding(
-                    padding: const EdgeInsets.all(8),
-                    child: ElevatedButton(
-                      child: const Text('追加'),
-                      onPressed: () async {
-                        // members!.add(memberName);
-                        groupId = await getLastGroupId(widget);
-                        await widget.database
-                            .addMember(groupId, memberName, 'test');
-                      },
-                    ),
-                  ),
-                ),
-                Expanded(
-                  child: Padding(
-                    padding: const EdgeInsets.all(8),
-                    child: ElevatedButton(
-                      child: const Text('削除'),
-                      onPressed: () async {
-                        final list = await widget.database.getAllMembers();
-                        if (list.isNotEmpty) {
-                          await widget.database
-                              .deleteMember(list[list.length - 1]);
-                        }
-                      },
-                    ),
-                  ),
-                ),
-              ],
+              child: const Text(groupCreateButtonText),
             ),
           ],
         )));
