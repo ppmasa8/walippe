@@ -14,6 +14,7 @@ class AddMember extends ConsumerWidget {
     final groupListAsync = ref.watch(groupListProvider);
     final memberListStream = ref.watch(memberListStreamProvider);
     final formValidator = ref.watch(formValidatorProvider);
+    final textEditingController = ref.watch(textEditingControllerProvider);
     late String memberName;
 
     return Scaffold(
@@ -52,6 +53,7 @@ class AddMember extends ConsumerWidget {
               child: Column(
                 children: [
                   TextFormField(
+                    controller: textEditingController,
                     decoration: const InputDecoration(
                         labelText: memberFormLabelText,
                         hintText: memberFormHintText),
@@ -72,6 +74,7 @@ class AddMember extends ConsumerWidget {
                         child: const Text(addText),
                         onPressed: () async {
                           if (formKey.currentState!.validate()) {
+                            textEditingController.clear();
                             await ref
                                 .watch(memberRepositoryProvider)
                                 .addMemberToGroup(

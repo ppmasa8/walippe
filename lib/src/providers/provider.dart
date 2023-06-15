@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../drift/walippe_db.dart';
@@ -51,5 +52,8 @@ final memberListStreamProvider = StreamProvider.autoDispose<List<MemberData>>((r
   return memberListFuture.asStream();
 });
 
-// For Form Provider.
+final textEditingControllerProvider = Provider<TextEditingController>((ref) {
+  return TextEditingController();
+});
+
 final formValidatorProvider = Provider((ref) => FormValidator());
