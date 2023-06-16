@@ -48,22 +48,28 @@ class AddMember extends ConsumerWidget {
       body: Center(
           child: Column(
         children: [
-          Form(
-              key: formKey,
-              child: Column(
-                children: [
-                  TextFormField(
-                    controller: textEditingController,
-                    decoration: const InputDecoration(
-                        labelText: memberFormLabelText,
-                        hintText: memberFormHintText),
-                    validator: formValidator.validateMemberName,
-                    onChanged: (value) {
-                      memberName = value;
-                    },
-                  )
-                ],
-              )),
+          Padding(
+            padding: const EdgeInsets.all(10.0),
+            child: Form(
+                key: formKey,
+                child: Column(
+                  children: [
+                    SizedBox(
+                        width: 300,
+                        child: TextFormField(
+                          controller: textEditingController,
+                          decoration: const InputDecoration(
+                              border: OutlineInputBorder(),
+                              labelText: memberFormLabelText,
+                              hintText: memberFormHintText),
+                          validator: formValidator.validateMemberName,
+                          onChanged: (value) {
+                            memberName = value;
+                          },
+                        ))
+                  ],
+                )),
+          ),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [

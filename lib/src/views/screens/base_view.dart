@@ -31,20 +31,27 @@ class BaseView extends ConsumerWidget {
         body: Center(
             child: Column(
           children: [
-            Form(
-                key: formKey,
-                child: Column(
-                  children: [
-                    TextFormField(
-                        decoration: const InputDecoration(
-                            labelText: groupFormLabelText,
-                            hintText: groupFormHintText),
-                        validator: formValidator.validateGroupName,
-                        onChanged: (value) {
-                          groupName = value;
-                        }),
-                  ],
-                )),
+            Padding(
+              padding: const EdgeInsets.all(10.0),
+              child: Form(
+                  key: formKey,
+                  child: Column(
+                    children: [
+                      SizedBox(
+                        width: 300,
+                        child: TextFormField(
+                            decoration: const InputDecoration(
+                                border: OutlineInputBorder(),
+                                labelText: groupFormLabelText,
+                                hintText: groupFormHintText),
+                            validator: formValidator.validateGroupName,
+                            onChanged: (value) {
+                              groupName = value;
+                            }),
+                      )
+                    ],
+                  )),
+            ),
             ElevatedButton(
               style: ElevatedButton.styleFrom(
                 shape: const StadiumBorder(),
@@ -69,22 +76,3 @@ class BaseView extends ConsumerWidget {
         )));
   }
 }
-
-
-// class TextFieldWidget extends StatelessWidget {
-//   const TextFieldWidget({Key? key}) : super(key: key);
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return const SizedBox(
-//       width: 300,
-//       child: TextField(
-//         obscureText: true,
-//         decoration: InputDecoration(
-//           border: OutlineInputBorder(),
-//           labelText: 'グループ名',
-//         ),
-//       ),
-//     );
-//   }
-// }
