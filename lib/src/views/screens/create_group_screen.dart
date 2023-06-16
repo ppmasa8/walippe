@@ -4,10 +4,10 @@ import 'package:google_fonts/google_fonts.dart';
 
 import '../../const/const.dart';
 import '../../providers/provider.dart';
-import 'add_member.dart';
+import 'group_member_screen.dart';
 
-class BaseView extends ConsumerWidget {
-  BaseView({Key? key}) : super(key: key);
+class CreateGroupScreen extends ConsumerWidget {
+  CreateGroupScreen({Key? key}) : super(key: key);
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
   @override
@@ -64,7 +64,7 @@ class BaseView extends ConsumerWidget {
                   await Navigator.of(context).push<void>(
                     MaterialPageRoute(
                       builder: (context) => ProviderScope(
-                        child: AddMember(),
+                        child: GroupMemberScreen(),
                       ),
                     ),
                   );

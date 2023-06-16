@@ -18,3 +18,5 @@ const deleteText = '削除';
 const memberDurationForDelete = 500;
 
 const memberDeleteSnackBarText = '削除しました';
+
+const nextPage = '次へ';

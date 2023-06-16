@@ -4,9 +4,10 @@ import 'package:google_fonts/google_fonts.dart';
 
 import '../../const/const.dart';
 import '../../providers/provider.dart';
+import 'group_view.dart';
 
-class AddMember extends ConsumerWidget {
-  AddMember({Key? key}) : super(key: key);
+class GroupMemberScreen extends ConsumerWidget {
+  GroupMemberScreen({Key? key}) : super(key: key);
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
   @override
@@ -122,6 +123,17 @@ class AddMember extends ConsumerWidget {
                 ),
               ),
             ],
+          ),
+          ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              shape: const StadiumBorder(),
+            ),
+            onPressed: () async {
+              await Navigator.of(context).push<void>(MaterialPageRoute(
+                  builder: (context) => ProviderScope(child: GroupView(),),
+              ));
+            },
+            child: const Text(nextPage),
           ),
           Row(
             children: [
