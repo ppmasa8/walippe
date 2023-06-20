@@ -27,10 +27,11 @@ class GroupListScreen extends ConsumerWidget {
       ),
       body: groupListAsync.when(
         data: (groupList) {
-          return ListView.builder(
+          return ListView.separated(
             itemCount: groupList.length,
             itemBuilder: (context, index) {
               final group = groupList[index];
+
               return ListTile(
                 title: Text(group.name),
                 trailing: Row(mainAxisSize: MainAxisSize.min, children: [
@@ -44,6 +45,9 @@ class GroupListScreen extends ConsumerWidget {
                   ),
                 ]),
               );
+            },
+            separatorBuilder: (BuildContext context, int index) {
+              return Divider(thickness: 0.5,);
             },
           );
         },
