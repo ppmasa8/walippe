@@ -112,7 +112,7 @@ class GroupMemberScreen extends ConsumerWidget {
                       await _deleteMember(ref);
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(
-                          content: Text(memberDeleteSnackBarText),
+                          content: Text(deleteSnackBarText),
                           behavior: SnackBarBehavior.fixed,
                           duration: Duration(seconds: 2),
                         ),

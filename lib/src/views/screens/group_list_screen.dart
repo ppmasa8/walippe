@@ -41,13 +41,27 @@ class GroupListScreen extends ConsumerWidget {
                   ),
                   IconButton(
                     icon: const Icon(Icons.delete),
-                    onPressed: () {},
+                    onPressed: () async {
+                      await ref
+                          .watch(groupRepositoryProvider)
+                          .deleteGroupById(group.id);
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text(deleteSnackBarText),
+                          behavior: SnackBarBehavior.fixed,
+                          duration: Duration(seconds: 2),
+                        ),
+                      );
+                      return ref.refresh(groupListProvider);
+                    },
                   ),
                 ]),
               );
             },
             separatorBuilder: (BuildContext context, int index) {
-              return Divider(thickness: 0.5,);
+              return Divider(
+                thickness: 0.5,
+              );
             },
           );
         },
