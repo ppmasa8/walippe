@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+//TODO: FIX THIS
 class GroupView extends StatelessWidget {
   const GroupView({Key? key}) : super(key: key);
 
