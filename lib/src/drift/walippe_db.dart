@@ -110,6 +110,10 @@ class WalippeDatabase extends _$WalippeDatabase {
   Future<int> deleteMember(int id) {
     return (delete(members)..where((tbl) => tbl.id.equals(id))).go();
   }
+
+  Future<int> deleteMemberByGroupId(int groupId) {
+    return (delete(members)..where((tbl) => tbl.groupId.equals(groupId))).go();
+  }
 }
 
 LazyDatabase _openConnection() {

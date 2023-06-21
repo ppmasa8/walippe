@@ -28,4 +28,8 @@ class MemberRepository {
   Future<void> deleteMemberById(int id) async {
     await database.deleteMember(id);
   }
+
+  Future<void> deleteMemberByGroupId(int groupId) async {
+    await database.deleteMemberByGroupId(groupId);
+  }
 }
