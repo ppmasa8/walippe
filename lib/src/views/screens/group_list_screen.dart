@@ -5,6 +5,7 @@ import 'package:google_fonts/google_fonts.dart';
 import '../../const/const.dart';
 import '../../providers/provider.dart';
 import 'create_group_screen.dart';
+import 'edit_group_screen.dart';
 import 'group_view.dart';
 
 class GroupListScreen extends ConsumerWidget {
@@ -44,8 +45,13 @@ class GroupListScreen extends ConsumerWidget {
                         IconButton(
                           icon: const Icon(Icons.edit),
                           onPressed: () {
-                            // 編集ボタンが押された時の処理
-                            // TODO: 編集の処理を実装する
+                            Navigator.of(context).push<void>(
+                              MaterialPageRoute(
+                                builder: (context) => ProviderScope(
+                                  child: EditGroupScreen(),
+                                ),
+                              ),
+                            );
                           },
                         ),
                         IconButton(
