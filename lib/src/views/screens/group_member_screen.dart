@@ -129,9 +129,9 @@ class GroupMemberScreen extends ConsumerWidget {
               shape: const StadiumBorder(),
             ),
             onPressed: () async {
-              await Navigator.of(context).push<void>(MaterialPageRoute(
-                  builder: (context) => ProviderScope(child: GroupView(),),
-              ));
+              // await Navigator.of(context).push<void>(MaterialPageRoute(
+              //     builder: (context) => ProviderScope(child: GroupView(),),
+              // ));
             },
             child: const Text(nextPage),
           ),

@@ -20,6 +20,21 @@ class MemberRepository {
         .toList();
   }
 
+  Future<List<MemberData>> fetchMembersInGroup(int groupId) async {
+    final members = await database.getMembersInGroup(groupId);
+    return members
+        .map((member) => MemberData(
+              id: member.id,
+              groupId: member.groupId,
+              name: member.name,
+              description: member.description,
+              balance: member.balance,
+              createdAt: member.createdAt,
+              updatedAt: member.updatedAt,
+            ))
+        .toList();
+  }
+
   Future<void> addMemberToGroup(
       int groupId, String name, String description) async {
     await database.addMember(groupId, name, description);

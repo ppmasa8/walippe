@@ -47,7 +47,8 @@ Future<List<MemberData>> memberList(MemberListRef ref) {
   return ref.read(memberRepositoryProvider).fetchMember();
 }
 
-final memberListStreamProvider = StreamProvider.autoDispose<List<MemberData>>((ref) {
+final memberListStreamProvider =
+    StreamProvider.autoDispose<List<MemberData>>((ref) {
   final memberListFuture = ref.watch(memberListProvider.future);
   return memberListFuture.asStream();
 });
