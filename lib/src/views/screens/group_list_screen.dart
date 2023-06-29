@@ -110,7 +110,7 @@ class GroupListScreen extends ConsumerWidget {
                   ),
                 );
               },
-              child: Icon(Icons.add),
+              child: const Icon(Icons.add),
             ),
           ),
         ],
