@@ -100,20 +100,6 @@ final memberRepositoryProvider = AutoDisposeProvider<MemberRepository>.internal(
 );
 
 typedef MemberRepositoryRef = AutoDisposeProviderRef<MemberRepository>;
-String _$memberListHash() => r'b194b5e69daedbd0fdf76ac784725becf2eadfc6';
-
-/// See also [memberList].
-@ProviderFor(memberList)
-final memberListProvider = AutoDisposeFutureProvider<List<MemberData>>.internal(
-  memberList,
-  name: r'memberListProvider',
-  debugGetCreateSourceHash:
-      const bool.fromEnvironment('dart.vm.product') ? null : _$memberListHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
-);
-
-typedef MemberListRef = AutoDisposeFutureProviderRef<List<MemberData>>;
 String _$memberListInGroupHash() => r'9c7c4a34c1ee52007676a022c1b9fed6d4dc7337';
 
 /// Copied from Dart SDK

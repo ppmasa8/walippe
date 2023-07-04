@@ -42,10 +42,10 @@ MemberRepository memberRepository(MemberRepositoryRef ref) {
   return MemberRepository(database: ref.read(walippeDatabaseProvider));
 }
 
-@riverpod
-Future<List<MemberData>> memberList(MemberListRef ref) {
-  return ref.read(memberRepositoryProvider).fetchMember();
-}
+// @riverpod
+// Future<List<MemberData>> memberList(MemberListRef ref) {
+//   return ref.read(memberRepositoryProvider).fetchMember();
+// }
 
 @riverpod
 Future<List<MemberData>> memberListInGroup(MemberListRef ref, int groupId) {
