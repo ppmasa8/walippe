@@ -114,4 +114,108 @@ final memberListProvider = AutoDisposeFutureProvider<List<MemberData>>.internal(
 );
 
 typedef MemberListRef = AutoDisposeFutureProviderRef<List<MemberData>>;
+String _$memberListInGroupHash() => r'9c7c4a34c1ee52007676a022c1b9fed6d4dc7337';
+
+/// Copied from Dart SDK
+class _SystemHash {
+  _SystemHash._();
+
+  static int combine(int hash, int value) {
+    // ignore: parameter_assignments
+    hash = 0x1fffffff & (hash + value);
+    // ignore: parameter_assignments
+    hash = 0x1fffffff & (hash + ((0x0007ffff & hash) << 10));
+    return hash ^ (hash >> 6);
+  }
+
+  static int finish(int hash) {
+    // ignore: parameter_assignments
+    hash = 0x1fffffff & (hash + ((0x03ffffff & hash) << 3));
+    // ignore: parameter_assignments
+    hash = hash ^ (hash >> 11);
+    return 0x1fffffff & (hash + ((0x00003fff & hash) << 15));
+  }
+}
+
+typedef MemberListInGroupRef = AutoDisposeFutureProviderRef<List<MemberData>>;
+
+/// See also [memberListInGroup].
+@ProviderFor(memberListInGroup)
+const memberListInGroupProvider = MemberListInGroupFamily();
+
+/// See also [memberListInGroup].
+class MemberListInGroupFamily extends Family<AsyncValue<List<MemberData>>> {
+  /// See also [memberListInGroup].
+  const MemberListInGroupFamily();
+
+  /// See also [memberListInGroup].
+  MemberListInGroupProvider call(
+    int groupId,
+  ) {
+    return MemberListInGroupProvider(
+      groupId,
+    );
+  }
+
+  @override
+  MemberListInGroupProvider getProviderOverride(
+    covariant MemberListInGroupProvider provider,
+  ) {
+    return call(
+      provider.groupId,
+    );
+  }
+
+  static const Iterable<ProviderOrFamily>? _dependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get dependencies => _dependencies;
+
+  static const Iterable<ProviderOrFamily>? _allTransitiveDependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get allTransitiveDependencies =>
+      _allTransitiveDependencies;
+
+  @override
+  String? get name => r'memberListInGroupProvider';
+}
+
+/// See also [memberListInGroup].
+class MemberListInGroupProvider
+    extends AutoDisposeFutureProvider<List<MemberData>> {
+  /// See also [memberListInGroup].
+  MemberListInGroupProvider(
+    this.groupId,
+  ) : super.internal(
+          (ref) => memberListInGroup(
+            ref,
+            groupId,
+          ),
+          from: memberListInGroupProvider,
+          name: r'memberListInGroupProvider',
+          debugGetCreateSourceHash:
+              const bool.fromEnvironment('dart.vm.product')
+                  ? null
+                  : _$memberListInGroupHash,
+          dependencies: MemberListInGroupFamily._dependencies,
+          allTransitiveDependencies:
+              MemberListInGroupFamily._allTransitiveDependencies,
+        );
+
+  final int groupId;
+
+  @override
+  bool operator ==(Object other) {
+    return other is MemberListInGroupProvider && other.groupId == groupId;
+  }
+
+  @override
+  int get hashCode {
+    var hash = _SystemHash.combine(0, runtimeType.hashCode);
+    hash = _SystemHash.combine(hash, groupId.hashCode);
+
+    return _SystemHash.finish(hash);
+  }
+}
 // ignore_for_file: unnecessary_raw_strings, subtype_of_sealed_class, invalid_use_of_internal_member, do_not_use_environment, prefer_const_constructors, public_member_api_docs, avoid_private_typedef_functions

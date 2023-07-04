@@ -58,13 +58,16 @@ class CreateGroupScreen extends ConsumerWidget {
               ),
               onPressed: () async {
                 if (formKey.currentState!.validate()) {
-                  await ref
+                  final groupId = await ref
                       .watch(groupRepositoryProvider)
                       .addGroupByString(groupName, 'test');
                   await Navigator.of(context).push<void>(
                     MaterialPageRoute(
                       builder: (context) => ProviderScope(
-                        child: GroupMemberScreen(),
+                        child: GroupMemberScreen(
+                          groupId: groupId,
+                          groupName: groupName,
+                        ),
                       ),
                     ),
                   );

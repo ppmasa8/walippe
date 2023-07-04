@@ -7,17 +7,20 @@ class GroupRepository {
 
   Future<List<GroupData>> fetchGroups() async {
     final groups = await database.getAllGroups();
-    return groups.map((group) => GroupData(
-      id: group.id,
-      name: group.name,
-      description: group.description,
-      createdAt: group.createdAt,
-      updatedAt: group.updatedAt,
-    )).toList();
+    return groups
+        .map((group) => GroupData(
+              id: group.id,
+              name: group.name,
+              description: group.description,
+              createdAt: group.createdAt,
+              updatedAt: group.updatedAt,
+            ))
+        .toList();
   }
 
-  Future<void> addGroupByString(String name, String description) async {
-    await database.addGroup(name, description);
+  Future<int> addGroupByString(String name, String description) async {
+    final groupId = await database.addGroup(name, description);
+    return groupId;
   }
 
   Future<void> deleteGroupById(int id) async {

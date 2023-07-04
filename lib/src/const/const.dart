@@ -6,7 +6,7 @@ const validMemberNameMessage = 'メンバー名を入力してください';
 const groupFormLabelText = 'グループ名';
 const groupFormHintText = '沖縄旅行';
 
-const memberFormLabelText = 'メンバー名';
+const memberLabelText = 'メンバー名';
 const memberFormHintText = 'ひかり';
 
 const groupCreateButtonText = 'グループを作成';

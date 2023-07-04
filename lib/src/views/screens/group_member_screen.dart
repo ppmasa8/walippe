@@ -7,41 +7,29 @@ import '../../providers/provider.dart';
 import 'group_view.dart';
 
 class GroupMemberScreen extends ConsumerWidget {
-  GroupMemberScreen({Key? key}) : super(key: key);
+  GroupMemberScreen(
+      {super.key, required this.groupId, required this.groupName});
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
+
+  final int groupId;
+  final String groupName;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final groupListAsync = ref.watch(groupListProvider);
-    final memberListStream = ref.watch(memberListStreamProvider);
+    final memberListStream = ref.watch(memberListInGroupStream(groupId));
     final formValidator = ref.watch(formValidatorProvider);
     final textEditingController = ref.watch(textEditingControllerProvider);
     late String memberName;
 
     return Scaffold(
       appBar: AppBar(
-        title: groupListAsync.when(
-          data: (groupList) {
-            if (groupList.isNotEmpty) {
-              String lastName = groupList.last.name;
-              return Text(
-                lastName,
-                style: GoogleFonts.sawarabiGothic(
-                  fontSize: 25,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white,
-                ),
-              );
-            } else {
-              return const Text(noGroupsAvailableText);
-            }
-          },
-          loading: () {
-            return const CircularProgressIndicator();
-          },
-          error: (error, stackTrace) {
-            return Text('Error: $error');
-          },
+        title: Text(
+          groupName,
+          style: GoogleFonts.dancingScript(
+            fontSize: 32,
+            fontWeight: FontWeight.bold,
+            color: Colors.white,
+          ),
         ),
         centerTitle: true,
         backgroundColor: Colors.deepPurpleAccent,
@@ -61,7 +49,7 @@ class GroupMemberScreen extends ConsumerWidget {
                           controller: textEditingController,
                           decoration: const InputDecoration(
                               border: OutlineInputBorder(),
-                              labelText: memberFormLabelText,
+                              labelText: memberLabelText,
                               hintText: memberFormHintText),
                           validator: formValidator.validateMemberName,
                           onChanged: (value) {
@@ -84,22 +72,9 @@ class GroupMemberScreen extends ConsumerWidget {
                             textEditingController.clear();
                             await ref
                                 .watch(memberRepositoryProvider)
-                                .addMemberToGroup(
-                                    groupListAsync.when(data: (groupList) {
-                                      if (groupList.isNotEmpty) {
-                                        int lastId = groupList.last.id;
-                                        return lastId;
-                                      } else {
-                                        return 0;
-                                      }
-                                    }, loading: () {
-                                      return 0;
-                                    }, error: (error, stackTrace) {
-                                      return 0;
-                                    }),
-                                    memberName,
-                                    'test');
-                            return ref.refresh(memberListProvider);
+                                .addMemberToGroup(groupId, memberName, 'test');
+                            return ref
+                                .refresh(memberListInGroupProvider(groupId));
                           }
                         })),
               ),
@@ -117,7 +92,7 @@ class GroupMemberScreen extends ConsumerWidget {
                           duration: Duration(seconds: 2),
                         ),
                       );
-                      return ref.refresh(memberListProvider);
+                      return ref.refresh(memberListInGroupProvider(groupId));
                     },
                   ),
                 ),
@@ -163,13 +138,13 @@ class GroupMemberScreen extends ConsumerWidget {
   }
 
   Future<void> _deleteMember(WidgetRef ref) async {
-    final memberListAsync = ref.watch(memberListProvider);
+    final memberListInGroup = ref.watch(memberListInGroupProvider(groupId));
 
     await Future<void>.delayed(
       const Duration(milliseconds: memberDurationForDelete),
     );
     await ref.watch(memberRepositoryProvider).deleteMemberById(
-          memberListAsync.when(data: (memberList) {
+          memberListInGroup.when(data: (memberList) {
             if (memberList.isNotEmpty) {
               int lastId = memberList.last.id;
               return lastId;

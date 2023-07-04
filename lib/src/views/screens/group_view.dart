@@ -2,11 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:walippe/src/models/group_data.dart';
+import 'package:walippe/src/views/screens/edit_group_screen.dart';
 
+import '../../const/const.dart';
 import '../../providers/provider.dart';
 import 'create_transaction_screen.dart';
 
-//TODO: FIX THIS
+//TODO: FIX THIS Name
 class GroupView extends ConsumerWidget {
   const GroupView({super.key, required this.groupData});
 
@@ -14,7 +16,7 @@ class GroupView extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final memberListAsync = ref.watch(memberListProvider);
+    final memberListInGroup = ref.watch(memberListInGroupProvider(groupData.id));
 
     return Scaffold(
       appBar: AppBar(
@@ -33,13 +35,14 @@ class GroupView extends ConsumerWidget {
           child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          memberListAsync.when(
-              data: (memberList) {
+          const Text(memberLabelText),
+          memberListInGroup.when(
+              data: (memberListInGroup) {
                 return Expanded(
                   child: ListView.separated(
-                    itemCount: memberList.length,
+                    itemCount: memberListInGroup.length,
                     itemBuilder: (context, index) {
-                      final member = memberList[index];
+                      final member = memberListInGroup[index];
                       return ListTile(
                         title: Text(member.name),
                       );
@@ -74,7 +77,10 @@ class GroupView extends ConsumerWidget {
               shape: const StadiumBorder(),
             ),
             onPressed: () async {
-              Navigator.pop(context);
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => EditGroupScreen()));
             },
             child: const Text('グループを編集'),
           ),

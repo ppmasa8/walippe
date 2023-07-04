@@ -47,10 +47,15 @@ Future<List<MemberData>> memberList(MemberListRef ref) {
   return ref.read(memberRepositoryProvider).fetchMember();
 }
 
-final memberListStreamProvider =
-    StreamProvider.autoDispose<List<MemberData>>((ref) {
-  final memberListFuture = ref.watch(memberListProvider.future);
-  return memberListFuture.asStream();
+@riverpod
+Future<List<MemberData>> memberListInGroup(MemberListRef ref, int groupId) {
+  return ref.read(memberRepositoryProvider).fetchMembersInGroup(groupId);
+}
+
+final memberListInGroupStream =
+    StreamProvider.autoDispose.family<List<MemberData>, int>((ref, groupId) {
+  final memberListInGroupFuture = ref.watch(memberListInGroupProvider(groupId).future);
+  return memberListInGroupFuture.asStream();
 });
 
 final textEditingControllerProvider = Provider<TextEditingController>((ref) {
