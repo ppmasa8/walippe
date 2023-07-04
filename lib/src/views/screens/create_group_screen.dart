@@ -79,7 +79,7 @@ class CreateGroupScreen extends ConsumerWidget {
               ],
             ))),
         onWillPop: () async {
-          ref.refresh(groupListProvider);
+          ref.invalidate(groupListProvider);
           return true;
         });
   }
