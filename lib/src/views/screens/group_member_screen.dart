@@ -25,7 +25,7 @@ class GroupMemberScreen extends ConsumerWidget {
       appBar: AppBar(
         title: Text(
           groupName,
-          style: GoogleFonts.dancingScript(
+          style: GoogleFonts.sawarabiGothic(
             fontSize: 32,
             fontWeight: FontWeight.bold,
             color: Colors.white,
