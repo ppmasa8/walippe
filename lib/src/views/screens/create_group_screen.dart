@@ -15,67 +15,72 @@ class CreateGroupScreen extends ConsumerWidget {
     final formValidator = ref.watch(formValidatorProvider);
     late String groupName;
 
-    return Scaffold(
-        appBar: AppBar(
-          title: Text(
-            titleName,
-            style: GoogleFonts.dancingScript(
-              fontSize: 32,
-              fontWeight: FontWeight.bold,
-              color: Colors.white,
-            ),
-          ),
-          centerTitle: true,
-          backgroundColor: Colors.deepPurpleAccent,
-        ),
-        body: Center(
-            child: Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(10.0),
-              child: Form(
-                  key: formKey,
-                  child: Column(
-                    children: [
-                      SizedBox(
-                        width: 300,
-                        child: TextFormField(
-                            decoration: const InputDecoration(
-                                border: OutlineInputBorder(),
-                                labelText: groupFormLabelText,
-                                hintText: groupFormHintText),
-                            validator: formValidator.validateGroupName,
-                            onChanged: (value) {
-                              groupName = value;
-                            }),
-                      )
-                    ],
-                  )),
-            ),
-            ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                shape: const StadiumBorder(),
+    return WillPopScope(
+        child: Scaffold(
+            appBar: AppBar(
+              title: Text(
+                titleName,
+                style: GoogleFonts.dancingScript(
+                  fontSize: 32,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
+                ),
               ),
-              onPressed: () async {
-                if (formKey.currentState!.validate()) {
-                  final groupId = await ref
-                      .watch(groupRepositoryProvider)
-                      .addGroupByString(groupName, 'test');
-                  await Navigator.of(context).push<void>(
-                    MaterialPageRoute(
-                      builder: (context) => ProviderScope(
-                        child: GroupMemberScreen(
-                          groupId: groupId,
-                          groupName: groupName,
-                        ),
-                      ),
-                    ),
-                  );
-                }
-              },
-              child: const Text(groupCreateButtonText),
+              centerTitle: true,
+              backgroundColor: Colors.deepPurpleAccent,
             ),
-          ],
-        )));
+            body: Center(
+                child: Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(10.0),
+                  child: Form(
+                      key: formKey,
+                      child: Column(
+                        children: [
+                          SizedBox(
+                            width: 300,
+                            child: TextFormField(
+                                decoration: const InputDecoration(
+                                    border: OutlineInputBorder(),
+                                    labelText: groupFormLabelText,
+                                    hintText: groupFormHintText),
+                                validator: formValidator.validateGroupName,
+                                onChanged: (value) {
+                                  groupName = value;
+                                }),
+                          )
+                        ],
+                      )),
+                ),
+                ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    shape: const StadiumBorder(),
+                  ),
+                  onPressed: () async {
+                    if (formKey.currentState!.validate()) {
+                      final groupId = await ref
+                          .watch(groupRepositoryProvider)
+                          .addGroupByString(groupName, 'test');
+                      await Navigator.of(context).push<void>(
+                        MaterialPageRoute(
+                          builder: (context) => ProviderScope(
+                            child: GroupMemberScreen(
+                              groupId: groupId,
+                              groupName: groupName,
+                            ),
+                          ),
+                        ),
+                      );
+                    }
+                  },
+                  child: const Text(groupCreateButtonText),
+                ),
+              ],
+            ))),
+        onWillPop: () async {
+          ref.refresh(groupListProvider);
+          return true;
+        });
   }
 }
