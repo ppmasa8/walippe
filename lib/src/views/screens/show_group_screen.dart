@@ -8,9 +8,8 @@ import '../../const/const.dart';
 import '../../providers/provider.dart';
 import 'create_transaction_screen.dart';
 
-//TODO: FIX THIS Name
-class GroupView extends ConsumerWidget {
-  const GroupView({super.key, required this.groupData});
+class ShowGroupScreen extends ConsumerWidget {
+  const ShowGroupScreen({super.key, required this.groupData});
 
   final GroupData groupData;
 

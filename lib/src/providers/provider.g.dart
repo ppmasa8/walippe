@@ -100,7 +100,7 @@ final memberRepositoryProvider = AutoDisposeProvider<MemberRepository>.internal(
 );
 
 typedef MemberRepositoryRef = AutoDisposeProviderRef<MemberRepository>;
-String _$memberListInGroupHash() => r'9c7c4a34c1ee52007676a022c1b9fed6d4dc7337';
+String _$memberListInGroupHash() => r'edee16b6a815d446f7e48ba22a11554c018262eb';
 
 /// Copied from Dart SDK
 class _SystemHash {

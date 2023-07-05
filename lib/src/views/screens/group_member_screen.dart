@@ -4,7 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 
 import '../../const/const.dart';
 import '../../providers/provider.dart';
-import 'group_view.dart';
+import 'show_group_screen.dart';
 
 class GroupMemberScreen extends ConsumerWidget {
   GroupMemberScreen(

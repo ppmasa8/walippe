@@ -6,7 +6,7 @@ import '../../const/const.dart';
 import '../../providers/provider.dart';
 import 'create_group_screen.dart';
 import 'edit_group_screen.dart';
-import 'group_view.dart';
+import 'show_group_screen.dart';
 
 class GroupListScreen extends ConsumerWidget {
   const GroupListScreen({Key? key}) : super(key: key);
@@ -80,7 +80,7 @@ class GroupListScreen extends ConsumerWidget {
                       await Navigator.of(context).push<void>(
                         MaterialPageRoute(
                           builder: (context) => ProviderScope(
-                            child: GroupView(
+                            child: ShowGroupScreen(
                               key: ValueKey(group.id),
                               groupData: group,
                             ),

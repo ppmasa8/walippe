@@ -48,7 +48,7 @@ MemberRepository memberRepository(MemberRepositoryRef ref) {
 // }
 
 @riverpod
-Future<List<MemberData>> memberListInGroup(MemberListRef ref, int groupId) {
+Future<List<MemberData>> memberListInGroup(MemberListInGroupRef ref, int groupId) {
   return ref.read(memberRepositoryProvider).fetchMembersInGroup(groupId);
 }
 
