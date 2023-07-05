@@ -4,7 +4,6 @@ import 'package:google_fonts/google_fonts.dart';
 
 import '../../const/const.dart';
 import '../../providers/provider.dart';
-import 'show_group_screen.dart';
 
 class GroupMemberScreen extends ConsumerWidget {
   GroupMemberScreen(
@@ -110,21 +109,23 @@ class GroupMemberScreen extends ConsumerWidget {
             },
             child: const Text(nextPage),
           ),
-          Row(
+          Column(
             children: [
               memberListStream.when(
                 data: (members) {
-                  return Expanded(
-                    child: ListView.builder(
-                      itemCount: members.length,
-                      itemBuilder: (context, index) {
-                        return ListTile(
-                          title: Text(members[index].name),
-                        );
-                      },
-                      scrollDirection: Axis.vertical,
-                      shrinkWrap: true,
-                    ),
+                  return Wrap(
+                    spacing: 8,
+                    runSpacing: 8,
+                    children: members.map((member) {
+                      return Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 8),
+                        decoration: BoxDecoration(
+                          color: Colors.grey[200],
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: Text(member.name),
+                      );
+                    }).toList(),
                   );
                 },
                 loading: () => const Center(child: CircularProgressIndicator()),

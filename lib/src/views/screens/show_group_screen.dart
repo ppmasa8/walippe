@@ -15,7 +15,8 @@ class ShowGroupScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final memberListInGroup = ref.watch(memberListInGroupProvider(groupData.id));
+    final memberListInGroup =
+        ref.watch(memberListInGroupProvider(groupData.id));
 
     return Scaffold(
       appBar: AppBar(
@@ -36,29 +37,29 @@ class ShowGroupScreen extends ConsumerWidget {
         children: [
           const Text(memberLabelText),
           memberListInGroup.when(
-              data: (memberListInGroup) {
-                return Expanded(
-                  child: ListView.separated(
-                    itemCount: memberListInGroup.length,
-                    itemBuilder: (context, index) {
-                      final member = memberListInGroup[index];
-                      return ListTile(
-                        title: Text(member.name),
-                      );
-                    },
-                    separatorBuilder: (context, index) {
-                      return const Divider();
-                    },
-                  ),
-                );
-              },
-              loading: () {
-                return const CircularProgressIndicator();
-              },
-              error: (error, stackTrace) {
-                return Text('Error: $error');
-              },
-            ),
+            data: (members) {
+              return Wrap(
+                spacing: 8,
+                runSpacing: 8,
+                children: members.map((member) {
+                  return Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 8),
+                    decoration: BoxDecoration(
+                      color: Colors.grey[200],
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: Text(member.name),
+                  );
+                }).toList(),
+              );
+            },
+            loading: () {
+              return const CircularProgressIndicator();
+            },
+            error: (error, stackTrace) {
+              return Text('Error: $error');
+            },
+          ),
           ElevatedButton(
             style: ElevatedButton.styleFrom(
               shape: const StadiumBorder(),
@@ -76,10 +77,8 @@ class ShowGroupScreen extends ConsumerWidget {
               shape: const StadiumBorder(),
             ),
             onPressed: () async {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => EditGroupScreen()));
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => EditGroupScreen()));
             },
             child: const Text('グループを編集'),
           ),
