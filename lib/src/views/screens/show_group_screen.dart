@@ -70,17 +70,22 @@ class ShowGroupScreen extends ConsumerWidget {
                   MaterialPageRoute(
                       builder: (context) => CreateTransactionScreen()));
             },
-            child: const Text('立て替えた記録を追加'),
+            child: const Text(addTransactionRecordText),
           ),
           ElevatedButton(
             style: ElevatedButton.styleFrom(
               shape: const StadiumBorder(),
             ),
             onPressed: () async {
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => EditGroupScreen()));
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => EditGroupScreen(
+                            key: ValueKey(groupData.id),
+                            groupData: groupData,
+                          )));
             },
-            child: const Text('グループを編集'),
+            child: const Text(editGroupText),
           ),
         ],
       )),

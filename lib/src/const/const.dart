@@ -11,6 +11,7 @@ const memberFormHintText = 'ひかり';
 
 const groupCreateButtonText = 'グループを作成';
 const noGroupsAvailableText = 'グループがありません';
+const editGroupText = 'グループを編集';
 
 const addText = '追加';
 const deleteText = '削除';
@@ -20,3 +21,5 @@ const memberDurationForDelete = 500;
 const deleteSnackBarText = '削除しました';
 
 const nextPage = '次へ';
+
+const addTransactionRecordText = '立て替えた記録を追加';

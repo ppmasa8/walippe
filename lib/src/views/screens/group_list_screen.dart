@@ -48,7 +48,10 @@ class GroupListScreen extends ConsumerWidget {
                             Navigator.of(context).push<void>(
                               MaterialPageRoute(
                                 builder: (context) => ProviderScope(
-                                  child: EditGroupScreen(),
+                                  child: EditGroupScreen(
+                                    key: ValueKey(group.id),
+                                    groupData: group,
+                                  ),
                                 ),
                               ),
                             );
