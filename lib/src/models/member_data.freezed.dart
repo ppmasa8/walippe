@@ -19,7 +19,7 @@ mixin _$MemberData {
   int get id => throw _privateConstructorUsedError;
   int get groupId => throw _privateConstructorUsedError;
   String get name => throw _privateConstructorUsedError;
-  String? get description => throw _privateConstructorUsedError;
+  String? get description => throw _privateConstructorUsedError; // nullable
   int get balance => throw _privateConstructorUsedError;
   DateTime get createdAt => throw _privateConstructorUsedError;
   DateTime get updatedAt => throw _privateConstructorUsedError;
@@ -189,6 +189,7 @@ class _$_MemberData implements _MemberData {
   final String name;
   @override
   final String? description;
+// nullable
   @override
   final int balance;
   @override
@@ -247,7 +248,7 @@ abstract class _MemberData implements MemberData {
   String get name;
   @override
   String? get description;
-  @override
+  @override // nullable
   int get balance;
   @override
   DateTime get createdAt;

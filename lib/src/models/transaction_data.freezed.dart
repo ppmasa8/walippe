@@ -19,7 +19,7 @@ mixin _$TransactionData {
   int get id => throw _privateConstructorUsedError;
   int get groupId => throw _privateConstructorUsedError;
   String get subject => throw _privateConstructorUsedError;
-  String? get description => throw _privateConstructorUsedError;
+  String? get description => throw _privateConstructorUsedError; // nullable
   int get payerId => throw _privateConstructorUsedError;
   int get payeeId => throw _privateConstructorUsedError;
   int get amount => throw _privateConstructorUsedError;
@@ -217,6 +217,7 @@ class _$_TransactionData implements _TransactionData {
   final String subject;
   @override
   final String? description;
+// nullable
   @override
   final int payerId;
   @override
@@ -283,7 +284,7 @@ abstract class _TransactionData implements TransactionData {
   String get subject;
   @override
   String? get description;
-  @override
+  @override // nullable
   int get payerId;
   @override
   int get payeeId;

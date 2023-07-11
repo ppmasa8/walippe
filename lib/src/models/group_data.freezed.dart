@@ -18,7 +18,7 @@ final _privateConstructorUsedError = UnsupportedError(
 mixin _$GroupData {
   int get id => throw _privateConstructorUsedError;
   String get name => throw _privateConstructorUsedError;
-  String? get description => throw _privateConstructorUsedError;
+  String? get description => throw _privateConstructorUsedError; // nullable
   DateTime get createdAt => throw _privateConstructorUsedError;
   DateTime get updatedAt => throw _privateConstructorUsedError;
 
@@ -157,6 +157,7 @@ class _$_GroupData implements _GroupData {
   final String name;
   @override
   final String? description;
+// nullable
   @override
   final DateTime createdAt;
   @override
@@ -207,7 +208,7 @@ abstract class _GroupData implements GroupData {
   String get name;
   @override
   String? get description;
-  @override
+  @override // nullable
   DateTime get createdAt;
   @override
   DateTime get updatedAt;
