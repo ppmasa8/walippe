@@ -3,23 +3,41 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import '../../models/group_data.dart';
+import '../../models/member_data.dart';
 import '../../providers/provider.dart';
 
-class CreateTransactionScreen extends ConsumerWidget {
-  const CreateTransactionScreen({super.key, required this.groupData});
+class CreateTransactionScreen extends ConsumerStatefulWidget {
+  const CreateTransactionScreen({Key? key, required this.groupData})
+      : super(key: key);
 
   final GroupData groupData;
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  _CreateTransactionScreenState createState() =>
+      _CreateTransactionScreenState();
+}
+
+class _CreateTransactionScreenState
+    extends ConsumerState<CreateTransactionScreen> {
+  MemberData payer = MemberData(
+    id: 0,
+    groupId: 0,
+    name: '',
+    description: null,
+    balance: 0,
+    createdAt: DateTime.now(),
+    updatedAt: DateTime.now(),
+  );
+
+  @override
+  Widget build(BuildContext context) {
     final memberListInGroup =
-        ref.watch(memberListInGroupProvider(groupData.id));
-    String isSelectedValue = '';
+        ref.watch(memberListInGroupProvider(widget.groupData.id));
 
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          groupData.name,
+          widget.groupData.name,
           style: GoogleFonts.dancingScript(
             fontSize: 32,
             fontWeight: FontWeight.bold,
@@ -32,22 +50,28 @@ class CreateTransactionScreen extends ConsumerWidget {
       body: Center(
         child: memberListInGroup.when(
           data: (members) {
-            if (!members
-                .map((member) => member.name)
-                .contains(isSelectedValue)) {
-              isSelectedValue = members[0].name;
+            if (!members.map((member) => member.name).contains(payer.name)) {
+              payer = members[0];
             }
-            return DropdownButton<String>(
-              items: members.map((member) {
-                return DropdownMenuItem<String>(
-                  value: member.name,
-                  child: Text(member.name),
-                );
-              }).toList(),
-              value: isSelectedValue,
-              onChanged: (value) {
-                isSelectedValue = value!;
-              },
+            return Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                DropdownButton<MemberData>(
+                  items: members.map((member) {
+                    return DropdownMenuItem<MemberData>(
+                      value: member,
+                      child: Text(member.name),
+                    );
+                  }).toList(),
+                  value: payer,
+                  onChanged: (value) {
+                    setState(() {
+                      payer = value!;
+                    });
+                  },
+                ),
+                const Text("が"),
+              ],
             );
           },
           loading: () => const CircularProgressIndicator(),
