@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+import '../../const/const.dart';
 import '../../models/group_data.dart';
 import '../../models/member_data.dart';
 import '../../providers/provider.dart';
@@ -29,8 +31,15 @@ class _CreateTransactionScreenState
     updatedAt: DateTime.now(),
   );
 
+  Map<MemberData, bool> payeeSelections = {};
+
+  String useOfMoney = '';
+
+  int amount = 0;
+
   @override
   Widget build(BuildContext context) {
+    final formValidator = ref.watch(formValidatorProvider);
     final memberListInGroup =
         ref.watch(memberListInGroupProvider(widget.groupData.id));
 
@@ -47,35 +56,110 @@ class _CreateTransactionScreenState
         centerTitle: true,
         backgroundColor: Colors.deepPurpleAccent,
       ),
-      body: Center(
-        child: memberListInGroup.when(
-          data: (members) {
-            if (!members.map((member) => member.name).contains(payer.name)) {
-              payer = members[0];
-            }
-            return Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                DropdownButton<MemberData>(
-                  items: members.map((member) {
-                    return DropdownMenuItem<MemberData>(
-                      value: member,
-                      child: Text(member.name),
+      body: SingleChildScrollView(
+        child: Center(
+          child: memberListInGroup.when(
+            data: (members) {
+              if (!members.map((member) => member.name).contains(payer.name)) {
+                payer = members[0];
+              }
+
+              if (payeeSelections.isEmpty) {
+                members.forEach((member) {
+                  payeeSelections[member] = false;
+                });
+              }
+
+              return Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  DropdownButton<MemberData>(
+                    items: members.map((member) {
+                      return DropdownMenuItem<MemberData>(
+                        value: member,
+                        child: Text(member.name),
+                      );
+                    }).toList(),
+                    value: payer,
+                    onChanged: (value) {
+                      setState(() {
+                        payer = value!;
+                      });
+                    },
+                  ),
+                  const Text("が"),
+                  ...members.map((member) {
+                    return CheckboxListTile(
+                      title: Text(member.name),
+                      value: payeeSelections[member],
+                      onChanged: (value) {
+                        setState(() {
+                          payeeSelections[member] = value!;
+                        });
+                      },
                     );
                   }).toList(),
-                  value: payer,
-                  onChanged: (value) {
-                    setState(() {
-                      payer = value!;
-                    });
-                  },
-                ),
-                const Text("が"),
-              ],
-            );
-          },
-          loading: () => const CircularProgressIndicator(),
-          error: (error, stackTrace) => Text('Error: $error'),
+                  const Text("の"),
+                  SizedBox(
+                    width: 300,
+                    child: TextFormField(
+                      decoration: const InputDecoration(
+                        border: OutlineInputBorder(),
+                        hintText: '飛行機代',
+                      ),
+                      validator: formValidator.validateUseOfMoney,
+                      onChanged: (value) {
+                        setState(() {
+                          useOfMoney = value;
+                        });
+                      },
+                    ),
+                  ),
+                  const Text("を払って、"),
+                  SizedBox(
+                    width: 300,
+                    child: TextFormField(
+                      decoration: const InputDecoration(
+                        border: OutlineInputBorder(),
+                        labelText: '￥',
+                        hintText: '飛行機代',
+                      ),
+                      keyboardType: TextInputType.number,
+                      inputFormatters: <TextInputFormatter>[
+                        FilteringTextInputFormatter.digitsOnly
+                      ],
+                      onChanged: (value) {
+                        setState(() {
+                          amount = int.parse(value);
+                        });
+                      },
+                    ),
+                  ),
+                  const Text("かかった。"),
+                  ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      shape: const StadiumBorder(),
+                    ),
+                    onPressed: () async {
+                      //TODO: Create a transaction.
+                    },
+                    child: const Text(entry),
+                  ),
+                  ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      shape: const StadiumBorder(),
+                    ),
+                    onPressed: () async {
+                      //TODO: Go back to the previous page.
+                    },
+                    child: const Text(backPage),
+                  ),
+                ],
+              );
+            },
+            loading: () => const CircularProgressIndicator(),
+            error: (error, stackTrace) => Text('Error: $error'),
+          ),
         ),
       ),
     );

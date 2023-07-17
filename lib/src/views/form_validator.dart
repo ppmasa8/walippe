@@ -14,4 +14,11 @@ class FormValidator {
     }
     return null;
   }
+
+  String? validateUseOfMoney(String? value) {
+    if (value == null || value.isEmpty) {
+      return validUseOfMoney;
+    }
+    return null;
+  }
 }
