@@ -68,7 +68,10 @@ class ShowGroupScreen extends ConsumerWidget {
               Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => CreateTransactionScreen()));
+                      builder: (context) => CreateTransactionScreen(
+                            key: ValueKey(groupData.id),
+                            groupData: groupData,
+                          )));
             },
             child: const Text(addTransactionRecordText),
           ),
