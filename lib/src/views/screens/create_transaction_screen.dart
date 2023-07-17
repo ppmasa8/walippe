@@ -122,7 +122,6 @@ class _CreateTransactionScreenState
                       decoration: const InputDecoration(
                         border: OutlineInputBorder(),
                         labelText: '￥',
-                        hintText: '飛行機代',
                       ),
                       keyboardType: TextInputType.number,
                       inputFormatters: <TextInputFormatter>[
