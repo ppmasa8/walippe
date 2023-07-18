@@ -72,7 +72,7 @@ class EditGroupScreen extends ConsumerWidget {
                             textEditingController.clear();
                             await ref
                                 .watch(memberRepositoryProvider)
-                                .addMemberToGroup(
+                                .addMemberToDatabase(
                                     groupData.id, memberName, 'test');
                             return ref.refresh(
                                 memberListInGroupProvider(groupData.id));
@@ -132,7 +132,8 @@ class EditGroupScreen extends ConsumerWidget {
   }
 
   Future<void> _deleteMember(WidgetRef ref) async {
-    final memberListInGroup = ref.watch(memberListInGroupProvider(groupData.id));
+    final memberListInGroup =
+        ref.watch(memberListInGroupProvider(groupData.id));
 
     await Future<void>.delayed(
       const Duration(milliseconds: memberDurationForDelete),

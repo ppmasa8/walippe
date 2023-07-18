@@ -7,7 +7,7 @@ import 'walippe_db_test.mocks.dart';
 
 void main() {
   group('MemberRepository', () {
-    test('fetchMembers returns a list of MemberData', () async {
+    test('fetchMemberss returns a list of MemberData', () async {
       final mockDatabase = MockWalippeDatabase();
       final repo = MemberRepository(database: mockDatabase);
 
@@ -26,19 +26,19 @@ void main() {
       when(mockDatabase.getAllMembers())
           .thenAnswer((_) => Future.value(dummyMemberList));
 
-      final result = await repo.fetchMember();
+      final result = await repo.fetchMembers();
 
       expect(result, isNotEmpty);
       expect(result.first.id, dummyMemberList.first.id);
     });
 
-    test('fetchMember returns an empty list', () async {
+    test('fetchMembers returns an empty list', () async {
       final mockDatabase = MockWalippeDatabase();
       final repo = MemberRepository(database: mockDatabase);
 
       when(mockDatabase.getAllMembers()).thenAnswer((_) => Future.value([]));
 
-      final result = await repo.fetchMember();
+      final result = await repo.fetchMembers();
 
       expect(result, isEmpty);
     });
@@ -82,7 +82,7 @@ void main() {
       expect(result, isEmpty);
     });
 
-    test('addMemberToGroup adds a member', () async {
+    test('addMemberToDatabase adds a member', () async {
       final mockDatabase = MockWalippeDatabase();
       final repo = MemberRepository(database: mockDatabase);
       final groupId = 1;
@@ -92,7 +92,7 @@ void main() {
       when(mockDatabase.addMember(groupId, name, description))
           .thenAnswer((_) async => 1);
 
-      await repo.addMemberToGroup(groupId, name, description);
+      await repo.addMemberToDatabase(groupId, name, description);
 
       verify(mockDatabase.addMember(groupId, name, description)).called(1);
     });

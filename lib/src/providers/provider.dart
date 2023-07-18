@@ -42,19 +42,16 @@ MemberRepository memberRepository(MemberRepositoryRef ref) {
   return MemberRepository(database: ref.read(walippeDatabaseProvider));
 }
 
-// @riverpod
-// Future<List<MemberData>> memberList(MemberListRef ref) {
-//   return ref.read(memberRepositoryProvider).fetchMember();
-// }
-
 @riverpod
-Future<List<MemberData>> memberListInGroup(MemberListInGroupRef ref, int groupId) {
+Future<List<MemberData>> memberListInGroup(
+    MemberListInGroupRef ref, int groupId) {
   return ref.read(memberRepositoryProvider).fetchMembersInGroup(groupId);
 }
 
 final memberListInGroupStream =
     StreamProvider.autoDispose.family<List<MemberData>, int>((ref, groupId) {
-  final memberListInGroupFuture = ref.watch(memberListInGroupProvider(groupId).future);
+  final memberListInGroupFuture =
+      ref.watch(memberListInGroupProvider(groupId).future);
   return memberListInGroupFuture.asStream();
 });
 

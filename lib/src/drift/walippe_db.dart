@@ -74,6 +74,25 @@ class WalippeDatabase extends _$WalippeDatabase {
 
   Future<List<Transaction>> getAllTransactions() => select(transactions).get();
 
+  Future<int> addTransaction(
+      int groupId,
+      String subject,
+      String description,
+      int payerId,
+      int payeeId,
+      int amount) {
+    return into(transactions).insert(TransactionsCompanion(
+      groupId: Value(groupId),
+      subject: Value(subject),
+      description: Value(description),
+      payerId: Value(payerId),
+      payeeId: Value(payeeId),
+      amount: Value(amount),
+      createdAt: Value(DateTime.now()),
+      updatedAt: Value(DateTime.now()),
+    ));
+  }
+
   // Members
   Stream<List<Member>> watchAllMembers() {
     return (select(members)).watch();

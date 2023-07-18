@@ -6,6 +6,7 @@ import 'package:google_fonts/google_fonts.dart';
 import '../../const/const.dart';
 import '../../models/group_data.dart';
 import '../../models/member_data.dart';
+import '../../models/transaction_data.dart';
 import '../../providers/provider.dart';
 
 class CreateTransactionScreen extends ConsumerStatefulWidget {
@@ -140,7 +141,24 @@ class _CreateTransactionScreenState
                       shape: const StadiumBorder(),
                     ),
                     onPressed: () async {
-                      //TODO: Create a transaction.
+                      final payeeList = payeeSelections.entries
+                          .where((entry) => entry.value)
+                          .map((entry) => entry.key)
+                          .toList();
+
+                      for (var payee in payeeList) {
+                        await ref
+                            .watch(transactionRepositoryProvider)
+                            .addTransactionToDatabase(
+                              widget.groupData.id,
+                              useOfMoney,
+                              '',
+                              payer.id,
+                              payee.id,
+                              amount,
+                            );
+                      }
+                      Navigator.pop(context);
                     },
                     child: const Text(entry),
                   ),
@@ -149,7 +167,7 @@ class _CreateTransactionScreenState
                       shape: const StadiumBorder(),
                     ),
                     onPressed: () async {
-                      //TODO: Go back to the previous page.
+                      Navigator.pop(context);
                     },
                     child: const Text(backPage),
                   ),

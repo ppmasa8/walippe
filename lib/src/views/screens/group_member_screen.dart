@@ -71,7 +71,8 @@ class GroupMemberScreen extends ConsumerWidget {
                             textEditingController.clear();
                             await ref
                                 .watch(memberRepositoryProvider)
-                                .addMemberToGroup(groupId, memberName, 'test');
+                                .addMemberToDatabase(
+                                    groupId, memberName, 'test');
                             return ref
                                 .refresh(memberListInGroupProvider(groupId));
                           }

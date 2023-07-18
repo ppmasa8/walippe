@@ -5,7 +5,7 @@ class MemberRepository {
   const MemberRepository({required this.database});
   final WalippeDatabase database;
 
-  Future<List<MemberData>> fetchMember() async {
+  Future<List<MemberData>> fetchMembers() async {
     final members = await database.getAllMembers();
     return members
         .map((member) => MemberData(
@@ -35,7 +35,7 @@ class MemberRepository {
         .toList();
   }
 
-  Future<void> addMemberToGroup(
+  Future<void> addMemberToDatabase(
       int groupId, String name, String description) async {
     await database.addMember(groupId, name, description);
   }

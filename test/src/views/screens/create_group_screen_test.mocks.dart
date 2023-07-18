@@ -58,13 +58,13 @@ class MockGroupRepository extends _i1.Mock implements _i3.GroupRepository {
         returnValue: _i4.Future<List<_i5.GroupData>>.value(<_i5.GroupData>[]),
       ) as _i4.Future<List<_i5.GroupData>>);
   @override
-  _i4.Future<int> addGroupByString(
+  _i4.Future<int> addGroupByStringToDatabase(
     String? name,
     String? description,
   ) =>
       (super.noSuchMethod(
         Invocation.method(
-          #addGroupByString,
+          #addGroupByStringToDatabase,
           [
             name,
             description,

@@ -51,7 +51,7 @@ void main() {
     when(mockFormValidator.validateGroupName(any)).thenReturn(null);
 
     // Mock the group repository to return a fake group id
-    when(mockGroupRepository.addGroupByString(any, any))
+    when(mockGroupRepository.addGroupByStringToDatabase(any, any))
         .thenAnswer((_) async => 1);
 
     // Fill in the TextFormField
@@ -61,8 +61,8 @@ void main() {
     await tester.tap(find.byType(ElevatedButton));
     await tester.pump();
 
-    // Verify that the group repository's addGroupByString method was called
-    verify(mockGroupRepository.addGroupByString('Test Group', 'test'))
+    // Verify that the group repository's addGroupByStringToDatabase method was called
+    verify(mockGroupRepository.addGroupByStringToDatabase('Test Group', 'test'))
         .called(1);
   });
 }

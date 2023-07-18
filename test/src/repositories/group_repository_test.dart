@@ -21,7 +21,8 @@ void main() {
         ),
       ];
 
-      when(mockDatabase.getAllGroups()).thenAnswer((_) => Future.value(dummyGroupList));
+      when(mockDatabase.getAllGroups())
+          .thenAnswer((_) => Future.value(dummyGroupList));
 
       final result = await repo.fetchGroups();
 
@@ -40,7 +41,7 @@ void main() {
       expect(result, isEmpty);
     });
 
-    test('addGroupByString returns an id', () async {
+    test('addGroupByStringToDatabase returns an id', () async {
       final mockDatabase = MockWalippeDatabase();
       final repo = GroupRepository(database: mockDatabase);
       final name = 'Test Group';
@@ -48,7 +49,7 @@ void main() {
 
       when(mockDatabase.addGroup(name, description)).thenAnswer((_) async => 1);
 
-      final result = await repo.addGroupByString(name, description);
+      final result = await repo.addGroupByStringToDatabase(name, description);
 
       verify(mockDatabase.addGroup(name, description)).called(1);
 
