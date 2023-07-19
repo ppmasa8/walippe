@@ -54,6 +54,10 @@ class WalippeDatabase extends _$WalippeDatabase {
 
   Future<List<Group>> getAllGroups() => select(groups).get();
 
+  Future<Group?> getGroupById(int id) {
+    return (select(groups)..where((tbl) => tbl.id.equals(id))).getSingleOrNull();
+  }
+
   Future<int> addGroup(String name, String description) {
     return into(groups).insert(GroupsCompanion(
       name: Value(name),

@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:walippe/src/models/group_data.dart';
+import 'package:walippe/src/views/screens/group_list_screen.dart';
+import 'package:walippe/src/views/screens/show_group_screen.dart';
 
 import '../../const/const.dart';
 import '../../providers/provider.dart';
+import 'create_transaction_screen.dart';
 
 class GroupMemberScreen extends ConsumerWidget {
   GroupMemberScreen(
@@ -104,6 +108,24 @@ class GroupMemberScreen extends ConsumerWidget {
               shape: const StadiumBorder(),
             ),
             onPressed: () async {
+              late GroupData group;
+              group = await ref
+                  .watch(groupRepositoryProvider)
+                  .fetchGroupById(groupId);
+              if (group == null) {
+                await Navigator.of(context).push<void>(MaterialPageRoute(
+                  builder: (context) => const ProviderScope(
+                    child: GroupListScreen(),
+                  ),
+                ));
+              }
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => ShowGroupScreen(
+                            key: ValueKey(group.id),
+                            groupData: group,
+                          )));
               // await Navigator.of(context).push<void>(MaterialPageRoute(
               //     builder: (context) => ProviderScope(child: GroupView(),),
               // ));

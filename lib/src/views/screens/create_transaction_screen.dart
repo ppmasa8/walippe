@@ -147,17 +147,18 @@ class _CreateTransactionScreenState
                           .where((entry) => entry.value)
                           .map((entry) => entry.key)
                           .toList();
-
+                      final perPersonAmount =
+                          (amount / payeeList.length).ceil();
                       for (var payee in payeeList) {
                         await ref
                             .watch(transactionRepositoryProvider)
                             .addTransactionToDatabase(
                               widget.groupData.id,
                               subject,
-                              '',
+                              'test',
                               payer.id,
                               payee.id,
-                              amount,
+                              perPersonAmount,
                             );
                       }
                       Navigator.pop(context);

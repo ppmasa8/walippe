@@ -18,6 +18,17 @@ class GroupRepository {
         .toList();
   }
 
+  Future<GroupData> fetchGroupById(int id) async {
+    final group = await database.getGroupById(id);
+    return GroupData(
+      id: group!.id,
+      name: group.name,
+      description: group.description,
+      createdAt: group.createdAt,
+      updatedAt: group.updatedAt,
+    );
+  }
+
   Future<int> addGroupByStringToDatabase(
       String name, String description) async {
     final groupId = await database.addGroup(name, description);
