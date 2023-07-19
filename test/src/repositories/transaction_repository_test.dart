@@ -1,7 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
 import 'package:walippe/src/drift/walippe_db.dart';
-import 'package:walippe/src/models/transaction_data.dart';
 import 'package:walippe/src/repositories/transaction_repository.dart';
 
 import 'walippe_db_test.mocks.dart';

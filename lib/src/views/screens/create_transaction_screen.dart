@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -34,7 +36,7 @@ class _CreateTransactionScreenState
 
   Map<MemberData, bool> payeeSelections = {};
 
-  String useOfMoney = '';
+  String subject = '';
 
   int amount = 0;
 
@@ -108,10 +110,10 @@ class _CreateTransactionScreenState
                         border: OutlineInputBorder(),
                         hintText: '飛行機代',
                       ),
-                      validator: formValidator.validateUseOfMoney,
+                      validator: formValidator.validateSubject,
                       onChanged: (value) {
                         setState(() {
-                          useOfMoney = value;
+                          subject = value;
                         });
                       },
                     ),
@@ -151,7 +153,7 @@ class _CreateTransactionScreenState
                             .watch(transactionRepositoryProvider)
                             .addTransactionToDatabase(
                               widget.groupData.id,
-                              useOfMoney,
+                              subject,
                               '',
                               payer.id,
                               payee.id,
