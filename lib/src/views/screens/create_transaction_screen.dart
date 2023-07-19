@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:walippe/src/views/divide_amount.dart';
 
 import '../../const/const.dart';
 import '../../models/group_data.dart';
@@ -39,6 +40,8 @@ class _CreateTransactionScreenState
   String subject = '';
 
   int amount = 0;
+
+  var divider = DivideAmount();
 
   @override
   Widget build(BuildContext context) {
@@ -147,8 +150,8 @@ class _CreateTransactionScreenState
                           .where((entry) => entry.value)
                           .map((entry) => entry.key)
                           .toList();
-                      final perPersonAmount =
-                          (amount / payeeList.length).ceil();
+                      final perPersonAmount = divider.calculateAmountPerPerson(
+                          amount, payeeList.length);
                       for (var payee in payeeList) {
                         await ref
                             .watch(transactionRepositoryProvider)
