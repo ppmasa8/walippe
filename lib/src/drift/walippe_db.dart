@@ -11,7 +11,6 @@ part 'walippe_db.g.dart';
 class Groups extends Table {
   IntColumn get id => integer().autoIncrement()();
   TextColumn get name => text()();
-  TextColumn get description => text().nullable()();
   DateTimeColumn get createdAt => dateTime()();
   DateTimeColumn get updatedAt => dateTime()();
 }
@@ -21,8 +20,16 @@ class Transactions extends Table {
   IntColumn get id => integer().autoIncrement()();
   IntColumn get groupId => integer().references(Groups, #id)();
   TextColumn get subject => text()();
-  TextColumn get description => text().nullable()();
   IntColumn get payerId => integer().references(Members, #id)();
+  IntColumn get amount => integer()();
+  DateTimeColumn get createdAt => dateTime()();
+  DateTimeColumn get updatedAt => dateTime()();
+}
+
+@DataClassName('TransactionDetail')
+class TransactionDetails extends Table {
+  IntColumn get id => integer().autoIncrement()();
+  IntColumn get transactionId => integer().references(Transactions, #id)();
   IntColumn get payeeId => integer().references(Members, #id)();
   IntColumn get amount => integer()();
   DateTimeColumn get createdAt => dateTime()();
@@ -34,13 +41,12 @@ class Members extends Table {
   IntColumn get id => integer().autoIncrement()();
   IntColumn get groupId => integer().references(Groups, #id)();
   TextColumn get name => text()();
-  TextColumn get description => text().nullable()();
   IntColumn get balance => integer()();
   DateTimeColumn get createdAt => dateTime()();
   DateTimeColumn get updatedAt => dateTime()();
 }
 
-@DriftDatabase(tables: [Groups, Transactions, Members])
+@DriftDatabase(tables: [Groups, Transactions, TransactionDetails, Members])
 class WalippeDatabase extends _$WalippeDatabase {
   WalippeDatabase() : super(_openConnection());
 
@@ -55,13 +61,13 @@ class WalippeDatabase extends _$WalippeDatabase {
   Future<List<Group>> getAllGroups() => select(groups).get();
 
   Future<Group?> getGroupById(int id) {
-    return (select(groups)..where((tbl) => tbl.id.equals(id))).getSingleOrNull();
+    return (select(groups)..where((tbl) => tbl.id.equals(id)))
+        .getSingleOrNull();
   }
 
-  Future<int> addGroup(String name, String description) {
+  Future<int> addGroup(String name) {
     return into(groups).insert(GroupsCompanion(
       name: Value(name),
-      description: Value(description),
       createdAt: Value(DateTime.now()),
       updatedAt: Value(DateTime.now()),
     ));
@@ -76,20 +82,45 @@ class WalippeDatabase extends _$WalippeDatabase {
     return (select(transactions)).watch();
   }
 
+  Stream<List<Transaction>> watchTransactionsInGroup(int groupId) {
+    return (select(transactions)..where((tbl) => tbl.groupId.equals(groupId)))
+        .watch();
+  }
+
   Future<List<Transaction>> getAllTransactions() => select(transactions).get();
 
+  Future<List<Transaction>> getTransactionsInGroup(int groupId) {
+    return (select(transactions)..where((tbl) => tbl.groupId.equals(groupId)))
+        .get();
+  }
+
   Future<int> addTransaction(
-      int groupId,
-      String subject,
-      String description,
-      int payerId,
-      int payeeId,
-      int amount) {
+      int groupId, String subject, int payerId, int amount) {
     return into(transactions).insert(TransactionsCompanion(
       groupId: Value(groupId),
       subject: Value(subject),
-      description: Value(description),
       payerId: Value(payerId),
+      amount: Value(amount),
+      createdAt: Value(DateTime.now()),
+      updatedAt: Value(DateTime.now()),
+    ));
+  }
+
+  // TransactionDetails
+  Stream<List<TransactionDetail>> watchAllTransactionDetails() {
+    return (select(transactionDetails)).watch();
+  }
+
+  Future<List<TransactionDetail>> getAllTransactionDetails() =>
+      select(transactionDetails).get();
+
+  Future<List<TransactionDetail>> getTransactionDetailsInTransaction(int transactionId) {
+    return (select(transactionDetails)..where((tbl) => tbl.transactionId.equals(transactionId))).get();
+  }
+
+  Future<int> addTransactionDetail(int transactionId, int payeeId, int amount) {
+    return into(transactionDetails).insert(TransactionDetailsCompanion(
+      transactionId: Value(transactionId),
       payeeId: Value(payeeId),
       amount: Value(amount),
       createdAt: Value(DateTime.now()),
@@ -113,11 +144,10 @@ class WalippeDatabase extends _$WalippeDatabase {
     return (select(members)..where((tbl) => tbl.groupId.equals(groupId))).get();
   }
 
-  Future<int> addMember(int groupId, String name, String description) {
+  Future<int> addMember(int groupId, String name) {
     return into(members).insert(MembersCompanion(
       groupId: Value(groupId),
       name: Value(name),
-      description: Value(description),
       balance: const Value(0),
       createdAt: Value(DateTime.now()),
       updatedAt: Value(DateTime.now()),

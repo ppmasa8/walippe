@@ -15,7 +15,6 @@ void main() {
         Group(
           id: 1,
           name: 'Group 1',
-          description: 'Group 1 Description',
           createdAt: DateTime.now(),
           updatedAt: DateTime.now(),
         ),
@@ -45,13 +44,12 @@ void main() {
       final mockDatabase = MockWalippeDatabase();
       final repo = GroupRepository(database: mockDatabase);
       final name = 'Test Group';
-      final description = 'Test Description';
 
-      when(mockDatabase.addGroup(name, description)).thenAnswer((_) async => 1);
+      when(mockDatabase.addGroup(name)).thenAnswer((_) async => 1);
 
-      final result = await repo.addGroupByStringToDatabase(name, description);
+      final result = await repo.addGroupByStringToDatabase(name);
 
-      verify(mockDatabase.addGroup(name, description)).called(1);
+      verify(mockDatabase.addGroup(name)).called(1);
 
       expect(result, equals(1));
     });

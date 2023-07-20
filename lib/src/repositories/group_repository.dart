@@ -11,7 +11,6 @@ class GroupRepository {
         .map((group) => GroupData(
               id: group.id,
               name: group.name,
-              description: group.description,
               createdAt: group.createdAt,
               updatedAt: group.updatedAt,
             ))
@@ -23,15 +22,13 @@ class GroupRepository {
     return GroupData(
       id: group!.id,
       name: group.name,
-      description: group.description,
       createdAt: group.createdAt,
       updatedAt: group.updatedAt,
     );
   }
 
-  Future<int> addGroupByStringToDatabase(
-      String name, String description) async {
-    final groupId = await database.addGroup(name, description);
+  Future<int> addGroupByStringToDatabase(String name) async {
+    final groupId = await database.addGroup(name);
     return groupId;
   }
 

@@ -16,7 +16,6 @@ void main() {
           id: 1,
           groupId: 1,
           name: 'John Doe',
-          description: 'Sample member',
           balance: 100,
           createdAt: DateTime.now(),
           updatedAt: DateTime.now(),
@@ -53,7 +52,6 @@ void main() {
           id: 1,
           groupId: 1,
           name: 'John Doe',
-          description: 'Sample member',
           balance: 100,
           createdAt: DateTime.now(),
           updatedAt: DateTime.now(),
@@ -87,14 +85,13 @@ void main() {
       final repo = MemberRepository(database: mockDatabase);
       final groupId = 1;
       final name = 'John Doe';
-      final description = 'Sample member';
 
-      when(mockDatabase.addMember(groupId, name, description))
+      when(mockDatabase.addMember(groupId, name))
           .thenAnswer((_) async => 1);
 
-      await repo.addMemberToDatabase(groupId, name, description);
+      await repo.addMemberToDatabase(groupId, name);
 
-      verify(mockDatabase.addMember(groupId, name, description)).called(1);
+      verify(mockDatabase.addMember(groupId, name)).called(1);
     });
 
     test('deleteMemberById deletes a member', () async {

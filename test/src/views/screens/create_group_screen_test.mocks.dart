@@ -3,12 +3,12 @@
 // Do not manually edit this file.
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
-import 'dart:async' as _i4;
+import 'dart:async' as _i5;
 
 import 'package:mockito/mockito.dart' as _i1;
 import 'package:walippe/src/drift/walippe_db.dart' as _i2;
-import 'package:walippe/src/models/group_data.dart' as _i5;
-import 'package:walippe/src/repositories/group_repository.dart' as _i3;
+import 'package:walippe/src/models/group_data.dart' as _i3;
+import 'package:walippe/src/repositories/group_repository.dart' as _i4;
 import 'package:walippe/src/views/form_validator.dart' as _i6;
 
 // ignore_for_file: type=lint
@@ -33,10 +33,20 @@ class _FakeWalippeDatabase_0 extends _i1.SmartFake
         );
 }
 
+class _FakeGroupData_1 extends _i1.SmartFake implements _i3.GroupData {
+  _FakeGroupData_1(
+    Object parent,
+    Invocation parentInvocation,
+  ) : super(
+          parent,
+          parentInvocation,
+        );
+}
+
 /// A class which mocks [GroupRepository].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockGroupRepository extends _i1.Mock implements _i3.GroupRepository {
+class MockGroupRepository extends _i1.Mock implements _i4.GroupRepository {
   MockGroupRepository() {
     _i1.throwOnMissingStub(this);
   }
@@ -50,37 +60,45 @@ class MockGroupRepository extends _i1.Mock implements _i3.GroupRepository {
         ),
       ) as _i2.WalippeDatabase);
   @override
-  _i4.Future<List<_i5.GroupData>> fetchGroups() => (super.noSuchMethod(
+  _i5.Future<List<_i3.GroupData>> fetchGroups() => (super.noSuchMethod(
         Invocation.method(
           #fetchGroups,
           [],
         ),
-        returnValue: _i4.Future<List<_i5.GroupData>>.value(<_i5.GroupData>[]),
-      ) as _i4.Future<List<_i5.GroupData>>);
+        returnValue: _i5.Future<List<_i3.GroupData>>.value(<_i3.GroupData>[]),
+      ) as _i5.Future<List<_i3.GroupData>>);
   @override
-  _i4.Future<int> addGroupByStringToDatabase(
-    String? name,
-    String? description,
-  ) =>
+  _i5.Future<_i3.GroupData> fetchGroupById(int? id) => (super.noSuchMethod(
+        Invocation.method(
+          #fetchGroupById,
+          [id],
+        ),
+        returnValue: _i5.Future<_i3.GroupData>.value(_FakeGroupData_1(
+          this,
+          Invocation.method(
+            #fetchGroupById,
+            [id],
+          ),
+        )),
+      ) as _i5.Future<_i3.GroupData>);
+  @override
+  _i5.Future<int> addGroupByStringToDatabase(String? name) =>
       (super.noSuchMethod(
         Invocation.method(
           #addGroupByStringToDatabase,
-          [
-            name,
-            description,
-          ],
+          [name],
         ),
-        returnValue: _i4.Future<int>.value(0),
-      ) as _i4.Future<int>);
+        returnValue: _i5.Future<int>.value(0),
+      ) as _i5.Future<int>);
   @override
-  _i4.Future<void> deleteGroupById(int? id) => (super.noSuchMethod(
+  _i5.Future<void> deleteGroupById(int? id) => (super.noSuchMethod(
         Invocation.method(
           #deleteGroupById,
           [id],
         ),
-        returnValue: _i4.Future<void>.value(),
-        returnValueForMissingStub: _i4.Future<void>.value(),
-      ) as _i4.Future<void>);
+        returnValue: _i5.Future<void>.value(),
+        returnValueForMissingStub: _i5.Future<void>.value(),
+      ) as _i5.Future<void>);
 }
 
 /// A class which mocks [FormValidator].

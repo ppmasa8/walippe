@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:walippe/src/models/group_data.dart';
-import 'package:walippe/src/views/screens/edit_group_screen.dart';
 
 import '../../const/const.dart';
 import '../../providers/provider.dart';
 import 'create_transaction_screen.dart';
+import '../../models/group_data.dart';
+import '../../views/screens/edit_group_screen.dart';
 
 class ShowGroupScreen extends ConsumerWidget {
   const ShowGroupScreen({super.key, required this.groupData});
@@ -17,6 +17,8 @@ class ShowGroupScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final memberListInGroup =
         ref.watch(memberListInGroupProvider(groupData.id));
+    final transactionListInGroup =
+        ref.watch(transactionListInGroupProvider(groupData.id));
 
     return Scaffold(
       appBar: AppBar(
@@ -75,6 +77,8 @@ class ShowGroupScreen extends ConsumerWidget {
             },
             child: const Text(addTransactionRecordText),
           ),
+          // stream transaction
+          
           ElevatedButton(
             style: ElevatedButton.styleFrom(
               shape: const StadiumBorder(),

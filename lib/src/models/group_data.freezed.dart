@@ -18,7 +18,6 @@ final _privateConstructorUsedError = UnsupportedError(
 mixin _$GroupData {
   int get id => throw _privateConstructorUsedError;
   String get name => throw _privateConstructorUsedError;
-  String? get description => throw _privateConstructorUsedError; // nullable
   DateTime get createdAt => throw _privateConstructorUsedError;
   DateTime get updatedAt => throw _privateConstructorUsedError;
 
@@ -32,12 +31,7 @@ abstract class $GroupDataCopyWith<$Res> {
   factory $GroupDataCopyWith(GroupData value, $Res Function(GroupData) then) =
       _$GroupDataCopyWithImpl<$Res, GroupData>;
   @useResult
-  $Res call(
-      {int id,
-      String name,
-      String? description,
-      DateTime createdAt,
-      DateTime updatedAt});
+  $Res call({int id, String name, DateTime createdAt, DateTime updatedAt});
 }
 
 /// @nodoc
@@ -55,7 +49,6 @@ class _$GroupDataCopyWithImpl<$Res, $Val extends GroupData>
   $Res call({
     Object? id = null,
     Object? name = null,
-    Object? description = freezed,
     Object? createdAt = null,
     Object? updatedAt = null,
   }) {
@@ -68,10 +61,6 @@ class _$GroupDataCopyWithImpl<$Res, $Val extends GroupData>
           ? _value.name
           : name // ignore: cast_nullable_to_non_nullable
               as String,
-      description: freezed == description
-          ? _value.description
-          : description // ignore: cast_nullable_to_non_nullable
-              as String?,
       createdAt: null == createdAt
           ? _value.createdAt
           : createdAt // ignore: cast_nullable_to_non_nullable
@@ -91,12 +80,7 @@ abstract class _$$_GroupDataCopyWith<$Res> implements $GroupDataCopyWith<$Res> {
       __$$_GroupDataCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call(
-      {int id,
-      String name,
-      String? description,
-      DateTime createdAt,
-      DateTime updatedAt});
+  $Res call({int id, String name, DateTime createdAt, DateTime updatedAt});
 }
 
 /// @nodoc
@@ -112,7 +96,6 @@ class __$$_GroupDataCopyWithImpl<$Res>
   $Res call({
     Object? id = null,
     Object? name = null,
-    Object? description = freezed,
     Object? createdAt = null,
     Object? updatedAt = null,
   }) {
@@ -125,10 +108,6 @@ class __$$_GroupDataCopyWithImpl<$Res>
           ? _value.name
           : name // ignore: cast_nullable_to_non_nullable
               as String,
-      description: freezed == description
-          ? _value.description
-          : description // ignore: cast_nullable_to_non_nullable
-              as String?,
       createdAt: null == createdAt
           ? _value.createdAt
           : createdAt // ignore: cast_nullable_to_non_nullable
@@ -147,7 +126,6 @@ class _$_GroupData implements _GroupData {
   const _$_GroupData(
       {required this.id,
       required this.name,
-      required this.description,
       required this.createdAt,
       required this.updatedAt});
 
@@ -156,16 +134,13 @@ class _$_GroupData implements _GroupData {
   @override
   final String name;
   @override
-  final String? description;
-// nullable
-  @override
   final DateTime createdAt;
   @override
   final DateTime updatedAt;
 
   @override
   String toString() {
-    return 'GroupData(id: $id, name: $name, description: $description, createdAt: $createdAt, updatedAt: $updatedAt)';
+    return 'GroupData(id: $id, name: $name, createdAt: $createdAt, updatedAt: $updatedAt)';
   }
 
   @override
@@ -175,8 +150,6 @@ class _$_GroupData implements _GroupData {
             other is _$_GroupData &&
             (identical(other.id, id) || other.id == id) &&
             (identical(other.name, name) || other.name == name) &&
-            (identical(other.description, description) ||
-                other.description == description) &&
             (identical(other.createdAt, createdAt) ||
                 other.createdAt == createdAt) &&
             (identical(other.updatedAt, updatedAt) ||
@@ -184,8 +157,7 @@ class _$_GroupData implements _GroupData {
   }
 
   @override
-  int get hashCode =>
-      Object.hash(runtimeType, id, name, description, createdAt, updatedAt);
+  int get hashCode => Object.hash(runtimeType, id, name, createdAt, updatedAt);
 
   @JsonKey(ignore: true)
   @override
@@ -198,7 +170,6 @@ abstract class _GroupData implements GroupData {
   const factory _GroupData(
       {required final int id,
       required final String name,
-      required final String? description,
       required final DateTime createdAt,
       required final DateTime updatedAt}) = _$_GroupData;
 
@@ -207,8 +178,6 @@ abstract class _GroupData implements GroupData {
   @override
   String get name;
   @override
-  String? get description;
-  @override // nullable
   DateTime get createdAt;
   @override
   DateTime get updatedAt;

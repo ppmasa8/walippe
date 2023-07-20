@@ -8,9 +8,7 @@ class TransactionData with _$TransactionData {
     required int id,
     required int groupId,
     required String subject,
-    required String? description, // nullable
     required int payerId,
-    required int payeeId,
     required int amount,
     required DateTime createdAt,
     required DateTime updatedAt,

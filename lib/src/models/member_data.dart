@@ -8,7 +8,6 @@ class MemberData with _$MemberData {
     required int id,
     required int groupId,
     required String name,
-    required String? description, // nullable
     required int balance,
     required DateTime createdAt,
     required DateTime updatedAt,

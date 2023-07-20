@@ -22,12 +22,6 @@ class $GroupsTable extends Groups with TableInfo<$GroupsTable, Group> {
   late final GeneratedColumn<String> name = GeneratedColumn<String>(
       'name', aliasedName, false,
       type: DriftSqlType.string, requiredDuringInsert: true);
-  static const VerificationMeta _descriptionMeta =
-      const VerificationMeta('description');
-  @override
-  late final GeneratedColumn<String> description = GeneratedColumn<String>(
-      'description', aliasedName, true,
-      type: DriftSqlType.string, requiredDuringInsert: false);
   static const VerificationMeta _createdAtMeta =
       const VerificationMeta('createdAt');
   @override
@@ -41,8 +35,7 @@ class $GroupsTable extends Groups with TableInfo<$GroupsTable, Group> {
       'updated_at', aliasedName, false,
       type: DriftSqlType.dateTime, requiredDuringInsert: true);
   @override
-  List<GeneratedColumn> get $columns =>
-      [id, name, description, createdAt, updatedAt];
+  List<GeneratedColumn> get $columns => [id, name, createdAt, updatedAt];
   @override
   String get aliasedName => _alias ?? 'groups';
   @override
@@ -60,12 +53,6 @@ class $GroupsTable extends Groups with TableInfo<$GroupsTable, Group> {
           _nameMeta, name.isAcceptableOrUnknown(data['name']!, _nameMeta));
     } else if (isInserting) {
       context.missing(_nameMeta);
-    }
-    if (data.containsKey('description')) {
-      context.handle(
-          _descriptionMeta,
-          description.isAcceptableOrUnknown(
-              data['description']!, _descriptionMeta));
     }
     if (data.containsKey('created_at')) {
       context.handle(_createdAtMeta,
@@ -92,8 +79,6 @@ class $GroupsTable extends Groups with TableInfo<$GroupsTable, Group> {
           .read(DriftSqlType.int, data['${effectivePrefix}id'])!,
       name: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}name'])!,
-      description: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}description']),
       createdAt: attachedDatabase.typeMapping
           .read(DriftSqlType.dateTime, data['${effectivePrefix}created_at'])!,
       updatedAt: attachedDatabase.typeMapping
@@ -110,13 +95,11 @@ class $GroupsTable extends Groups with TableInfo<$GroupsTable, Group> {
 class Group extends DataClass implements Insertable<Group> {
   final int id;
   final String name;
-  final String? description;
   final DateTime createdAt;
   final DateTime updatedAt;
   const Group(
       {required this.id,
       required this.name,
-      this.description,
       required this.createdAt,
       required this.updatedAt});
   @override
@@ -124,9 +107,6 @@ class Group extends DataClass implements Insertable<Group> {
     final map = <String, Expression>{};
     map['id'] = Variable<int>(id);
     map['name'] = Variable<String>(name);
-    if (!nullToAbsent || description != null) {
-      map['description'] = Variable<String>(description);
-    }
     map['created_at'] = Variable<DateTime>(createdAt);
     map['updated_at'] = Variable<DateTime>(updatedAt);
     return map;
@@ -136,9 +116,6 @@ class Group extends DataClass implements Insertable<Group> {
     return GroupsCompanion(
       id: Value(id),
       name: Value(name),
-      description: description == null && nullToAbsent
-          ? const Value.absent()
-          : Value(description),
       createdAt: Value(createdAt),
       updatedAt: Value(updatedAt),
     );
@@ -150,7 +127,6 @@ class Group extends DataClass implements Insertable<Group> {
     return Group(
       id: serializer.fromJson<int>(json['id']),
       name: serializer.fromJson<String>(json['name']),
-      description: serializer.fromJson<String?>(json['description']),
       createdAt: serializer.fromJson<DateTime>(json['createdAt']),
       updatedAt: serializer.fromJson<DateTime>(json['updatedAt']),
     );
@@ -161,22 +137,16 @@ class Group extends DataClass implements Insertable<Group> {
     return <String, dynamic>{
       'id': serializer.toJson<int>(id),
       'name': serializer.toJson<String>(name),
-      'description': serializer.toJson<String?>(description),
       'createdAt': serializer.toJson<DateTime>(createdAt),
       'updatedAt': serializer.toJson<DateTime>(updatedAt),
     };
   }
 
   Group copyWith(
-          {int? id,
-          String? name,
-          Value<String?> description = const Value.absent(),
-          DateTime? createdAt,
-          DateTime? updatedAt}) =>
+          {int? id, String? name, DateTime? createdAt, DateTime? updatedAt}) =>
       Group(
         id: id ?? this.id,
         name: name ?? this.name,
-        description: description.present ? description.value : this.description,
         createdAt: createdAt ?? this.createdAt,
         updatedAt: updatedAt ?? this.updatedAt,
       );
@@ -185,7 +155,6 @@ class Group extends DataClass implements Insertable<Group> {
     return (StringBuffer('Group(')
           ..write('id: $id, ')
           ..write('name: $name, ')
-          ..write('description: $description, ')
           ..write('createdAt: $createdAt, ')
           ..write('updatedAt: $updatedAt')
           ..write(')'))
@@ -193,14 +162,13 @@ class Group extends DataClass implements Insertable<Group> {
   }
 
   @override
-  int get hashCode => Object.hash(id, name, description, createdAt, updatedAt);
+  int get hashCode => Object.hash(id, name, createdAt, updatedAt);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
       (other is Group &&
           other.id == this.id &&
           other.name == this.name &&
-          other.description == this.description &&
           other.createdAt == this.createdAt &&
           other.updatedAt == this.updatedAt);
 }
@@ -208,20 +176,17 @@ class Group extends DataClass implements Insertable<Group> {
 class GroupsCompanion extends UpdateCompanion<Group> {
   final Value<int> id;
   final Value<String> name;
-  final Value<String?> description;
   final Value<DateTime> createdAt;
   final Value<DateTime> updatedAt;
   const GroupsCompanion({
     this.id = const Value.absent(),
     this.name = const Value.absent(),
-    this.description = const Value.absent(),
     this.createdAt = const Value.absent(),
     this.updatedAt = const Value.absent(),
   });
   GroupsCompanion.insert({
     this.id = const Value.absent(),
     required String name,
-    this.description = const Value.absent(),
     required DateTime createdAt,
     required DateTime updatedAt,
   })  : name = Value(name),
@@ -230,14 +195,12 @@ class GroupsCompanion extends UpdateCompanion<Group> {
   static Insertable<Group> custom({
     Expression<int>? id,
     Expression<String>? name,
-    Expression<String>? description,
     Expression<DateTime>? createdAt,
     Expression<DateTime>? updatedAt,
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
       if (name != null) 'name': name,
-      if (description != null) 'description': description,
       if (createdAt != null) 'created_at': createdAt,
       if (updatedAt != null) 'updated_at': updatedAt,
     });
@@ -246,13 +209,11 @@ class GroupsCompanion extends UpdateCompanion<Group> {
   GroupsCompanion copyWith(
       {Value<int>? id,
       Value<String>? name,
-      Value<String?>? description,
       Value<DateTime>? createdAt,
       Value<DateTime>? updatedAt}) {
     return GroupsCompanion(
       id: id ?? this.id,
       name: name ?? this.name,
-      description: description ?? this.description,
       createdAt: createdAt ?? this.createdAt,
       updatedAt: updatedAt ?? this.updatedAt,
     );
@@ -266,9 +227,6 @@ class GroupsCompanion extends UpdateCompanion<Group> {
     }
     if (name.present) {
       map['name'] = Variable<String>(name.value);
-    }
-    if (description.present) {
-      map['description'] = Variable<String>(description.value);
     }
     if (createdAt.present) {
       map['created_at'] = Variable<DateTime>(createdAt.value);
@@ -284,7 +242,6 @@ class GroupsCompanion extends UpdateCompanion<Group> {
     return (StringBuffer('GroupsCompanion(')
           ..write('id: $id, ')
           ..write('name: $name, ')
-          ..write('description: $description, ')
           ..write('createdAt: $createdAt, ')
           ..write('updatedAt: $updatedAt')
           ..write(')'))
@@ -320,12 +277,6 @@ class $MembersTable extends Members with TableInfo<$MembersTable, Member> {
   late final GeneratedColumn<String> name = GeneratedColumn<String>(
       'name', aliasedName, false,
       type: DriftSqlType.string, requiredDuringInsert: true);
-  static const VerificationMeta _descriptionMeta =
-      const VerificationMeta('description');
-  @override
-  late final GeneratedColumn<String> description = GeneratedColumn<String>(
-      'description', aliasedName, true,
-      type: DriftSqlType.string, requiredDuringInsert: false);
   static const VerificationMeta _balanceMeta =
       const VerificationMeta('balance');
   @override
@@ -346,7 +297,7 @@ class $MembersTable extends Members with TableInfo<$MembersTable, Member> {
       type: DriftSqlType.dateTime, requiredDuringInsert: true);
   @override
   List<GeneratedColumn> get $columns =>
-      [id, groupId, name, description, balance, createdAt, updatedAt];
+      [id, groupId, name, balance, createdAt, updatedAt];
   @override
   String get aliasedName => _alias ?? 'members';
   @override
@@ -370,12 +321,6 @@ class $MembersTable extends Members with TableInfo<$MembersTable, Member> {
           _nameMeta, name.isAcceptableOrUnknown(data['name']!, _nameMeta));
     } else if (isInserting) {
       context.missing(_nameMeta);
-    }
-    if (data.containsKey('description')) {
-      context.handle(
-          _descriptionMeta,
-          description.isAcceptableOrUnknown(
-              data['description']!, _descriptionMeta));
     }
     if (data.containsKey('balance')) {
       context.handle(_balanceMeta,
@@ -410,8 +355,6 @@ class $MembersTable extends Members with TableInfo<$MembersTable, Member> {
           .read(DriftSqlType.int, data['${effectivePrefix}group_id'])!,
       name: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}name'])!,
-      description: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}description']),
       balance: attachedDatabase.typeMapping
           .read(DriftSqlType.int, data['${effectivePrefix}balance'])!,
       createdAt: attachedDatabase.typeMapping
@@ -431,7 +374,6 @@ class Member extends DataClass implements Insertable<Member> {
   final int id;
   final int groupId;
   final String name;
-  final String? description;
   final int balance;
   final DateTime createdAt;
   final DateTime updatedAt;
@@ -439,7 +381,6 @@ class Member extends DataClass implements Insertable<Member> {
       {required this.id,
       required this.groupId,
       required this.name,
-      this.description,
       required this.balance,
       required this.createdAt,
       required this.updatedAt});
@@ -449,9 +390,6 @@ class Member extends DataClass implements Insertable<Member> {
     map['id'] = Variable<int>(id);
     map['group_id'] = Variable<int>(groupId);
     map['name'] = Variable<String>(name);
-    if (!nullToAbsent || description != null) {
-      map['description'] = Variable<String>(description);
-    }
     map['balance'] = Variable<int>(balance);
     map['created_at'] = Variable<DateTime>(createdAt);
     map['updated_at'] = Variable<DateTime>(updatedAt);
@@ -463,9 +401,6 @@ class Member extends DataClass implements Insertable<Member> {
       id: Value(id),
       groupId: Value(groupId),
       name: Value(name),
-      description: description == null && nullToAbsent
-          ? const Value.absent()
-          : Value(description),
       balance: Value(balance),
       createdAt: Value(createdAt),
       updatedAt: Value(updatedAt),
@@ -479,7 +414,6 @@ class Member extends DataClass implements Insertable<Member> {
       id: serializer.fromJson<int>(json['id']),
       groupId: serializer.fromJson<int>(json['groupId']),
       name: serializer.fromJson<String>(json['name']),
-      description: serializer.fromJson<String?>(json['description']),
       balance: serializer.fromJson<int>(json['balance']),
       createdAt: serializer.fromJson<DateTime>(json['createdAt']),
       updatedAt: serializer.fromJson<DateTime>(json['updatedAt']),
@@ -492,7 +426,6 @@ class Member extends DataClass implements Insertable<Member> {
       'id': serializer.toJson<int>(id),
       'groupId': serializer.toJson<int>(groupId),
       'name': serializer.toJson<String>(name),
-      'description': serializer.toJson<String?>(description),
       'balance': serializer.toJson<int>(balance),
       'createdAt': serializer.toJson<DateTime>(createdAt),
       'updatedAt': serializer.toJson<DateTime>(updatedAt),
@@ -503,7 +436,6 @@ class Member extends DataClass implements Insertable<Member> {
           {int? id,
           int? groupId,
           String? name,
-          Value<String?> description = const Value.absent(),
           int? balance,
           DateTime? createdAt,
           DateTime? updatedAt}) =>
@@ -511,7 +443,6 @@ class Member extends DataClass implements Insertable<Member> {
         id: id ?? this.id,
         groupId: groupId ?? this.groupId,
         name: name ?? this.name,
-        description: description.present ? description.value : this.description,
         balance: balance ?? this.balance,
         createdAt: createdAt ?? this.createdAt,
         updatedAt: updatedAt ?? this.updatedAt,
@@ -522,7 +453,6 @@ class Member extends DataClass implements Insertable<Member> {
           ..write('id: $id, ')
           ..write('groupId: $groupId, ')
           ..write('name: $name, ')
-          ..write('description: $description, ')
           ..write('balance: $balance, ')
           ..write('createdAt: $createdAt, ')
           ..write('updatedAt: $updatedAt')
@@ -531,8 +461,8 @@ class Member extends DataClass implements Insertable<Member> {
   }
 
   @override
-  int get hashCode => Object.hash(
-      id, groupId, name, description, balance, createdAt, updatedAt);
+  int get hashCode =>
+      Object.hash(id, groupId, name, balance, createdAt, updatedAt);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -540,7 +470,6 @@ class Member extends DataClass implements Insertable<Member> {
           other.id == this.id &&
           other.groupId == this.groupId &&
           other.name == this.name &&
-          other.description == this.description &&
           other.balance == this.balance &&
           other.createdAt == this.createdAt &&
           other.updatedAt == this.updatedAt);
@@ -550,7 +479,6 @@ class MembersCompanion extends UpdateCompanion<Member> {
   final Value<int> id;
   final Value<int> groupId;
   final Value<String> name;
-  final Value<String?> description;
   final Value<int> balance;
   final Value<DateTime> createdAt;
   final Value<DateTime> updatedAt;
@@ -558,7 +486,6 @@ class MembersCompanion extends UpdateCompanion<Member> {
     this.id = const Value.absent(),
     this.groupId = const Value.absent(),
     this.name = const Value.absent(),
-    this.description = const Value.absent(),
     this.balance = const Value.absent(),
     this.createdAt = const Value.absent(),
     this.updatedAt = const Value.absent(),
@@ -567,7 +494,6 @@ class MembersCompanion extends UpdateCompanion<Member> {
     this.id = const Value.absent(),
     required int groupId,
     required String name,
-    this.description = const Value.absent(),
     required int balance,
     required DateTime createdAt,
     required DateTime updatedAt,
@@ -580,7 +506,6 @@ class MembersCompanion extends UpdateCompanion<Member> {
     Expression<int>? id,
     Expression<int>? groupId,
     Expression<String>? name,
-    Expression<String>? description,
     Expression<int>? balance,
     Expression<DateTime>? createdAt,
     Expression<DateTime>? updatedAt,
@@ -589,7 +514,6 @@ class MembersCompanion extends UpdateCompanion<Member> {
       if (id != null) 'id': id,
       if (groupId != null) 'group_id': groupId,
       if (name != null) 'name': name,
-      if (description != null) 'description': description,
       if (balance != null) 'balance': balance,
       if (createdAt != null) 'created_at': createdAt,
       if (updatedAt != null) 'updated_at': updatedAt,
@@ -600,7 +524,6 @@ class MembersCompanion extends UpdateCompanion<Member> {
       {Value<int>? id,
       Value<int>? groupId,
       Value<String>? name,
-      Value<String?>? description,
       Value<int>? balance,
       Value<DateTime>? createdAt,
       Value<DateTime>? updatedAt}) {
@@ -608,7 +531,6 @@ class MembersCompanion extends UpdateCompanion<Member> {
       id: id ?? this.id,
       groupId: groupId ?? this.groupId,
       name: name ?? this.name,
-      description: description ?? this.description,
       balance: balance ?? this.balance,
       createdAt: createdAt ?? this.createdAt,
       updatedAt: updatedAt ?? this.updatedAt,
@@ -626,9 +548,6 @@ class MembersCompanion extends UpdateCompanion<Member> {
     }
     if (name.present) {
       map['name'] = Variable<String>(name.value);
-    }
-    if (description.present) {
-      map['description'] = Variable<String>(description.value);
     }
     if (balance.present) {
       map['balance'] = Variable<int>(balance.value);
@@ -648,7 +567,6 @@ class MembersCompanion extends UpdateCompanion<Member> {
           ..write('id: $id, ')
           ..write('groupId: $groupId, ')
           ..write('name: $name, ')
-          ..write('description: $description, ')
           ..write('balance: $balance, ')
           ..write('createdAt: $createdAt, ')
           ..write('updatedAt: $updatedAt')
@@ -687,26 +605,11 @@ class $TransactionsTable extends Transactions
   late final GeneratedColumn<String> subject = GeneratedColumn<String>(
       'subject', aliasedName, false,
       type: DriftSqlType.string, requiredDuringInsert: true);
-  static const VerificationMeta _descriptionMeta =
-      const VerificationMeta('description');
-  @override
-  late final GeneratedColumn<String> description = GeneratedColumn<String>(
-      'description', aliasedName, true,
-      type: DriftSqlType.string, requiredDuringInsert: false);
   static const VerificationMeta _payerIdMeta =
       const VerificationMeta('payerId');
   @override
   late final GeneratedColumn<int> payerId = GeneratedColumn<int>(
       'payer_id', aliasedName, false,
-      type: DriftSqlType.int,
-      requiredDuringInsert: true,
-      defaultConstraints:
-          GeneratedColumn.constraintIsAlways('REFERENCES members (id)'));
-  static const VerificationMeta _payeeIdMeta =
-      const VerificationMeta('payeeId');
-  @override
-  late final GeneratedColumn<int> payeeId = GeneratedColumn<int>(
-      'payee_id', aliasedName, false,
       type: DriftSqlType.int,
       requiredDuringInsert: true,
       defaultConstraints:
@@ -729,17 +632,8 @@ class $TransactionsTable extends Transactions
       'updated_at', aliasedName, false,
       type: DriftSqlType.dateTime, requiredDuringInsert: true);
   @override
-  List<GeneratedColumn> get $columns => [
-        id,
-        groupId,
-        subject,
-        description,
-        payerId,
-        payeeId,
-        amount,
-        createdAt,
-        updatedAt
-      ];
+  List<GeneratedColumn> get $columns =>
+      [id, groupId, subject, payerId, amount, createdAt, updatedAt];
   @override
   String get aliasedName => _alias ?? 'transactions';
   @override
@@ -764,23 +658,11 @@ class $TransactionsTable extends Transactions
     } else if (isInserting) {
       context.missing(_subjectMeta);
     }
-    if (data.containsKey('description')) {
-      context.handle(
-          _descriptionMeta,
-          description.isAcceptableOrUnknown(
-              data['description']!, _descriptionMeta));
-    }
     if (data.containsKey('payer_id')) {
       context.handle(_payerIdMeta,
           payerId.isAcceptableOrUnknown(data['payer_id']!, _payerIdMeta));
     } else if (isInserting) {
       context.missing(_payerIdMeta);
-    }
-    if (data.containsKey('payee_id')) {
-      context.handle(_payeeIdMeta,
-          payeeId.isAcceptableOrUnknown(data['payee_id']!, _payeeIdMeta));
-    } else if (isInserting) {
-      context.missing(_payeeIdMeta);
     }
     if (data.containsKey('amount')) {
       context.handle(_amountMeta,
@@ -815,12 +697,8 @@ class $TransactionsTable extends Transactions
           .read(DriftSqlType.int, data['${effectivePrefix}group_id'])!,
       subject: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}subject'])!,
-      description: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}description']),
       payerId: attachedDatabase.typeMapping
           .read(DriftSqlType.int, data['${effectivePrefix}payer_id'])!,
-      payeeId: attachedDatabase.typeMapping
-          .read(DriftSqlType.int, data['${effectivePrefix}payee_id'])!,
       amount: attachedDatabase.typeMapping
           .read(DriftSqlType.int, data['${effectivePrefix}amount'])!,
       createdAt: attachedDatabase.typeMapping
@@ -840,9 +718,7 @@ class Transaction extends DataClass implements Insertable<Transaction> {
   final int id;
   final int groupId;
   final String subject;
-  final String? description;
   final int payerId;
-  final int payeeId;
   final int amount;
   final DateTime createdAt;
   final DateTime updatedAt;
@@ -850,9 +726,7 @@ class Transaction extends DataClass implements Insertable<Transaction> {
       {required this.id,
       required this.groupId,
       required this.subject,
-      this.description,
       required this.payerId,
-      required this.payeeId,
       required this.amount,
       required this.createdAt,
       required this.updatedAt});
@@ -862,11 +736,7 @@ class Transaction extends DataClass implements Insertable<Transaction> {
     map['id'] = Variable<int>(id);
     map['group_id'] = Variable<int>(groupId);
     map['subject'] = Variable<String>(subject);
-    if (!nullToAbsent || description != null) {
-      map['description'] = Variable<String>(description);
-    }
     map['payer_id'] = Variable<int>(payerId);
-    map['payee_id'] = Variable<int>(payeeId);
     map['amount'] = Variable<int>(amount);
     map['created_at'] = Variable<DateTime>(createdAt);
     map['updated_at'] = Variable<DateTime>(updatedAt);
@@ -878,11 +748,7 @@ class Transaction extends DataClass implements Insertable<Transaction> {
       id: Value(id),
       groupId: Value(groupId),
       subject: Value(subject),
-      description: description == null && nullToAbsent
-          ? const Value.absent()
-          : Value(description),
       payerId: Value(payerId),
-      payeeId: Value(payeeId),
       amount: Value(amount),
       createdAt: Value(createdAt),
       updatedAt: Value(updatedAt),
@@ -896,9 +762,7 @@ class Transaction extends DataClass implements Insertable<Transaction> {
       id: serializer.fromJson<int>(json['id']),
       groupId: serializer.fromJson<int>(json['groupId']),
       subject: serializer.fromJson<String>(json['subject']),
-      description: serializer.fromJson<String?>(json['description']),
       payerId: serializer.fromJson<int>(json['payerId']),
-      payeeId: serializer.fromJson<int>(json['payeeId']),
       amount: serializer.fromJson<int>(json['amount']),
       createdAt: serializer.fromJson<DateTime>(json['createdAt']),
       updatedAt: serializer.fromJson<DateTime>(json['updatedAt']),
@@ -911,9 +775,7 @@ class Transaction extends DataClass implements Insertable<Transaction> {
       'id': serializer.toJson<int>(id),
       'groupId': serializer.toJson<int>(groupId),
       'subject': serializer.toJson<String>(subject),
-      'description': serializer.toJson<String?>(description),
       'payerId': serializer.toJson<int>(payerId),
-      'payeeId': serializer.toJson<int>(payeeId),
       'amount': serializer.toJson<int>(amount),
       'createdAt': serializer.toJson<DateTime>(createdAt),
       'updatedAt': serializer.toJson<DateTime>(updatedAt),
@@ -924,9 +786,7 @@ class Transaction extends DataClass implements Insertable<Transaction> {
           {int? id,
           int? groupId,
           String? subject,
-          Value<String?> description = const Value.absent(),
           int? payerId,
-          int? payeeId,
           int? amount,
           DateTime? createdAt,
           DateTime? updatedAt}) =>
@@ -934,9 +794,7 @@ class Transaction extends DataClass implements Insertable<Transaction> {
         id: id ?? this.id,
         groupId: groupId ?? this.groupId,
         subject: subject ?? this.subject,
-        description: description.present ? description.value : this.description,
         payerId: payerId ?? this.payerId,
-        payeeId: payeeId ?? this.payeeId,
         amount: amount ?? this.amount,
         createdAt: createdAt ?? this.createdAt,
         updatedAt: updatedAt ?? this.updatedAt,
@@ -947,9 +805,7 @@ class Transaction extends DataClass implements Insertable<Transaction> {
           ..write('id: $id, ')
           ..write('groupId: $groupId, ')
           ..write('subject: $subject, ')
-          ..write('description: $description, ')
           ..write('payerId: $payerId, ')
-          ..write('payeeId: $payeeId, ')
           ..write('amount: $amount, ')
           ..write('createdAt: $createdAt, ')
           ..write('updatedAt: $updatedAt')
@@ -958,8 +814,8 @@ class Transaction extends DataClass implements Insertable<Transaction> {
   }
 
   @override
-  int get hashCode => Object.hash(id, groupId, subject, description, payerId,
-      payeeId, amount, createdAt, updatedAt);
+  int get hashCode =>
+      Object.hash(id, groupId, subject, payerId, amount, createdAt, updatedAt);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -967,9 +823,7 @@ class Transaction extends DataClass implements Insertable<Transaction> {
           other.id == this.id &&
           other.groupId == this.groupId &&
           other.subject == this.subject &&
-          other.description == this.description &&
           other.payerId == this.payerId &&
-          other.payeeId == this.payeeId &&
           other.amount == this.amount &&
           other.createdAt == this.createdAt &&
           other.updatedAt == this.updatedAt);
@@ -979,9 +833,7 @@ class TransactionsCompanion extends UpdateCompanion<Transaction> {
   final Value<int> id;
   final Value<int> groupId;
   final Value<String> subject;
-  final Value<String?> description;
   final Value<int> payerId;
-  final Value<int> payeeId;
   final Value<int> amount;
   final Value<DateTime> createdAt;
   final Value<DateTime> updatedAt;
@@ -989,9 +841,7 @@ class TransactionsCompanion extends UpdateCompanion<Transaction> {
     this.id = const Value.absent(),
     this.groupId = const Value.absent(),
     this.subject = const Value.absent(),
-    this.description = const Value.absent(),
     this.payerId = const Value.absent(),
-    this.payeeId = const Value.absent(),
     this.amount = const Value.absent(),
     this.createdAt = const Value.absent(),
     this.updatedAt = const Value.absent(),
@@ -1000,16 +850,13 @@ class TransactionsCompanion extends UpdateCompanion<Transaction> {
     this.id = const Value.absent(),
     required int groupId,
     required String subject,
-    this.description = const Value.absent(),
     required int payerId,
-    required int payeeId,
     required int amount,
     required DateTime createdAt,
     required DateTime updatedAt,
   })  : groupId = Value(groupId),
         subject = Value(subject),
         payerId = Value(payerId),
-        payeeId = Value(payeeId),
         amount = Value(amount),
         createdAt = Value(createdAt),
         updatedAt = Value(updatedAt);
@@ -1017,9 +864,7 @@ class TransactionsCompanion extends UpdateCompanion<Transaction> {
     Expression<int>? id,
     Expression<int>? groupId,
     Expression<String>? subject,
-    Expression<String>? description,
     Expression<int>? payerId,
-    Expression<int>? payeeId,
     Expression<int>? amount,
     Expression<DateTime>? createdAt,
     Expression<DateTime>? updatedAt,
@@ -1028,9 +873,7 @@ class TransactionsCompanion extends UpdateCompanion<Transaction> {
       if (id != null) 'id': id,
       if (groupId != null) 'group_id': groupId,
       if (subject != null) 'subject': subject,
-      if (description != null) 'description': description,
       if (payerId != null) 'payer_id': payerId,
-      if (payeeId != null) 'payee_id': payeeId,
       if (amount != null) 'amount': amount,
       if (createdAt != null) 'created_at': createdAt,
       if (updatedAt != null) 'updated_at': updatedAt,
@@ -1041,9 +884,7 @@ class TransactionsCompanion extends UpdateCompanion<Transaction> {
       {Value<int>? id,
       Value<int>? groupId,
       Value<String>? subject,
-      Value<String?>? description,
       Value<int>? payerId,
-      Value<int>? payeeId,
       Value<int>? amount,
       Value<DateTime>? createdAt,
       Value<DateTime>? updatedAt}) {
@@ -1051,9 +892,7 @@ class TransactionsCompanion extends UpdateCompanion<Transaction> {
       id: id ?? this.id,
       groupId: groupId ?? this.groupId,
       subject: subject ?? this.subject,
-      description: description ?? this.description,
       payerId: payerId ?? this.payerId,
-      payeeId: payeeId ?? this.payeeId,
       amount: amount ?? this.amount,
       createdAt: createdAt ?? this.createdAt,
       updatedAt: updatedAt ?? this.updatedAt,
@@ -1072,14 +911,8 @@ class TransactionsCompanion extends UpdateCompanion<Transaction> {
     if (subject.present) {
       map['subject'] = Variable<String>(subject.value);
     }
-    if (description.present) {
-      map['description'] = Variable<String>(description.value);
-    }
     if (payerId.present) {
       map['payer_id'] = Variable<int>(payerId.value);
-    }
-    if (payeeId.present) {
-      map['payee_id'] = Variable<int>(payeeId.value);
     }
     if (amount.present) {
       map['amount'] = Variable<int>(amount.value);
@@ -1099,8 +932,339 @@ class TransactionsCompanion extends UpdateCompanion<Transaction> {
           ..write('id: $id, ')
           ..write('groupId: $groupId, ')
           ..write('subject: $subject, ')
-          ..write('description: $description, ')
           ..write('payerId: $payerId, ')
+          ..write('amount: $amount, ')
+          ..write('createdAt: $createdAt, ')
+          ..write('updatedAt: $updatedAt')
+          ..write(')'))
+        .toString();
+  }
+}
+
+class $TransactionDetailsTable extends TransactionDetails
+    with TableInfo<$TransactionDetailsTable, TransactionDetail> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $TransactionDetailsTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<int> id = GeneratedColumn<int>(
+      'id', aliasedName, false,
+      hasAutoIncrement: true,
+      type: DriftSqlType.int,
+      requiredDuringInsert: false,
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('PRIMARY KEY AUTOINCREMENT'));
+  static const VerificationMeta _transactionIdMeta =
+      const VerificationMeta('transactionId');
+  @override
+  late final GeneratedColumn<int> transactionId = GeneratedColumn<int>(
+      'transaction_id', aliasedName, false,
+      type: DriftSqlType.int,
+      requiredDuringInsert: true,
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('REFERENCES transactions (id)'));
+  static const VerificationMeta _payeeIdMeta =
+      const VerificationMeta('payeeId');
+  @override
+  late final GeneratedColumn<int> payeeId = GeneratedColumn<int>(
+      'payee_id', aliasedName, false,
+      type: DriftSqlType.int,
+      requiredDuringInsert: true,
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('REFERENCES members (id)'));
+  static const VerificationMeta _amountMeta = const VerificationMeta('amount');
+  @override
+  late final GeneratedColumn<int> amount = GeneratedColumn<int>(
+      'amount', aliasedName, false,
+      type: DriftSqlType.int, requiredDuringInsert: true);
+  static const VerificationMeta _createdAtMeta =
+      const VerificationMeta('createdAt');
+  @override
+  late final GeneratedColumn<DateTime> createdAt = GeneratedColumn<DateTime>(
+      'created_at', aliasedName, false,
+      type: DriftSqlType.dateTime, requiredDuringInsert: true);
+  static const VerificationMeta _updatedAtMeta =
+      const VerificationMeta('updatedAt');
+  @override
+  late final GeneratedColumn<DateTime> updatedAt = GeneratedColumn<DateTime>(
+      'updated_at', aliasedName, false,
+      type: DriftSqlType.dateTime, requiredDuringInsert: true);
+  @override
+  List<GeneratedColumn> get $columns =>
+      [id, transactionId, payeeId, amount, createdAt, updatedAt];
+  @override
+  String get aliasedName => _alias ?? 'transaction_details';
+  @override
+  String get actualTableName => 'transaction_details';
+  @override
+  VerificationContext validateIntegrity(Insertable<TransactionDetail> instance,
+      {bool isInserting = false}) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    }
+    if (data.containsKey('transaction_id')) {
+      context.handle(
+          _transactionIdMeta,
+          transactionId.isAcceptableOrUnknown(
+              data['transaction_id']!, _transactionIdMeta));
+    } else if (isInserting) {
+      context.missing(_transactionIdMeta);
+    }
+    if (data.containsKey('payee_id')) {
+      context.handle(_payeeIdMeta,
+          payeeId.isAcceptableOrUnknown(data['payee_id']!, _payeeIdMeta));
+    } else if (isInserting) {
+      context.missing(_payeeIdMeta);
+    }
+    if (data.containsKey('amount')) {
+      context.handle(_amountMeta,
+          amount.isAcceptableOrUnknown(data['amount']!, _amountMeta));
+    } else if (isInserting) {
+      context.missing(_amountMeta);
+    }
+    if (data.containsKey('created_at')) {
+      context.handle(_createdAtMeta,
+          createdAt.isAcceptableOrUnknown(data['created_at']!, _createdAtMeta));
+    } else if (isInserting) {
+      context.missing(_createdAtMeta);
+    }
+    if (data.containsKey('updated_at')) {
+      context.handle(_updatedAtMeta,
+          updatedAt.isAcceptableOrUnknown(data['updated_at']!, _updatedAtMeta));
+    } else if (isInserting) {
+      context.missing(_updatedAtMeta);
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  TransactionDetail map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return TransactionDetail(
+      id: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}id'])!,
+      transactionId: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}transaction_id'])!,
+      payeeId: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}payee_id'])!,
+      amount: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}amount'])!,
+      createdAt: attachedDatabase.typeMapping
+          .read(DriftSqlType.dateTime, data['${effectivePrefix}created_at'])!,
+      updatedAt: attachedDatabase.typeMapping
+          .read(DriftSqlType.dateTime, data['${effectivePrefix}updated_at'])!,
+    );
+  }
+
+  @override
+  $TransactionDetailsTable createAlias(String alias) {
+    return $TransactionDetailsTable(attachedDatabase, alias);
+  }
+}
+
+class TransactionDetail extends DataClass
+    implements Insertable<TransactionDetail> {
+  final int id;
+  final int transactionId;
+  final int payeeId;
+  final int amount;
+  final DateTime createdAt;
+  final DateTime updatedAt;
+  const TransactionDetail(
+      {required this.id,
+      required this.transactionId,
+      required this.payeeId,
+      required this.amount,
+      required this.createdAt,
+      required this.updatedAt});
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<int>(id);
+    map['transaction_id'] = Variable<int>(transactionId);
+    map['payee_id'] = Variable<int>(payeeId);
+    map['amount'] = Variable<int>(amount);
+    map['created_at'] = Variable<DateTime>(createdAt);
+    map['updated_at'] = Variable<DateTime>(updatedAt);
+    return map;
+  }
+
+  TransactionDetailsCompanion toCompanion(bool nullToAbsent) {
+    return TransactionDetailsCompanion(
+      id: Value(id),
+      transactionId: Value(transactionId),
+      payeeId: Value(payeeId),
+      amount: Value(amount),
+      createdAt: Value(createdAt),
+      updatedAt: Value(updatedAt),
+    );
+  }
+
+  factory TransactionDetail.fromJson(Map<String, dynamic> json,
+      {ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return TransactionDetail(
+      id: serializer.fromJson<int>(json['id']),
+      transactionId: serializer.fromJson<int>(json['transactionId']),
+      payeeId: serializer.fromJson<int>(json['payeeId']),
+      amount: serializer.fromJson<int>(json['amount']),
+      createdAt: serializer.fromJson<DateTime>(json['createdAt']),
+      updatedAt: serializer.fromJson<DateTime>(json['updatedAt']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<int>(id),
+      'transactionId': serializer.toJson<int>(transactionId),
+      'payeeId': serializer.toJson<int>(payeeId),
+      'amount': serializer.toJson<int>(amount),
+      'createdAt': serializer.toJson<DateTime>(createdAt),
+      'updatedAt': serializer.toJson<DateTime>(updatedAt),
+    };
+  }
+
+  TransactionDetail copyWith(
+          {int? id,
+          int? transactionId,
+          int? payeeId,
+          int? amount,
+          DateTime? createdAt,
+          DateTime? updatedAt}) =>
+      TransactionDetail(
+        id: id ?? this.id,
+        transactionId: transactionId ?? this.transactionId,
+        payeeId: payeeId ?? this.payeeId,
+        amount: amount ?? this.amount,
+        createdAt: createdAt ?? this.createdAt,
+        updatedAt: updatedAt ?? this.updatedAt,
+      );
+  @override
+  String toString() {
+    return (StringBuffer('TransactionDetail(')
+          ..write('id: $id, ')
+          ..write('transactionId: $transactionId, ')
+          ..write('payeeId: $payeeId, ')
+          ..write('amount: $amount, ')
+          ..write('createdAt: $createdAt, ')
+          ..write('updatedAt: $updatedAt')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode =>
+      Object.hash(id, transactionId, payeeId, amount, createdAt, updatedAt);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is TransactionDetail &&
+          other.id == this.id &&
+          other.transactionId == this.transactionId &&
+          other.payeeId == this.payeeId &&
+          other.amount == this.amount &&
+          other.createdAt == this.createdAt &&
+          other.updatedAt == this.updatedAt);
+}
+
+class TransactionDetailsCompanion extends UpdateCompanion<TransactionDetail> {
+  final Value<int> id;
+  final Value<int> transactionId;
+  final Value<int> payeeId;
+  final Value<int> amount;
+  final Value<DateTime> createdAt;
+  final Value<DateTime> updatedAt;
+  const TransactionDetailsCompanion({
+    this.id = const Value.absent(),
+    this.transactionId = const Value.absent(),
+    this.payeeId = const Value.absent(),
+    this.amount = const Value.absent(),
+    this.createdAt = const Value.absent(),
+    this.updatedAt = const Value.absent(),
+  });
+  TransactionDetailsCompanion.insert({
+    this.id = const Value.absent(),
+    required int transactionId,
+    required int payeeId,
+    required int amount,
+    required DateTime createdAt,
+    required DateTime updatedAt,
+  })  : transactionId = Value(transactionId),
+        payeeId = Value(payeeId),
+        amount = Value(amount),
+        createdAt = Value(createdAt),
+        updatedAt = Value(updatedAt);
+  static Insertable<TransactionDetail> custom({
+    Expression<int>? id,
+    Expression<int>? transactionId,
+    Expression<int>? payeeId,
+    Expression<int>? amount,
+    Expression<DateTime>? createdAt,
+    Expression<DateTime>? updatedAt,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (transactionId != null) 'transaction_id': transactionId,
+      if (payeeId != null) 'payee_id': payeeId,
+      if (amount != null) 'amount': amount,
+      if (createdAt != null) 'created_at': createdAt,
+      if (updatedAt != null) 'updated_at': updatedAt,
+    });
+  }
+
+  TransactionDetailsCompanion copyWith(
+      {Value<int>? id,
+      Value<int>? transactionId,
+      Value<int>? payeeId,
+      Value<int>? amount,
+      Value<DateTime>? createdAt,
+      Value<DateTime>? updatedAt}) {
+    return TransactionDetailsCompanion(
+      id: id ?? this.id,
+      transactionId: transactionId ?? this.transactionId,
+      payeeId: payeeId ?? this.payeeId,
+      amount: amount ?? this.amount,
+      createdAt: createdAt ?? this.createdAt,
+      updatedAt: updatedAt ?? this.updatedAt,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<int>(id.value);
+    }
+    if (transactionId.present) {
+      map['transaction_id'] = Variable<int>(transactionId.value);
+    }
+    if (payeeId.present) {
+      map['payee_id'] = Variable<int>(payeeId.value);
+    }
+    if (amount.present) {
+      map['amount'] = Variable<int>(amount.value);
+    }
+    if (createdAt.present) {
+      map['created_at'] = Variable<DateTime>(createdAt.value);
+    }
+    if (updatedAt.present) {
+      map['updated_at'] = Variable<DateTime>(updatedAt.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('TransactionDetailsCompanion(')
+          ..write('id: $id, ')
+          ..write('transactionId: $transactionId, ')
           ..write('payeeId: $payeeId, ')
           ..write('amount: $amount, ')
           ..write('createdAt: $createdAt, ')
@@ -1115,10 +1279,12 @@ abstract class _$WalippeDatabase extends GeneratedDatabase {
   late final $GroupsTable groups = $GroupsTable(this);
   late final $MembersTable members = $MembersTable(this);
   late final $TransactionsTable transactions = $TransactionsTable(this);
+  late final $TransactionDetailsTable transactionDetails =
+      $TransactionDetailsTable(this);
   @override
   Iterable<TableInfo<Table, Object?>> get allTables =>
       allSchemaEntities.whereType<TableInfo<Table, Object?>>();
   @override
   List<DatabaseSchemaEntity> get allSchemaEntities =>
-      [groups, members, transactions];
+      [groups, members, transactions, transactionDetails];
 }

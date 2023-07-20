@@ -16,9 +16,7 @@ void main() {
           id: 1,
           groupId: 1,
           subject: 'Expense',
-          description: 'Sample transaction',
           payerId: 2,
-          payeeId: 3,
           amount: 100,
           createdAt: DateTime.now(),
           updatedAt: DateTime.now(),
@@ -51,35 +49,27 @@ void main() {
       final repo = TransactionRepository(database: mockDatabase);
       final groupId = 1;
       final subject = 'Expense';
-      final description = 'Sample transaction';
       final payerId = 2;
-      final payeeId = 3;
       final amount = 100;
 
       when(mockDatabase.addTransaction(
         groupId,
         subject,
-        description,
         payerId,
-        payeeId,
         amount
       )).thenAnswer((_) async => 1);
 
       await repo.addTransactionToDatabase(
         groupId,
         subject,
-        description,
         payerId,
-        payeeId,
         amount
       );
 
       verify(mockDatabase.addTransaction(
         groupId,
         subject,
-        description,
         payerId,
-        payeeId,
         amount
       )).called(1);
     });

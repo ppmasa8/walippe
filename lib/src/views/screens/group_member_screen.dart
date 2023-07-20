@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:walippe/src/models/group_data.dart';
-import 'package:walippe/src/views/screens/group_list_screen.dart';
-import 'package:walippe/src/views/screens/show_group_screen.dart';
 
+import '../../models/group_data.dart';
 import '../../const/const.dart';
 import '../../providers/provider.dart';
-import 'create_transaction_screen.dart';
+import 'group_list_screen.dart';
+import 'show_group_screen.dart';
 
 class GroupMemberScreen extends ConsumerWidget {
   GroupMemberScreen(
@@ -76,7 +75,7 @@ class GroupMemberScreen extends ConsumerWidget {
                             await ref
                                 .watch(memberRepositoryProvider)
                                 .addMemberToDatabase(
-                                    groupId, memberName, 'test');
+                                    groupId, memberName);
                             return ref
                                 .refresh(memberListInGroupProvider(groupId));
                           }
@@ -126,9 +125,6 @@ class GroupMemberScreen extends ConsumerWidget {
                             key: ValueKey(group.id),
                             groupData: group,
                           )));
-              // await Navigator.of(context).push<void>(MaterialPageRoute(
-              //     builder: (context) => ProviderScope(child: GroupView(),),
-              // ));
             },
             child: const Text(nextPage),
           ),

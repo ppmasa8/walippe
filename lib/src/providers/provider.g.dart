@@ -68,39 +68,8 @@ final transactionRepositoryProvider =
 
 typedef TransactionRepositoryRef
     = AutoDisposeProviderRef<TransactionRepository>;
-String _$transactionListHash() => r'860c312a6cd27d3ba150102ce819d1829572ab13';
-
-/// See also [transactionList].
-@ProviderFor(transactionList)
-final transactionListProvider =
-    AutoDisposeFutureProvider<List<TransactionData>>.internal(
-  transactionList,
-  name: r'transactionListProvider',
-  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-      ? null
-      : _$transactionListHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
-);
-
-typedef TransactionListRef
-    = AutoDisposeFutureProviderRef<List<TransactionData>>;
-String _$memberRepositoryHash() => r'8159a59fe34e1dba8bda0341c8b98189d9954e64';
-
-/// See also [memberRepository].
-@ProviderFor(memberRepository)
-final memberRepositoryProvider = AutoDisposeProvider<MemberRepository>.internal(
-  memberRepository,
-  name: r'memberRepositoryProvider',
-  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-      ? null
-      : _$memberRepositoryHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
-);
-
-typedef MemberRepositoryRef = AutoDisposeProviderRef<MemberRepository>;
-String _$memberListInGroupHash() => r'edee16b6a815d446f7e48ba22a11554c018262eb';
+String _$transactionListInGroupHash() =>
+    r'bcc4be983310269e76f859d5b6dd9293a3ed6924';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -123,6 +92,212 @@ class _SystemHash {
   }
 }
 
+typedef TransactionListInGroupRef
+    = AutoDisposeFutureProviderRef<List<TransactionData>>;
+
+/// See also [transactionListInGroup].
+@ProviderFor(transactionListInGroup)
+const transactionListInGroupProvider = TransactionListInGroupFamily();
+
+/// See also [transactionListInGroup].
+class TransactionListInGroupFamily
+    extends Family<AsyncValue<List<TransactionData>>> {
+  /// See also [transactionListInGroup].
+  const TransactionListInGroupFamily();
+
+  /// See also [transactionListInGroup].
+  TransactionListInGroupProvider call(
+    int groupId,
+  ) {
+    return TransactionListInGroupProvider(
+      groupId,
+    );
+  }
+
+  @override
+  TransactionListInGroupProvider getProviderOverride(
+    covariant TransactionListInGroupProvider provider,
+  ) {
+    return call(
+      provider.groupId,
+    );
+  }
+
+  static const Iterable<ProviderOrFamily>? _dependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get dependencies => _dependencies;
+
+  static const Iterable<ProviderOrFamily>? _allTransitiveDependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get allTransitiveDependencies =>
+      _allTransitiveDependencies;
+
+  @override
+  String? get name => r'transactionListInGroupProvider';
+}
+
+/// See also [transactionListInGroup].
+class TransactionListInGroupProvider
+    extends AutoDisposeFutureProvider<List<TransactionData>> {
+  /// See also [transactionListInGroup].
+  TransactionListInGroupProvider(
+    this.groupId,
+  ) : super.internal(
+          (ref) => transactionListInGroup(
+            ref,
+            groupId,
+          ),
+          from: transactionListInGroupProvider,
+          name: r'transactionListInGroupProvider',
+          debugGetCreateSourceHash:
+              const bool.fromEnvironment('dart.vm.product')
+                  ? null
+                  : _$transactionListInGroupHash,
+          dependencies: TransactionListInGroupFamily._dependencies,
+          allTransitiveDependencies:
+              TransactionListInGroupFamily._allTransitiveDependencies,
+        );
+
+  final int groupId;
+
+  @override
+  bool operator ==(Object other) {
+    return other is TransactionListInGroupProvider && other.groupId == groupId;
+  }
+
+  @override
+  int get hashCode {
+    var hash = _SystemHash.combine(0, runtimeType.hashCode);
+    hash = _SystemHash.combine(hash, groupId.hashCode);
+
+    return _SystemHash.finish(hash);
+  }
+}
+
+String _$transactionDetailRepositoryHash() =>
+    r'72ca0678207f9c204b8fe61b60205f97b86db5f4';
+
+/// See also [transactionDetailRepository].
+@ProviderFor(transactionDetailRepository)
+final transactionDetailRepositoryProvider =
+    AutoDisposeProvider<TransactionDetailRepository>.internal(
+  transactionDetailRepository,
+  name: r'transactionDetailRepositoryProvider',
+  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+      ? null
+      : _$transactionDetailRepositoryHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
+
+typedef TransactionDetailRepositoryRef
+    = AutoDisposeProviderRef<TransactionDetailRepository>;
+String _$transactionDetailListInTransactionHash() =>
+    r'c666431f05a187ea5975318290c581b68b05f131';
+typedef TransactionDetailListInTransactionRef
+    = AutoDisposeFutureProviderRef<List<TransactionDetailData>>;
+
+/// See also [transactionDetailListInTransaction].
+@ProviderFor(transactionDetailListInTransaction)
+const transactionDetailListInTransactionProvider =
+    TransactionDetailListInTransactionFamily();
+
+/// See also [transactionDetailListInTransaction].
+class TransactionDetailListInTransactionFamily
+    extends Family<AsyncValue<List<TransactionDetailData>>> {
+  /// See also [transactionDetailListInTransaction].
+  const TransactionDetailListInTransactionFamily();
+
+  /// See also [transactionDetailListInTransaction].
+  TransactionDetailListInTransactionProvider call(
+    int transactionId,
+  ) {
+    return TransactionDetailListInTransactionProvider(
+      transactionId,
+    );
+  }
+
+  @override
+  TransactionDetailListInTransactionProvider getProviderOverride(
+    covariant TransactionDetailListInTransactionProvider provider,
+  ) {
+    return call(
+      provider.transactionId,
+    );
+  }
+
+  static const Iterable<ProviderOrFamily>? _dependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get dependencies => _dependencies;
+
+  static const Iterable<ProviderOrFamily>? _allTransitiveDependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get allTransitiveDependencies =>
+      _allTransitiveDependencies;
+
+  @override
+  String? get name => r'transactionDetailListInTransactionProvider';
+}
+
+/// See also [transactionDetailListInTransaction].
+class TransactionDetailListInTransactionProvider
+    extends AutoDisposeFutureProvider<List<TransactionDetailData>> {
+  /// See also [transactionDetailListInTransaction].
+  TransactionDetailListInTransactionProvider(
+    this.transactionId,
+  ) : super.internal(
+          (ref) => transactionDetailListInTransaction(
+            ref,
+            transactionId,
+          ),
+          from: transactionDetailListInTransactionProvider,
+          name: r'transactionDetailListInTransactionProvider',
+          debugGetCreateSourceHash:
+              const bool.fromEnvironment('dart.vm.product')
+                  ? null
+                  : _$transactionDetailListInTransactionHash,
+          dependencies: TransactionDetailListInTransactionFamily._dependencies,
+          allTransitiveDependencies: TransactionDetailListInTransactionFamily
+              ._allTransitiveDependencies,
+        );
+
+  final int transactionId;
+
+  @override
+  bool operator ==(Object other) {
+    return other is TransactionDetailListInTransactionProvider &&
+        other.transactionId == transactionId;
+  }
+
+  @override
+  int get hashCode {
+    var hash = _SystemHash.combine(0, runtimeType.hashCode);
+    hash = _SystemHash.combine(hash, transactionId.hashCode);
+
+    return _SystemHash.finish(hash);
+  }
+}
+
+String _$memberRepositoryHash() => r'8159a59fe34e1dba8bda0341c8b98189d9954e64';
+
+/// See also [memberRepository].
+@ProviderFor(memberRepository)
+final memberRepositoryProvider = AutoDisposeProvider<MemberRepository>.internal(
+  memberRepository,
+  name: r'memberRepositoryProvider',
+  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+      ? null
+      : _$memberRepositoryHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
+
+typedef MemberRepositoryRef = AutoDisposeProviderRef<MemberRepository>;
+String _$memberListInGroupHash() => r'edee16b6a815d446f7e48ba22a11554c018262eb';
 typedef MemberListInGroupRef = AutoDisposeFutureProviderRef<List<MemberData>>;
 
 /// See also [memberListInGroup].

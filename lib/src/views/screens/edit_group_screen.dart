@@ -73,7 +73,7 @@ class EditGroupScreen extends ConsumerWidget {
                             await ref
                                 .watch(memberRepositoryProvider)
                                 .addMemberToDatabase(
-                                    groupData.id, memberName, 'test');
+                                    groupData.id, memberName);
                             return ref.refresh(
                                 memberListInGroupProvider(groupData.id));
                           }

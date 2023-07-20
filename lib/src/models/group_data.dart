@@ -7,7 +7,6 @@ class GroupData with _$GroupData {
   const factory GroupData({
     required int id,
     required String name,
-    required String? description, // nullable
     required DateTime createdAt,
     required DateTime updatedAt,
   }) = _GroupData;

@@ -1,16 +1,13 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:walippe/src/views/divide_amount.dart';
 
 import '../../const/const.dart';
 import '../../models/group_data.dart';
 import '../../models/member_data.dart';
-import '../../models/transaction_data.dart';
 import '../../providers/provider.dart';
+import '../../views/divide_amount.dart';
 
 class CreateTransactionScreen extends ConsumerStatefulWidget {
   const CreateTransactionScreen({Key? key, required this.groupData})
@@ -29,7 +26,6 @@ class _CreateTransactionScreenState
     id: 0,
     groupId: 0,
     name: '',
-    description: null,
     balance: 0,
     createdAt: DateTime.now(),
     updatedAt: DateTime.now(),
@@ -146,24 +142,22 @@ class _CreateTransactionScreenState
                       shape: const StadiumBorder(),
                     ),
                     onPressed: () async {
-                      final payeeList = payeeSelections.entries
-                          .where((entry) => entry.value)
-                          .map((entry) => entry.key)
-                          .toList();
-                      final perPersonAmount = divider.calculateAmountPerPerson(
-                          amount, payeeList.length);
-                      for (var payee in payeeList) {
-                        await ref
-                            .watch(transactionRepositoryProvider)
-                            .addTransactionToDatabase(
-                              widget.groupData.id,
-                              subject,
-                              'test',
-                              payer.id,
-                              payee.id,
-                              perPersonAmount,
-                            );
-                      }
+                      // final payeeList = payeeSelections.entries
+                      //     .where((entry) => entry.value)
+                      //     .map((entry) => entry.key)
+                      //     .toList();
+                      // final perPersonAmount = divider.calculateAmountPerPerson(
+                      //     amount, payeeList.length);
+                      // for (var payee in payeeList) {
+                      //   await ref
+                      //       .watch(transactionRepositoryProvider)
+                      //       .addTransactionToDatabase(
+                      //         widget.groupData.id,
+                      //         subject,
+                      //         payer.id,
+                      //         perPersonAmount,
+                      //       );
+                      // }
                       Navigator.pop(context);
                     },
                     child: const Text(entry),

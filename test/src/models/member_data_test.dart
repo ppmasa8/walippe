@@ -10,7 +10,6 @@ void main() {
         id: 1,
         groupId: 1,
         name: 'John Doe',
-        description: 'Sample member',
         balance: 100,
         createdAt: DateTime.now(),
         updatedAt: DateTime.now(),
@@ -22,7 +21,6 @@ void main() {
       expect(memberData.id, 1);
       expect(memberData.groupId, 1);
       expect(memberData.name, 'John Doe');
-      expect(memberData.description, 'Sample member');
       expect(memberData.balance, 100);
       expect(memberData.createdAt, isA<DateTime>());
       expect(memberData.updatedAt, isA<DateTime>());
@@ -31,7 +29,6 @@ void main() {
     test('should have correct values when updating properties', () {
       final updatedMemberData = memberData.copyWith(
         name: 'Jane Smith',
-        description: 'Updated member',
         balance: 200,
       );
 
@@ -39,7 +36,6 @@ void main() {
       expect(updatedMemberData.id, 1);
       expect(updatedMemberData.groupId, 1);
       expect(updatedMemberData.name, 'Jane Smith');
-      expect(updatedMemberData.description, 'Updated member');
       expect(updatedMemberData.balance, 200);
       expect(updatedMemberData.createdAt, memberData.createdAt);
       expect(updatedMemberData.updatedAt, memberData.updatedAt);

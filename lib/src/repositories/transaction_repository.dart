@@ -12,9 +12,7 @@ class TransactionRepository {
               id: transaction.id,
               groupId: transaction.groupId,
               subject: transaction.subject,
-              description: transaction.description,
               payerId: transaction.payerId,
-              payeeId: transaction.payeeId,
               amount: transaction.amount,
               createdAt: transaction.createdAt,
               updatedAt: transaction.updatedAt,
@@ -22,14 +20,27 @@ class TransactionRepository {
         .toList();
   }
 
-  Future<void> addTransactionToDatabase(int groupId, String subject,
-      String description, int payerId, int payeeId, int amount) async {
+  Future<List<TransactionData>> fetchTransactionsInGroup(int groupId) async {
+    final transactions = await database.getTransactionsInGroup(groupId);
+    return transactions
+        .map((transaction) => TransactionData(
+              id: transaction.id,
+              groupId: transaction.groupId,
+              subject: transaction.subject,
+              payerId: transaction.payerId,
+              amount: transaction.amount,
+              createdAt: transaction.createdAt,
+              updatedAt: transaction.updatedAt,
+            ))
+        .toList();
+  }
+
+  Future<void> addTransactionToDatabase(
+      int groupId, String subject, int payerId, int amount) async {
     await database.addTransaction(
       groupId,
       subject,
-      description,
       payerId,
-      payeeId,
       amount,
     );
   }

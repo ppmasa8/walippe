@@ -12,7 +12,6 @@ class MemberRepository {
               id: member.id,
               groupId: member.groupId,
               name: member.name,
-              description: member.description,
               balance: member.balance,
               createdAt: member.createdAt,
               updatedAt: member.updatedAt,
@@ -27,7 +26,6 @@ class MemberRepository {
               id: member.id,
               groupId: member.groupId,
               name: member.name,
-              description: member.description,
               balance: member.balance,
               createdAt: member.createdAt,
               updatedAt: member.updatedAt,
@@ -35,9 +33,8 @@ class MemberRepository {
         .toList();
   }
 
-  Future<void> addMemberToDatabase(
-      int groupId, String name, String description) async {
-    await database.addMember(groupId, name, description);
+  Future<void> addMemberToDatabase(int groupId, String name) async {
+    await database.addMember(groupId, name);
   }
 
   Future<void> deleteMemberById(int id) async {
