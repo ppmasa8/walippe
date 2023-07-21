@@ -142,7 +142,7 @@ class _CreateTransactionScreenState
                       shape: const StadiumBorder(),
                     ),
                     onPressed: () async {
-                      await ref
+                      final transactionId = await ref
                           .watch(transactionRepositoryProvider)
                           .addTransactionToDatabase(
                               widget.groupData.id, subject, payer.id, amount);
@@ -153,16 +153,15 @@ class _CreateTransactionScreenState
                           .toList();
                       final perPersonAmount = divider.calculateAmountPerPerson(
                           amount, payeeList.length);
-                      // for (var payee in payeeList) {
-                      //   await ref
-                      //       .watch(transactionDetailRepositoryProvider)
-                      //       .addTransactionDetailToDatabase(
-                      //         widget.groupData.id,
-                      //         subject,
-                      //         payer.id,
-                      //         perPersonAmount,
-                      //       );
-                      // }
+                      for (var payee in payeeList) {
+                        await ref
+                            .watch(transactionDetailRepositoryProvider)
+                            .addTransactionDetailToDatabase(
+                              transactionId,
+                              payee.id,
+                              perPersonAmount,
+                            );
+                      }
                       Navigator.pop(context);
                     },
                     child: const Text(entry),
