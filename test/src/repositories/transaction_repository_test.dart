@@ -7,10 +7,14 @@ import 'walippe_db_test.mocks.dart';
 
 void main() {
   group('TransactionRepository', () {
-    test('fetchTransactions returns a list of TransactionData', () async {
-      final mockDatabase = MockWalippeDatabase();
-      final repo = TransactionRepository(database: mockDatabase);
+    late TransactionRepository transactionRepository;
+    late MockWalippeDatabase mockDatabase;
 
+    setUp(() {
+      mockDatabase = MockWalippeDatabase();
+      transactionRepository = TransactionRepository(database: mockDatabase);
+    });
+    test('fetchTransactions returns a list of TransactionData', () async {
       final dummyTransactionList = [
         Transaction(
           id: 1,
@@ -26,52 +30,32 @@ void main() {
       when(mockDatabase.getAllTransactions())
           .thenAnswer((_) => Future.value(dummyTransactionList));
 
-      final result = await repo.fetchTransactions();
+      final result = await transactionRepository.fetchTransactions();
 
       expect(result, isNotEmpty);
       expect(result.first.id, dummyTransactionList.first.id);
     });
 
     test('fetchTransactions returns an empty list', () async {
-      final mockDatabase = MockWalippeDatabase();
-      final repo = TransactionRepository(database: mockDatabase);
-
       when(mockDatabase.getAllTransactions())
           .thenAnswer((_) => Future.value([]));
 
-      final result = await repo.fetchTransactions();
+      final result = await transactionRepository.fetchTransactions();
 
       expect(result, isEmpty);
     });
 
-    test('addTransactionToDatabase adds a transaction', () async {
-      final mockDatabase = MockWalippeDatabase();
-      final repo = TransactionRepository(database: mockDatabase);
-      final groupId = 1;
-      final subject = 'Expense';
-      final payerId = 2;
-      final amount = 100;
+    test('addTransactionToDatabase calls addTransaction', () async {
+      const groupId = 1;
+      const subject = 'Expense';
+      const payerId = 2;
+      const amount = 100;
+      when(mockDatabase.addTransaction(groupId, subject, payerId, amount)).thenAnswer((_) async => 1);
 
-      when(mockDatabase.addTransaction(
-        groupId,
-        subject,
-        payerId,
-        amount
-      )).thenAnswer((_) async => 1);
+      final transactionId = await transactionRepository.addTransactionToDatabase(groupId, subject, payerId, amount);
 
-      await repo.addTransactionToDatabase(
-        groupId,
-        subject,
-        payerId,
-        amount
-      );
-
-      verify(mockDatabase.addTransaction(
-        groupId,
-        subject,
-        payerId,
-        amount
-      )).called(1);
+      verify(mockDatabase.addTransaction(groupId, subject, payerId, amount)).called(1);
+      expect(transactionId, 1);
     });
   });
 }

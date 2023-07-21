@@ -35,13 +35,14 @@ class TransactionRepository {
         .toList();
   }
 
-  Future<void> addTransactionToDatabase(
+  Future<int> addTransactionToDatabase(
       int groupId, String subject, int payerId, int amount) async {
-    await database.addTransaction(
+    final transactionId = await database.addTransaction(
       groupId,
       subject,
       payerId,
       amount,
     );
+    return transactionId;
   }
 }

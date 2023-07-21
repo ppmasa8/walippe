@@ -142,16 +142,21 @@ class _CreateTransactionScreenState
                       shape: const StadiumBorder(),
                     ),
                     onPressed: () async {
-                      // final payeeList = payeeSelections.entries
-                      //     .where((entry) => entry.value)
-                      //     .map((entry) => entry.key)
-                      //     .toList();
-                      // final perPersonAmount = divider.calculateAmountPerPerson(
-                      //     amount, payeeList.length);
+                      await ref
+                          .watch(transactionRepositoryProvider)
+                          .addTransactionToDatabase(
+                              widget.groupData.id, subject, payer.id, amount);
+
+                      final payeeList = payeeSelections.entries
+                          .where((entry) => entry.value)
+                          .map((entry) => entry.key)
+                          .toList();
+                      final perPersonAmount = divider.calculateAmountPerPerson(
+                          amount, payeeList.length);
                       // for (var payee in payeeList) {
                       //   await ref
-                      //       .watch(transactionRepositoryProvider)
-                      //       .addTransactionToDatabase(
+                      //       .watch(transactionDetailRepositoryProvider)
+                      //       .addTransactionDetailToDatabase(
                       //         widget.groupData.id,
                       //         subject,
                       //         payer.id,
