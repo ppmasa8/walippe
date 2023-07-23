@@ -35,10 +35,8 @@ class GroupListScreen extends ConsumerWidget {
               return ListView.separated(
                 itemCount: groupList.length,
                 itemBuilder: (context, index) {
-                  final group = groupList[index];
-
                   return ListTile(
-                    title: Text(group.name),
+                    title: Text(groupList[index].name),
                     trailing: Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
@@ -49,8 +47,8 @@ class GroupListScreen extends ConsumerWidget {
                               MaterialPageRoute(
                                 builder: (context) => ProviderScope(
                                   child: EditGroupScreen(
-                                    key: ValueKey(group.id),
-                                    groupData: group,
+                                    key: ValueKey(groupList[index].id),
+                                    groupData: groupList[index],
                                   ),
                                 ),
                               ),
@@ -62,10 +60,10 @@ class GroupListScreen extends ConsumerWidget {
                           onPressed: () async {
                             await ref
                                 .watch(groupRepositoryProvider)
-                                .deleteGroupById(group.id);
+                                .deleteGroupById(groupList[index].id);
                             await ref
                                 .watch(memberRepositoryProvider)
-                                .deleteMemberByGroupId(group.id);
+                                .deleteMemberByGroupId(groupList[index].id);
                             // TODO: Add transaction version of delete.
                             ScaffoldMessenger.of(context).showSnackBar(
                               const SnackBar(
@@ -84,8 +82,8 @@ class GroupListScreen extends ConsumerWidget {
                         MaterialPageRoute(
                           builder: (context) => ProviderScope(
                             child: ShowGroupScreen(
-                              key: ValueKey(group.id),
-                              groupData: group,
+                              key: ValueKey(groupList[index].id),
+                              groupData: groupList[index],
                             ),
                           ),
                         ),
@@ -94,7 +92,7 @@ class GroupListScreen extends ConsumerWidget {
                   );
                 },
                 separatorBuilder: (BuildContext context, int index) {
-                  return Divider(
+                  return const Divider(
                     thickness: 0.5,
                   );
                 },

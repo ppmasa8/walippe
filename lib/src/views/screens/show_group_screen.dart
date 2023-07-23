@@ -15,6 +15,7 @@ class ShowGroupScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    //TODO: Fix name(ex: groupListAsync)
     final memberListInGroup =
         ref.watch(memberListInGroupProvider(groupData.id));
     final transactionListInGroup =
@@ -24,8 +25,7 @@ class ShowGroupScreen extends ConsumerWidget {
       appBar: AppBar(
         title: Text(
           groupData.name,
-          //TODO: change font
-          style: GoogleFonts.dancingScript(
+          style: GoogleFonts.sawarabiGothic(
             fontSize: 32,
             fontWeight: FontWeight.bold,
             color: Colors.white,
@@ -78,30 +78,48 @@ class ShowGroupScreen extends ConsumerWidget {
             },
             child: const Text(addTransactionRecordText),
           ),
-          //TODO: Fix style
-          transactionListInGroup.when(
-            data: (transactions) {
-              return Wrap(
-                spacing: 8,
-                runSpacing: 8,
-                children: transactions.map((transaction) {
-                  return Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 8),
-                    decoration: BoxDecoration(
-                      color: Colors.grey[200],
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    child: Text(transaction.subject),
-                  );
-                }).toList(),
-              );
-            },
-            loading: () {
-              return const CircularProgressIndicator();
-            },
-            error: (error, stackTrace) {
-              return Text('Error: $error');
-            },
+          const Text(transactionRecordLabelText),
+          Expanded(
+            child: transactionListInGroup.when(
+              data: (transactions) {
+                return ListView.separated(
+                  itemCount: transactions.length,
+                  itemBuilder: (context, index) {
+                    return ListTile(
+                      title: Text(transactions[index].subject),
+                      trailing: Row(mainAxisSize: MainAxisSize.min, children: [
+                        IconButton(
+                          icon: const Icon(Icons.edit),
+                          onPressed: () {
+                            // Navigator.of(context).push<void>(
+                            //   MaterialPageRoute(
+                            //     builder: (context) => ProviderScope(
+                            //       child: EditGroupScreen(
+                            //         key: ValueKey(groupData.id),
+                            //         groupData: groupData,
+                            //       ),
+                            //     ),
+                            //   ),
+                            // );
+                          },
+                        ),
+                      ]),
+                    );
+                  },
+                  separatorBuilder: (BuildContext context, int index) {
+                    return const Divider(
+                      thickness: 0.5,
+                    );
+                  },
+                );
+              },
+              loading: () {
+                return const CircularProgressIndicator();
+              },
+              error: (error, stackTrace) {
+                return Text('Error: $error');
+              },
+            ),
           ),
           ElevatedButton(
             style: ElevatedButton.styleFrom(

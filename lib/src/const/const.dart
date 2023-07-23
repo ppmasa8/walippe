@@ -11,6 +11,8 @@ const groupFormHintText = '沖縄旅行';
 const memberLabelText = 'メンバー名';
 const memberFormHintText = 'ひかり';
 
+const transactionRecordLabelText = '立て替えた記録';
+
 const groupCreateButtonText = 'グループを作成';
 const noGroupsAvailableText = 'グループがありません';
 const editGroupText = 'グループを編集';
