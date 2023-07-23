@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:walippe/src/views/screens/show_group_screen.dart';
 
 import '../../const/const.dart';
 import '../../models/group_data.dart';
@@ -146,6 +147,7 @@ class _CreateTransactionScreenState
                           .watch(transactionRepositoryProvider)
                           .addTransactionToDatabase(
                               widget.groupData.id, subject, payer.id, amount);
+                      ref.invalidate(transactionListInGroupProvider(widget.groupData.id));
 
                       final payeeList = payeeSelections.entries
                           .where((entry) => entry.value)
@@ -162,7 +164,13 @@ class _CreateTransactionScreenState
                               perPersonAmount,
                             );
                       }
-                      Navigator.pop(context);
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => ShowGroupScreen(
+                                    key: ValueKey(widget.groupData.id),
+                                    groupData: widget.groupData,
+                                  )));
                     },
                     child: const Text(entry),
                   ),

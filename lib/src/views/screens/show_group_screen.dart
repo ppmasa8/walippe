@@ -24,6 +24,7 @@ class ShowGroupScreen extends ConsumerWidget {
       appBar: AppBar(
         title: Text(
           groupData.name,
+          //TODO: change font
           style: GoogleFonts.dancingScript(
             fontSize: 32,
             fontWeight: FontWeight.bold,
@@ -77,8 +78,31 @@ class ShowGroupScreen extends ConsumerWidget {
             },
             child: const Text(addTransactionRecordText),
           ),
-          // stream transaction
-          
+          //TODO: Fix style
+          transactionListInGroup.when(
+            data: (transactions) {
+              return Wrap(
+                spacing: 8,
+                runSpacing: 8,
+                children: transactions.map((transaction) {
+                  return Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 8),
+                    decoration: BoxDecoration(
+                      color: Colors.grey[200],
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: Text(transaction.subject),
+                  );
+                }).toList(),
+              );
+            },
+            loading: () {
+              return const CircularProgressIndicator();
+            },
+            error: (error, stackTrace) {
+              return Text('Error: $error');
+            },
+          ),
           ElevatedButton(
             style: ElevatedButton.styleFrom(
               shape: const StadiumBorder(),
