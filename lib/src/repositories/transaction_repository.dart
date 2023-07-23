@@ -45,4 +45,12 @@ class TransactionRepository {
     );
     return transactionId;
   }
+
+  Future<void> deleteTransactionById(int id) async {
+    await database.deleteTransaction(id);
+  }
+
+  Future<void> deleteTransactionByGroupId(int groupId) async {
+    await database.deleteTransactionByGroupId(groupId);
+  }
 }

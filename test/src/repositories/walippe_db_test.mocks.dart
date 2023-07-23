@@ -482,6 +482,23 @@ class MockWalippeDatabase extends _i1.Mock implements _i2.WalippeDatabase {
         returnValue: _i5.Future<int>.value(0),
       ) as _i5.Future<int>);
   @override
+  _i5.Future<int> deleteTransaction(int? id) => (super.noSuchMethod(
+        Invocation.method(
+          #deleteTransaction,
+          [id],
+        ),
+        returnValue: _i5.Future<int>.value(0),
+      ) as _i5.Future<int>);
+  @override
+  _i5.Future<int> deleteTransactionByGroupId(int? groupId) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #deleteTransactionByGroupId,
+          [groupId],
+        ),
+        returnValue: _i5.Future<int>.value(0),
+      ) as _i5.Future<int>);
+  @override
   _i5.Stream<List<_i2.TransactionDetail>> watchAllTransactionDetails() =>
       (super.noSuchMethod(
         Invocation.method(

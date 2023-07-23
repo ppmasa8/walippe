@@ -57,5 +57,23 @@ void main() {
       verify(mockDatabase.addTransaction(groupId, subject, payerId, amount)).called(1);
       expect(transactionId, 1);
     });
+
+    test('deleteTransactionById calls deleteTransaction', () async {
+      const id = 1;
+      when(mockDatabase.deleteTransaction(id)).thenAnswer((_) async => 1);
+
+      await transactionRepository.deleteTransactionById(id);
+
+      verify(mockDatabase.deleteTransaction(id)).called(1);
+    });
+
+    test('deleteTransactionByGroupId calls deleteTransactionByGroupId', () async {
+      const groupId = 1;
+      when(mockDatabase.deleteTransactionByGroupId(groupId)).thenAnswer((_) async => 1);
+
+      await transactionRepository.deleteTransactionByGroupId(groupId);
+
+      verify(mockDatabase.deleteTransactionByGroupId(groupId)).called(1);
+    });
   });
 }
