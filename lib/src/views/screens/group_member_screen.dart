@@ -74,8 +74,7 @@ class GroupMemberScreen extends ConsumerWidget {
                             textEditingController.clear();
                             await ref
                                 .watch(memberRepositoryProvider)
-                                .addMemberToDatabase(
-                                    groupId, memberName);
+                                .addMemberToDatabase(groupId, memberName);
                             return ref
                                 .refresh(memberListInGroupProvider(groupId));
                           }
@@ -107,17 +106,14 @@ class GroupMemberScreen extends ConsumerWidget {
               shape: const StadiumBorder(),
             ),
             onPressed: () async {
-              late GroupData group;
-              group = await ref
+              GroupData group = await ref
                   .watch(groupRepositoryProvider)
                   .fetchGroupById(groupId);
-              if (group == null) {
-                await Navigator.of(context).push<void>(MaterialPageRoute(
-                  builder: (context) => const ProviderScope(
-                    child: GroupListScreen(),
-                  ),
-                ));
-              }
+              await Navigator.of(context).push<void>(MaterialPageRoute(
+                builder: (context) => const ProviderScope(
+                  child: GroupListScreen(),
+                ),
+              ));
               Navigator.push(
                   context,
                   MaterialPageRoute(
