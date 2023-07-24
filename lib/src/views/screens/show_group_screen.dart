@@ -7,6 +7,7 @@ import '../../providers/provider.dart';
 import 'create_transaction_screen.dart';
 import '../../models/group_data.dart';
 import '../../views/screens/edit_group_screen.dart';
+import 'show_transaction_screen.dart';
 
 class ShowGroupScreen extends ConsumerWidget {
   const ShowGroupScreen({super.key, required this.groupData});
@@ -91,16 +92,13 @@ class ShowGroupScreen extends ConsumerWidget {
                         IconButton(
                           icon: const Icon(Icons.edit),
                           onPressed: () {
-                            // Navigator.of(context).push<void>(
-                            //   MaterialPageRoute(
-                            //     builder: (context) => ProviderScope(
-                            //       child: EditGroupScreen(
-                            //         key: ValueKey(groupData.id),
-                            //         groupData: groupData,
-                            //       ),
-                            //     ),
-                            //   ),
-                            // );
+                            Navigator.of(context).push<void>(
+                              MaterialPageRoute(
+                                builder: (context) => ProviderScope(
+                                  child: ShowTransactionScreen()
+                                ),
+                              ),
+                            );
                           },
                         ),
                       ]),
