@@ -64,7 +64,10 @@ class GroupListScreen extends ConsumerWidget {
                             await ref
                                 .watch(memberRepositoryProvider)
                                 .deleteMemberByGroupId(groupList[index].id);
-                            
+                            await ref
+                                .watch(transactionRepositoryProvider)
+                                .deleteTransactionByGroupId(
+                                    groupList[index].id);
                             ScaffoldMessenger.of(context).showSnackBar(
                               const SnackBar(
                                 content: Text(deleteSnackBarText),
