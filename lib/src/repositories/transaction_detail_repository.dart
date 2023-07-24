@@ -43,4 +43,12 @@ class TransactionDetailRepository {
       amount,
     );
   }
+
+  Future<void> deleteTransactionDetailById(int id) async {
+    await database.deleteTransactionDetail(id);
+  }
+
+  Future<void> deleteTransactionDetailByTransactionId(int transactionId) async {
+    await database.deleteTransactionDetailByTransactionId(transactionId);
+  }
 }

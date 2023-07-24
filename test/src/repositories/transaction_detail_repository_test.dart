@@ -7,7 +7,8 @@ import 'walippe_db_test.mocks.dart';
 
 void main() {
   group('TransactionDetailRepository', () {
-    test('fetchTransactionDetails returns a list of TransactionDetailData', () async {
+    test('fetchTransactionDetails returns a list of TransactionDetailData',
+        () async {
       final mockDatabase = MockWalippeDatabase();
       final repo = TransactionDetailRepository(database: mockDatabase);
 
@@ -50,23 +51,13 @@ void main() {
       final payeeId = 2;
       final amount = 1000;
 
-      when(mockDatabase.addTransactionDetail(
-        transactionId,
-        payeeId,
-        amount
-      )).thenAnswer((_) async => 1);
+      when(mockDatabase.addTransactionDetail(transactionId, payeeId, amount))
+          .thenAnswer((_) async => 1);
 
-      await repo.addTransactionDetailToDatabase(
-        transactionId,
-        payeeId,
-        amount
-      );
+      await repo.addTransactionDetailToDatabase(transactionId, payeeId, amount);
 
-      verify(mockDatabase.addTransactionDetail(
-        transactionId,
-        payeeId,
-        amount
-      )).called(1);
+      verify(mockDatabase.addTransactionDetail(transactionId, payeeId, amount))
+          .called(1);
     });
   });
 }

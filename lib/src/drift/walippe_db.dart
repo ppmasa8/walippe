@@ -137,6 +137,14 @@ class WalippeDatabase extends _$WalippeDatabase {
     ));
   }
 
+  Future<int> deleteTransactionDetail(int id) {
+    return (delete(transactionDetails)..where((tbl) => tbl.id.equals(id))).go();
+  }
+
+  Future<int> deleteTransactionDetailByTransactionId(int transactionId) {
+    return (delete(transactionDetails)..where((tbl) => tbl.transactionId.equals(transactionId))).go();
+  }
+
   // Members
   Stream<List<Member>> watchAllMembers() {
     return (select(members)).watch();
