@@ -49,6 +49,6 @@ class TransactionDetailRepository {
   }
 
   Future<void> deleteTransactionDetailByTransactionId(int transactionId) async {
-    await database.deleteTransactionDetailByTransactionId(transactionId);
+    await database.deleteTransactionDetails(transactionId);
   }
 }

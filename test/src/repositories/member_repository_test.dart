@@ -7,10 +7,14 @@ import 'walippe_db_test.mocks.dart';
 
 void main() {
   group('MemberRepository', () {
-    test('fetchMemberss returns a list of MemberData', () async {
-      final mockDatabase = MockWalippeDatabase();
-      final repo = MemberRepository(database: mockDatabase);
+    late MockWalippeDatabase mockDatabase;
+    late MemberRepository repo;
 
+    setUp(() {
+      mockDatabase = MockWalippeDatabase();
+      repo = MemberRepository(database: mockDatabase);
+    });
+    test('fetchMemberss returns a list of MemberData', () async {
       final dummyMemberList = [
         Member(
           id: 1,
@@ -32,9 +36,6 @@ void main() {
     });
 
     test('fetchMembers returns an empty list', () async {
-      final mockDatabase = MockWalippeDatabase();
-      final repo = MemberRepository(database: mockDatabase);
-
       when(mockDatabase.getAllMembers()).thenAnswer((_) => Future.value([]));
 
       final result = await repo.fetchMembers();
@@ -43,9 +44,7 @@ void main() {
     });
 
     test('fetchMembersInGroup returns a list of MemberData', () async {
-      final mockDatabase = MockWalippeDatabase();
-      final repo = MemberRepository(database: mockDatabase);
-      final groupId = 1;
+      const groupId = 1;
 
       final dummyMemberList = [
         Member(
@@ -68,9 +67,7 @@ void main() {
     });
 
     test('fetchMembersInGroup returns an empty list', () async {
-      final mockDatabase = MockWalippeDatabase();
-      final repo = MemberRepository(database: mockDatabase);
-      final groupId = 1;
+      const groupId = 1;
 
       when(mockDatabase.getMembersInGroup(groupId))
           .thenAnswer((_) => Future.value([]));
@@ -81,13 +78,10 @@ void main() {
     });
 
     test('addMemberToDatabase adds a member', () async {
-      final mockDatabase = MockWalippeDatabase();
-      final repo = MemberRepository(database: mockDatabase);
-      final groupId = 1;
-      final name = 'John Doe';
+      const groupId = 1;
+      const name = 'John Doe';
 
-      when(mockDatabase.addMember(groupId, name))
-          .thenAnswer((_) async => 1);
+      when(mockDatabase.addMember(groupId, name)).thenAnswer((_) async => 1);
 
       await repo.addMemberToDatabase(groupId, name);
 
@@ -95,9 +89,7 @@ void main() {
     });
 
     test('deleteMemberById deletes a member', () async {
-      final mockDatabase = MockWalippeDatabase();
-      final repo = MemberRepository(database: mockDatabase);
-      final id = 1;
+      const id = 1;
 
       when(mockDatabase.deleteMember(id)).thenAnswer((_) async => 1);
 
@@ -107,16 +99,13 @@ void main() {
     });
 
     test('deleteMemberByGroupId deletes members', () async {
-      final mockDatabase = MockWalippeDatabase();
-      final repo = MemberRepository(database: mockDatabase);
-      final groupId = 1;
+      const groupId = 1;
 
-      when(mockDatabase.deleteMemberByGroupId(groupId))
-          .thenAnswer((_) async => 1);
+      when(mockDatabase.deleteMembers(groupId)).thenAnswer((_) async => 1);
 
       await repo.deleteMemberByGroupId(groupId);
 
-      verify(mockDatabase.deleteMemberByGroupId(groupId)).called(1);
+      verify(mockDatabase.deleteMembers(groupId)).called(1);
     });
   });
 }

@@ -7,10 +7,14 @@ import 'walippe_db_test.mocks.dart';
 
 void main() {
   group('GroupRepository', () {
-    test('fetchGroups returns a list of GroupData', () async {
-      final mockDatabase = MockWalippeDatabase();
-      final repo = GroupRepository(database: mockDatabase);
+    late MockWalippeDatabase mockDatabase;
+    late GroupRepository repo;
 
+    setUp(() {
+      mockDatabase = MockWalippeDatabase();
+      repo = GroupRepository(database: mockDatabase);
+    });
+    test('fetchGroups returns a list of GroupData', () async {
       final dummyGroupList = [
         Group(
           id: 1,
@@ -30,9 +34,6 @@ void main() {
     });
 
     test('fetchGroups returns an empty list', () async {
-      final mockDatabase = MockWalippeDatabase();
-      final repo = GroupRepository(database: mockDatabase);
-
       when(mockDatabase.getAllGroups()).thenAnswer((_) => Future.value([]));
 
       final result = await repo.fetchGroups();
@@ -41,9 +42,7 @@ void main() {
     });
 
     test('addGroupByStringToDatabase returns an id', () async {
-      final mockDatabase = MockWalippeDatabase();
-      final repo = GroupRepository(database: mockDatabase);
-      final name = 'Test Group';
+      const name = 'Test Group';
 
       when(mockDatabase.addGroup(name)).thenAnswer((_) async => 1);
 
@@ -55,9 +54,7 @@ void main() {
     });
 
     test('deleteGroupById deletes a group', () async {
-      final mockDatabase = MockWalippeDatabase();
-      final repo = GroupRepository(database: mockDatabase);
-      final id = 1;
+      const id = 1;
 
       when(mockDatabase.deleteGroup(id)).thenAnswer((_) async => 1);
 

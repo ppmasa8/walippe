@@ -7,11 +7,15 @@ import 'walippe_db_test.mocks.dart';
 
 void main() {
   group('TransactionDetailRepository', () {
+    late MockWalippeDatabase mockDatabase;
+    late TransactionDetailRepository repo;
+
+    setUp(() {
+      mockDatabase = MockWalippeDatabase();
+      repo = TransactionDetailRepository(database: mockDatabase);
+    });
     test('fetchTransactionDetails returns a list of TransactionDetailData',
         () async {
-      final mockDatabase = MockWalippeDatabase();
-      final repo = TransactionDetailRepository(database: mockDatabase);
-
       final dummyTransactionDetailList = [
         TransactionDetail(
           id: 1,
@@ -33,9 +37,6 @@ void main() {
     });
 
     test('fetchTransactionDetails returns an empty list', () async {
-      final mockDatabase = MockWalippeDatabase();
-      final repo = TransactionDetailRepository(database: mockDatabase);
-
       when(mockDatabase.getAllTransactionDetails())
           .thenAnswer((_) => Future.value([]));
 
@@ -45,11 +46,9 @@ void main() {
     });
 
     test('addTransactionDetailToDatabase adds a transaction detail', () async {
-      final mockDatabase = MockWalippeDatabase();
-      final repo = TransactionDetailRepository(database: mockDatabase);
-      final transactionId = 1;
-      final payeeId = 2;
-      final amount = 1000;
+      const transactionId = 1;
+      const payeeId = 2;
+      const amount = 1000;
 
       when(mockDatabase.addTransactionDetail(transactionId, payeeId, amount))
           .thenAnswer((_) async => 1);
@@ -57,6 +56,30 @@ void main() {
       await repo.addTransactionDetailToDatabase(transactionId, payeeId, amount);
 
       verify(mockDatabase.addTransactionDetail(transactionId, payeeId, amount))
+          .called(1);
+    });
+
+    test('deleteTransactionDetailById deletes a transaction detail', () async {
+      const id = 1;
+
+      when(mockDatabase.deleteTransactionDetail(id))
+          .thenAnswer((_) async => 1);
+
+      await repo.deleteTransactionDetailById(id);
+
+      verify(mockDatabase.deleteTransactionDetail(id)).called(1);
+    });
+
+    test('deleteTransactionDetailByTransactionId deletes transaction details',
+        () async {
+      const transactionId = 1;
+
+      when(mockDatabase.deleteTransactionDetails(transactionId))
+          .thenAnswer((_) async => 1);
+
+      await repo.deleteTransactionDetailByTransactionId(transactionId);
+
+      verify(mockDatabase.deleteTransactionDetails(transactionId))
           .called(1);
     });
   });

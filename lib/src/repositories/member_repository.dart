@@ -42,6 +42,6 @@ class MemberRepository {
   }
 
   Future<void> deleteMemberByGroupId(int groupId) async {
-    await database.deleteMemberByGroupId(groupId);
+    await database.deleteMembers(groupId);
   }
 }

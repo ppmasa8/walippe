@@ -7,12 +7,12 @@ import 'walippe_db_test.mocks.dart';
 
 void main() {
   group('TransactionRepository', () {
-    late TransactionRepository transactionRepository;
     late MockWalippeDatabase mockDatabase;
+    late TransactionRepository repo;
 
     setUp(() {
       mockDatabase = MockWalippeDatabase();
-      transactionRepository = TransactionRepository(database: mockDatabase);
+      repo = TransactionRepository(database: mockDatabase);
     });
     test('fetchTransactions returns a list of TransactionData', () async {
       final dummyTransactionList = [
@@ -30,7 +30,7 @@ void main() {
       when(mockDatabase.getAllTransactions())
           .thenAnswer((_) => Future.value(dummyTransactionList));
 
-      final result = await transactionRepository.fetchTransactions();
+      final result = await repo.fetchTransactions();
 
       expect(result, isNotEmpty);
       expect(result.first.id, dummyTransactionList.first.id);
@@ -40,7 +40,7 @@ void main() {
       when(mockDatabase.getAllTransactions())
           .thenAnswer((_) => Future.value([]));
 
-      final result = await transactionRepository.fetchTransactions();
+      final result = await repo.fetchTransactions();
 
       expect(result, isEmpty);
     });
@@ -50,11 +50,14 @@ void main() {
       const subject = 'Expense';
       const payerId = 2;
       const amount = 100;
-      when(mockDatabase.addTransaction(groupId, subject, payerId, amount)).thenAnswer((_) async => 1);
+      when(mockDatabase.addTransaction(groupId, subject, payerId, amount))
+          .thenAnswer((_) async => 1);
 
-      final transactionId = await transactionRepository.addTransactionToDatabase(groupId, subject, payerId, amount);
+      final transactionId = await repo.addTransactionToDatabase(
+          groupId, subject, payerId, amount);
 
-      verify(mockDatabase.addTransaction(groupId, subject, payerId, amount)).called(1);
+      verify(mockDatabase.addTransaction(groupId, subject, payerId, amount))
+          .called(1);
       expect(transactionId, 1);
     });
 
@@ -62,18 +65,20 @@ void main() {
       const id = 1;
       when(mockDatabase.deleteTransaction(id)).thenAnswer((_) async => 1);
 
-      await transactionRepository.deleteTransactionById(id);
+      await repo.deleteTransactionById(id);
 
       verify(mockDatabase.deleteTransaction(id)).called(1);
     });
 
-    test('deleteTransactionByGroupId calls deleteTransactionByGroupId', () async {
+    test('deleteTransactionByGroupId calls deleteTransactionByGroupId',
+        () async {
       const groupId = 1;
-      when(mockDatabase.deleteTransactionByGroupId(groupId)).thenAnswer((_) async => 1);
+      when(mockDatabase.deleteTransactions(groupId))
+          .thenAnswer((_) async => 1);
 
-      await transactionRepository.deleteTransactionByGroupId(groupId);
+      await repo.deleteTransactionByGroupId(groupId);
 
-      verify(mockDatabase.deleteTransactionByGroupId(groupId)).called(1);
+      verify(mockDatabase.deleteTransactions(groupId)).called(1);
     });
   });
 }

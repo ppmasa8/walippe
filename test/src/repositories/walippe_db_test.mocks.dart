@@ -490,10 +490,9 @@ class MockWalippeDatabase extends _i1.Mock implements _i2.WalippeDatabase {
         returnValue: _i5.Future<int>.value(0),
       ) as _i5.Future<int>);
   @override
-  _i5.Future<int> deleteTransactionByGroupId(int? groupId) =>
-      (super.noSuchMethod(
+  _i5.Future<int> deleteTransactions(int? groupId) => (super.noSuchMethod(
         Invocation.method(
-          #deleteTransactionByGroupId,
+          #deleteTransactions,
           [groupId],
         ),
         returnValue: _i5.Future<int>.value(0),
@@ -542,6 +541,23 @@ class MockWalippeDatabase extends _i1.Mock implements _i2.WalippeDatabase {
             payeeId,
             amount,
           ],
+        ),
+        returnValue: _i5.Future<int>.value(0),
+      ) as _i5.Future<int>);
+  @override
+  _i5.Future<int> deleteTransactionDetail(int? id) => (super.noSuchMethod(
+        Invocation.method(
+          #deleteTransactionDetail,
+          [id],
+        ),
+        returnValue: _i5.Future<int>.value(0),
+      ) as _i5.Future<int>);
+  @override
+  _i5.Future<int> deleteTransactionDetails(int? transactionId) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #deleteTransactionDetails,
+          [transactionId],
         ),
         returnValue: _i5.Future<int>.value(0),
       ) as _i5.Future<int>);
@@ -618,9 +634,9 @@ class MockWalippeDatabase extends _i1.Mock implements _i2.WalippeDatabase {
         returnValue: _i5.Future<int>.value(0),
       ) as _i5.Future<int>);
   @override
-  _i5.Future<int> deleteMemberByGroupId(int? groupId) => (super.noSuchMethod(
+  _i5.Future<int> deleteMembers(int? groupId) => (super.noSuchMethod(
         Invocation.method(
-          #deleteMemberByGroupId,
+          #deleteMembers,
           [groupId],
         ),
         returnValue: _i5.Future<int>.value(0),

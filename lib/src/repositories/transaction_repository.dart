@@ -51,6 +51,6 @@ class TransactionRepository {
   }
 
   Future<void> deleteTransactionByGroupId(int groupId) async {
-    await database.deleteTransactionByGroupId(groupId);
+    await database.deleteTransactions(groupId);
   }
 }

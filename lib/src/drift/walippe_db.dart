@@ -110,7 +110,7 @@ class WalippeDatabase extends _$WalippeDatabase {
     return (delete(transactions)..where((tbl) => tbl.id.equals(id))).go();
   }
 
-  Future<int> deleteTransactionByGroupId(int groupId) {
+  Future<int> deleteTransactions(int groupId) {
     return (delete(transactions)..where((tbl) => tbl.groupId.equals(groupId)))
         .go();
   }
@@ -141,7 +141,7 @@ class WalippeDatabase extends _$WalippeDatabase {
     return (delete(transactionDetails)..where((tbl) => tbl.id.equals(id))).go();
   }
 
-  Future<int> deleteTransactionDetailByTransactionId(int transactionId) {
+  Future<int> deleteTransactionDetails(int transactionId) {
     return (delete(transactionDetails)..where((tbl) => tbl.transactionId.equals(transactionId))).go();
   }
 
@@ -181,7 +181,7 @@ class WalippeDatabase extends _$WalippeDatabase {
     return (delete(members)..where((tbl) => tbl.id.equals(id))).go();
   }
 
-  Future<int> deleteMemberByGroupId(int groupId) {
+  Future<int> deleteMembers(int groupId) {
     return (delete(members)..where((tbl) => tbl.groupId.equals(groupId))).go();
   }
 }
