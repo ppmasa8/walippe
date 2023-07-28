@@ -16,10 +16,9 @@ class ShowGroupScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    //TODO: Fix name(ex: groupListAsync)
-    final memberListInGroup =
+    final memberListInGroupAsync =
         ref.watch(memberListInGroupProvider(groupData.id));
-    final transactionListInGroup =
+    final transactionListInGroupAsync =
         ref.watch(transactionListInGroupProvider(groupData.id));
 
     return Scaffold(
@@ -40,7 +39,7 @@ class ShowGroupScreen extends ConsumerWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           const Text(memberLabelText),
-          memberListInGroup.when(
+          memberListInGroupAsync.when(
             data: (members) {
               return Wrap(
                 spacing: 8,
@@ -81,7 +80,7 @@ class ShowGroupScreen extends ConsumerWidget {
           ),
           const Text(transactionRecordLabelText),
           Expanded(
-            child: transactionListInGroup.when(
+            child: transactionListInGroupAsync.when(
               data: (transactions) {
                 return ListView.separated(
                   itemCount: transactions.length,
@@ -95,7 +94,10 @@ class ShowGroupScreen extends ConsumerWidget {
                             Navigator.of(context).push<void>(
                               MaterialPageRoute(
                                 builder: (context) => ProviderScope(
-                                  child: ShowTransactionScreen()
+                                  child: ShowTransactionScreen(
+                                    key: ValueKey(transactions[index].id),
+                                    transactionData: transactions[index],
+                                  )
                                 ),
                               ),
                             );

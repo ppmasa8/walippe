@@ -43,7 +43,7 @@ class _CreateTransactionScreenState
   @override
   Widget build(BuildContext context) {
     final formValidator = ref.watch(formValidatorProvider);
-    final memberListInGroup =
+    final memberListInGroupAsync =
         ref.watch(memberListInGroupProvider(widget.groupData.id));
 
     return Scaffold(
@@ -61,7 +61,7 @@ class _CreateTransactionScreenState
       ),
       body: SingleChildScrollView(
         child: Center(
-          child: memberListInGroup.when(
+          child: memberListInGroupAsync.when(
             data: (members) {
               if (!members.map((member) => member.name).contains(payer.name)) {
                 payer = members[0];
