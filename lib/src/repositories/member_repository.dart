@@ -33,6 +33,20 @@ class MemberRepository {
         .toList();
   }
 
+  Future<MemberData?> getMemberById(int id) async {
+    final member = await database.getMember(id);
+    return member != null
+        ? MemberData(
+            id: member.id,
+            groupId: member.groupId,
+            name: member.name,
+            balance: member.balance,
+            createdAt: member.createdAt,
+            updatedAt: member.updatedAt,
+          )
+        : null;
+  }
+
   Future<void> addMemberToDatabase(int groupId, String name) async {
     await database.addMember(groupId, name);
   }

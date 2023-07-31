@@ -77,6 +77,16 @@ void main() {
       expect(result, isEmpty);
     });
 
+    test('getMemberById gets a member return null', () async {
+      const id = 1;
+
+      when(mockDatabase.getMember(id)).thenAnswer((_) async => Future.value(null));
+
+      final result = await repo.getMemberById(id);
+
+      expect(result, isNull);
+    });
+
     test('addMemberToDatabase adds a member', () async {
       const groupId = 1;
       const name = 'John Doe';

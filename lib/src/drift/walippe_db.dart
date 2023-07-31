@@ -123,8 +123,11 @@ class WalippeDatabase extends _$WalippeDatabase {
   Future<List<TransactionDetail>> getAllTransactionDetails() =>
       select(transactionDetails).get();
 
-  Future<List<TransactionDetail>> getTransactionDetailsInTransaction(int transactionId) {
-    return (select(transactionDetails)..where((tbl) => tbl.transactionId.equals(transactionId))).get();
+  Future<List<TransactionDetail>> getTransactionDetailsInTransaction(
+      int transactionId) {
+    return (select(transactionDetails)
+          ..where((tbl) => tbl.transactionId.equals(transactionId)))
+        .get();
   }
 
   Future<int> addTransactionDetail(int transactionId, int payeeId, int amount) {
@@ -142,7 +145,9 @@ class WalippeDatabase extends _$WalippeDatabase {
   }
 
   Future<int> deleteTransactionDetails(int transactionId) {
-    return (delete(transactionDetails)..where((tbl) => tbl.transactionId.equals(transactionId))).go();
+    return (delete(transactionDetails)
+          ..where((tbl) => tbl.transactionId.equals(transactionId)))
+        .go();
   }
 
   // Members
@@ -156,6 +161,11 @@ class WalippeDatabase extends _$WalippeDatabase {
   }
 
   Future<List<Member>> getAllMembers() => select(members).get();
+
+  Future<Member?> getMember(int id) {
+    return (select(members)..where((tbl) => tbl.id.equals(id)))
+        .getSingleOrNull();
+  }
 
   Future<List<Member>> getMembersInGroup(int groupId) {
     return (select(members)..where((tbl) => tbl.groupId.equals(groupId))).get();
