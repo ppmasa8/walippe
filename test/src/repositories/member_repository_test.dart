@@ -14,7 +14,7 @@ void main() {
       mockDatabase = MockWalippeDatabase();
       repo = MemberRepository(database: mockDatabase);
     });
-    test('fetchMemberss returns a list of MemberData', () async {
+    test('fetchMembers returns a list of MemberData', () async {
       final dummyMemberList = [
         Member(
           id: 1,
@@ -77,10 +77,31 @@ void main() {
       expect(result, isEmpty);
     });
 
+    test('getMemberById gets a member', () async {
+      const id = 1;
+
+      final dummyMember = Member(
+        id: 1,
+        groupId: 1,
+        name: 'John Doe',
+        balance: 100,
+        createdAt: DateTime.now(),
+        updatedAt: DateTime.now(),
+      );
+
+      when(mockDatabase.getMember(id)).thenAnswer((_) async => dummyMember);
+
+      final result = await repo.getMemberById(id);
+
+      expect(result, isNotNull);
+      expect(result!.id, dummyMember.id);
+    });
+
     test('getMemberById gets a member return null', () async {
       const id = 1;
 
-      when(mockDatabase.getMember(id)).thenAnswer((_) async => Future.value(null));
+      when(mockDatabase.getMember(id))
+          .thenAnswer((_) async => Future.value(null));
 
       final result = await repo.getMemberById(id);
 

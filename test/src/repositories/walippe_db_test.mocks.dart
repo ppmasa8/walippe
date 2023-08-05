@@ -587,9 +587,9 @@ class MockWalippeDatabase extends _i1.Mock implements _i2.WalippeDatabase {
         returnValue: _i5.Future<List<_i2.Member>>.value(<_i2.Member>[]),
       ) as _i5.Future<List<_i2.Member>>);
   @override
-  _i5.Future<_i2.Member?> getMemberById(int? id) => (super.noSuchMethod(
+  _i5.Future<_i2.Member?> getMember(int? id) => (super.noSuchMethod(
         Invocation.method(
-          #getMemberById,
+          #getMember,
           [id],
         ),
         returnValue: _i5.Future<_i2.Member?>.value(),
