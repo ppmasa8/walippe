@@ -89,21 +89,23 @@ class ShowGroupScreen extends ConsumerWidget {
                       title: Text(transactions[index].subject),
                       trailing: Row(mainAxisSize: MainAxisSize.min, children: [
                         IconButton(
-                          icon: const Icon(Icons.edit),
+                          icon: const Icon(Icons.delete),
                           onPressed: () {
-                            Navigator.of(context).push<void>(
-                              MaterialPageRoute(
-                                builder: (context) => ProviderScope(
-                                  child: ShowTransactionScreen(
-                                    key: ValueKey(transactions[index].id),
-                                    transactionData: transactions[index],
-                                  )
-                                ),
-                              ),
-                            );
+                            
                           },
                         ),
                       ]),
+                      onTap: () async {
+                        Navigator.of(context).push<void>(
+                          MaterialPageRoute(
+                            builder: (context) => ProviderScope(
+                                child: ShowTransactionScreen(
+                              key: ValueKey(transactions[index].id),
+                              transactionData: transactions[index],
+                            )),
+                          ),
+                        );
+                      },
                     );
                   },
                   separatorBuilder: (BuildContext context, int index) {
