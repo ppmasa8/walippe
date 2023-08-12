@@ -50,7 +50,7 @@ class _CreateTransactionScreenState
       appBar: AppBar(
         title: Text(
           widget.groupData.name,
-          style: GoogleFonts.dancingScript(
+          style: GoogleFonts.sawarabiGothic(
             fontSize: 32,
             fontWeight: FontWeight.bold,
             color: Colors.white,

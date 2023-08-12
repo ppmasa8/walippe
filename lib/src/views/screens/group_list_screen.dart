@@ -36,7 +36,10 @@ class GroupListScreen extends ConsumerWidget {
                 itemCount: groupList.length,
                 itemBuilder: (context, index) {
                   return ListTile(
-                    title: Text(groupList[index].name),
+                    title: Container(
+                      margin: const EdgeInsets.only(top: 4.0, left: 16.0),
+                      child: Text(groupList[index].name),
+                    ),
                     trailing: Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [

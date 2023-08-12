@@ -38,45 +38,71 @@ class ShowGroupScreen extends ConsumerWidget {
           child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          const Text(memberLabelText),
-          memberListInGroupAsync.when(
-            data: (members) {
-              return Wrap(
-                spacing: 8,
-                runSpacing: 8,
-                children: members.map((member) {
-                  return Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 8),
-                    decoration: BoxDecoration(
-                      color: Colors.grey[200],
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    child: Text(member.name),
-                  );
-                }).toList(),
-              );
-            },
-            loading: () {
-              return const CircularProgressIndicator();
-            },
-            error: (error, stackTrace) {
-              return Text('Error: $error');
-            },
-          ),
-          ElevatedButton(
-            style: ElevatedButton.styleFrom(
-              shape: const StadiumBorder(),
-            ),
-            onPressed: () async {
-              Navigator.push(
+          Container(
+            margin: const EdgeInsets.only(top: 16.0, bottom: 16.0),
+            child: ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                shape: const StadiumBorder(),
+              ),
+              onPressed: () async {
+                Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => CreateTransactionScreen(
-                            key: ValueKey(groupData.id),
-                            groupData: groupData,
-                          )));
-            },
-            child: const Text(addTransactionRecordText),
+                    builder: (context) => EditGroupScreen(
+                      key: ValueKey(groupData.id),
+                      groupData: groupData,
+                    ),
+                  ),
+                );
+              },
+              child: const Text(editGroupText),
+            ),
+          ),
+          const Text(memberLabelText),
+          Container(
+            margin: const EdgeInsets.only(bottom: 16.0),
+            child: memberListInGroupAsync.when(
+              data: (members) {
+                return Wrap(
+                  spacing: 8,
+                  runSpacing: 8,
+                  children: members.map((member) {
+                    return Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 8),
+                      decoration: BoxDecoration(
+                        color: Colors.grey[200],
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: Text(member.name),
+                    );
+                  }).toList(),
+                );
+              },
+              loading: () {
+                return const CircularProgressIndicator();
+              },
+              error: (error, stackTrace) {
+                return Text('Error: $error');
+              },
+            ),
+          ),
+          Container(
+            margin: const EdgeInsets.only(bottom: 16.0),
+            child: ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                shape: const StadiumBorder(),
+              ),
+              onPressed: () async {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => CreateTransactionScreen(
+                              key: ValueKey(groupData.id),
+                              groupData: groupData,
+                            )));
+              },
+              child: const Text(addTransactionRecordText),
+            ),
           ),
           const Text(transactionRecordLabelText),
           Expanded(
@@ -86,12 +112,19 @@ class ShowGroupScreen extends ConsumerWidget {
                   itemCount: transactions.length,
                   itemBuilder: (context, index) {
                     return ListTile(
-                      title: Text(transactions[index].subject),
+                      title: Container(
+                        margin: const EdgeInsets.only(left: 16.0),
+                        child: Text(transactions[index].subject),
+                      ),
                       trailing: Row(mainAxisSize: MainAxisSize.min, children: [
                         IconButton(
                           icon: const Icon(Icons.delete),
-                          onPressed: () {
-                            
+                          onPressed: () async {
+                            await ref
+                                .watch(transactionRepositoryProvider)
+                                .deleteTransactionById(transactions[index].id);
+                            return ref.refresh(
+                                transactionListInGroupProvider(groupData.id));
                           },
                         ),
                       ]),
@@ -122,21 +155,6 @@ class ShowGroupScreen extends ConsumerWidget {
                 return Text('Error: $error');
               },
             ),
-          ),
-          ElevatedButton(
-            style: ElevatedButton.styleFrom(
-              shape: const StadiumBorder(),
-            ),
-            onPressed: () async {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => EditGroupScreen(
-                            key: ValueKey(groupData.id),
-                            groupData: groupData,
-                          )));
-            },
-            child: const Text(editGroupText),
           ),
         ],
       )),

@@ -32,102 +32,103 @@ class EditGroupScreen extends ConsumerWidget {
         centerTitle: true,
         backgroundColor: Colors.deepPurpleAccent,
       ),
-      body: Center(
+      body: Container(
+          margin: const EdgeInsets.only(top: 16.0),
           child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          // TODO: Add to update groupName unit.
-          Padding(
-            padding: const EdgeInsets.all(10.0),
-            child: Form(
-                key: formKey,
-                child: Column(
-                  children: [
-                    SizedBox(
-                        width: 300,
-                        child: TextFormField(
-                          controller: textEditingController,
-                          decoration: const InputDecoration(
-                              border: OutlineInputBorder(),
-                              labelText: memberLabelText,
-                              hintText: memberFormHintText),
-                          validator: formValidator.validateMemberName,
-                          onChanged: (value) {
-                            memberName = value;
-                          },
-                        ))
-                  ],
-                )),
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            mainAxisSize: MainAxisSize.min,
             children: [
-              Expanded(
-                child: Padding(
-                    padding: const EdgeInsets.all(8),
-                    child: ElevatedButton(
-                        child: const Text(addText),
-                        onPressed: () async {
-                          if (formKey.currentState!.validate()) {
-                            textEditingController.clear();
-                            await ref
-                                .watch(memberRepositoryProvider)
-                                .addMemberToDatabase(
-                                    groupData.id, memberName);
-                            return ref.refresh(
-                                memberListInGroupProvider(groupData.id));
-                          }
-                        })),
+              // TODO: Add to update groupName unit.
+              Padding(
+                padding: const EdgeInsets.all(10.0),
+                child: Form(
+                    key: formKey,
+                    child: Column(
+                      children: [
+                        SizedBox(
+                            width: 300,
+                            child: TextFormField(
+                              controller: textEditingController,
+                              decoration: const InputDecoration(
+                                  border: OutlineInputBorder(),
+                                  labelText: memberLabelText,
+                                  hintText: memberFormHintText),
+                              validator: formValidator.validateMemberName,
+                              onChanged: (value) {
+                                memberName = value;
+                              },
+                            ))
+                      ],
+                    )),
               ),
-              Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.all(8),
-                  child: ElevatedButton(
-                    child: const Text(deleteText),
-                    onPressed: () async {
-                      await _deleteMember(ref);
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                          content: Text(deleteSnackBarText),
-                          behavior: SnackBarBehavior.fixed,
-                          duration: Duration(seconds: 2),
-                        ),
-                      );
-                      return ref
-                          .refresh(memberListInGroupProvider(groupData.id));
-                    },
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Expanded(
+                    child: Padding(
+                        padding: const EdgeInsets.all(8),
+                        child: ElevatedButton(
+                            child: const Text(addText),
+                            onPressed: () async {
+                              if (formKey.currentState!.validate()) {
+                                textEditingController.clear();
+                                await ref
+                                    .watch(memberRepositoryProvider)
+                                    .addMemberToDatabase(
+                                        groupData.id, memberName);
+                                return ref.refresh(
+                                    memberListInGroupProvider(groupData.id));
+                              }
+                            })),
                   ),
-                ),
+                  Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.all(8),
+                      child: ElevatedButton(
+                        child: const Text(deleteText),
+                        onPressed: () async {
+                          await _deleteMember(ref);
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text(deleteSnackBarText),
+                              behavior: SnackBarBehavior.fixed,
+                              duration: Duration(seconds: 2),
+                            ),
+                          );
+                          return ref
+                              .refresh(memberListInGroupProvider(groupData.id));
+                        },
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              const Text(memberLabelText),
+              memberListStream.when(
+                data: (members) {
+                  return Wrap(
+                    spacing: 8,
+                    runSpacing: 8,
+                    children: members.map((member) {
+                      return Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 8),
+                        decoration: BoxDecoration(
+                          color: Colors.grey[200],
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: Text(member.name),
+                      );
+                    }).toList(),
+                  );
+                },
+                loading: () {
+                  return const CircularProgressIndicator();
+                },
+                error: (error, stackTrace) {
+                  return Text('Error: $error');
+                },
               ),
             ],
-          ),
-          const Text(memberLabelText),
-          memberListStream.when(
-            data: (members) {
-              return Wrap(
-                spacing: 8,
-                runSpacing: 8,
-                children: members.map((member) {
-                  return Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 8),
-                    decoration: BoxDecoration(
-                      color: Colors.grey[200],
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    child: Text(member.name),
-                  );
-                }).toList(),
-              );
-            },
-            loading: () {
-              return const CircularProgressIndicator();
-            },
-            error: (error, stackTrace) {
-              return Text('Error: $error');
-            },
-          ),
-        ],
-      )),
+          )),
     );
   }
 
