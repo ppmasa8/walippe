@@ -30,3 +30,5 @@ const backPage = '戻る';
 const addTransactionRecordText = '立て替えた記録を追加';
 
 const entry = '登録';
+
+const showResult = '割り勘結果を見る';

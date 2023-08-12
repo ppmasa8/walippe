@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:walippe/src/views/screens/show_result_screen.dart';
 
 import '../../const/const.dart';
 import '../../providers/provider.dart';
@@ -84,6 +85,26 @@ class ShowGroupScreen extends ConsumerWidget {
               error: (error, stackTrace) {
                 return Text('Error: $error');
               },
+            ),
+          ),
+          Container(
+            margin: const EdgeInsets.only(top: 16.0, bottom: 16.0),
+            child: ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                shape: const StadiumBorder(),
+              ),
+              onPressed: () async {
+                Navigator.of(context).push<void>(
+                  MaterialPageRoute(
+                    builder: (context) =>
+                        ProviderScope(child: ShowResultScreen(
+                          key: ValueKey(groupData.id),
+                          groupData: groupData,
+                        )),
+                  ),
+                );
+              },
+              child: const Text(showResult),
             ),
           ),
           Container(
