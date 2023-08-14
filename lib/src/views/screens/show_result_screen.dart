@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import '../../models/group_data.dart';
+import '../../providers/provider.dart';
 
 class ShowResultScreen extends ConsumerWidget {
   const ShowResultScreen({super.key, required this.groupData});
@@ -12,6 +13,9 @@ class ShowResultScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    // final memberListInGroupAsync =
+    //     ref.watch(memberListInGroupProvider(groupData.id));
+
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -25,7 +29,11 @@ class ShowResultScreen extends ConsumerWidget {
         centerTitle: true,
         backgroundColor: Colors.deepPurpleAccent,
       ),
-      body: Container(),
+      body: Stack(
+        children: [
+
+        ]
+      ),
     );
   }
 }
